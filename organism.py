@@ -3,8 +3,10 @@ import turtle
 
 class Organism:
 
-    def __init__(self, position, destination, health, speed, damage, separation_weight, birth_rate, mutation_rate):
+    def __init__(self, identifier, position, destination, health, speed, damage,
+                 separation_weight, birth_rate, mutation_rate):
         self._sprite = turtle.Turtle()
+        self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
         self._health = health
@@ -25,6 +27,9 @@ class Organism:
 
     def get_dest(self):
         pass
+
+    def get_sprite(self):
+        return self._sprite
 
     def move(self):
         """Move towards destination"""
