@@ -24,14 +24,17 @@ class Organism:
     def get_pos(self):
         return self._position
 
-    def set_dest(self):
+    def set_dest(self, destination):
+        self._destination = destination
+
+    def get_dest(self):
+        return self._destination
+
+    def update_dest(self):
         """Set random direction to go to with a step size of speed"""
         direction = math.radians(random.randint(0, 360))
         self._destination[0] = self._position[0] + (math.sin(direction) * self._speed)
         self._destination[1] = self._position[1] + (math.cos(direction) * self._speed)
-
-    def get_dest(self):
-        return self._destination
 
     def get_sprite(self):
         return self._sprite
@@ -39,7 +42,7 @@ class Organism:
     def move(self):
         """Move towards destination"""
         self._position = self._destination
-        self.set_dest()
+        self.update_dest()
 
     def clear(self):
         """Remove circle"""
