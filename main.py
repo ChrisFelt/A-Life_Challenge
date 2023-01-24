@@ -5,15 +5,10 @@ from organism import *
 # global variables
 screen_size = 600
 population = 10
+predator_prevalence = 3  # every nth organism is a predator when simulation starts
 organisms = []
 
-sim_screen = turtle.Screen()
-sim_screen.setup(width=screen_size, height=screen_size)
-turtle.hideturtle()  # don't need this?
-turtle.speed(10)  # animation speed 1-10 (0 means no animation)
-turtle.tracer(0, 0)  # requires update method to be called on screen
-
-# diameter of turtle
+# turtle specific globals
 turtle_diameter = 10
 speed = 15
 slow_factor = 300
@@ -28,6 +23,13 @@ prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 # predator general attributes
 pred_health, pred_speed, pred_damage = 1, 1, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
+
+# setup turtle
+sim_screen = turtle.Screen()
+sim_screen.setup(width=screen_size, height=screen_size)
+turtle.hideturtle()  # don't need this?
+turtle.speed(10)  # animation speed 1-10 (0 means no animation)
+turtle.tracer(0, 0)  # requires update method to be called on screen
 
 
 def new_organism(identifier, position, destination, health, speed, damage,
@@ -44,15 +46,15 @@ def rand_coords() -> list:
 
 for i in range(population):
 
-    if i % 2 == 0:
+    if i % predator_prevalence == 0:
+        # create predator
+        new_organism(1, rand_coords(), rand_coords(), pred_health, pred_speed, pred_damage,
+                     pred_separation_weight, pred_birth_rate, pred_mutation_rate)
+
+    else:
         # create prey
         new_organism(0, rand_coords(), rand_coords(), prey_health, prey_speed, prey_damage,
                      prey_separation_weight, prey_birth_rate, prey_mutation_rate)
-
-    else:
-        # create predator
-        new_organism(0, rand_coords(), rand_coords(), pred_health, pred_speed, pred_damage,
-                     pred_separation_weight, pred_birth_rate, pred_mutation_rate)
 
     organisms[i].hide_default()  # hide default arrow
     organisms[i].up()  # don't draw line
