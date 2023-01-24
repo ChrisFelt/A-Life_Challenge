@@ -102,7 +102,7 @@ class Organism:
         self._position[0] += speed / slow_factor * math.cos(self._direction)
         self._position[1] += speed / slow_factor * math.sin(self._direction)
 
-        self._sprite.goto(self._position[1], self._position[0])
+        self._sprite.goto(self._position[0], self._position[1])
 
 
 class Predator(Organism):
