@@ -68,14 +68,6 @@ class Organism:
         else:
             return False
 
-    def move(self, speed, slow_factor):
-        """Move organism towards destination"""
-        # slow_factor reduces distance moved and makes the animation smoother
-        self._position[0] += speed / slow_factor * math.cos(self._direction)
-        self._position[1] += speed / slow_factor * math.sin(self._direction)
-
-        self._sprite.goto(self._position[1], self._position[0])
-
     def nearest_neighbors(self, organisms):
 
         neighbors = []
@@ -103,6 +95,14 @@ class Organism:
     def draw_dot(self, diameter):
         """Draw circle on position"""
         self._sprite.dot(diameter)
+
+    def move(self, speed, slow_factor):
+        """Move organism towards destination"""
+        # slow_factor reduces distance moved and makes the animation smoother
+        self._position[0] += speed / slow_factor * math.cos(self._direction)
+        self._position[1] += speed / slow_factor * math.sin(self._direction)
+
+        self._sprite.goto(self._position[1], self._position[0])
 
 
 class Predator(Organism):
