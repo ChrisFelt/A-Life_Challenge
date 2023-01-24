@@ -20,7 +20,7 @@ class Organism:
         self._direction = None
 
         # set initial direction automatically
-        self._update_direction()
+        self.__update_direction()
 
     def set_pos(self, pos_coords):
         """Set new current position"""
@@ -37,7 +37,7 @@ class Organism:
         self._destination[1] = dest_coords[1]
 
         # update direction
-        self._update_direction()
+        self.__update_direction()
 
     def get_dest(self):
         return self._destination
@@ -48,7 +48,7 @@ class Organism:
     def get_direction(self):
         return self._direction
 
-    def _update_direction(self):
+    def __update_direction(self):
         """Private method that updates direction given CURRENT position and destination"""
         # atan2(destination y - current y, destination x - current x)
         self._direction = math.atan2(self._destination[1] - self._position[1],
