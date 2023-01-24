@@ -5,12 +5,13 @@ import random
 
 class Organism:
 
-    def __init__(self, identifier, position, destination, health, speed, damage,
+    def __init__(self, identifier, position, destination, direction, health, speed, damage,
                  separation_weight, birth_rate, mutation_rate):
         self._sprite = turtle.Turtle()
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
+        self._direction = direction
         self._health = health
         self._speed = speed
         self._damage = damage
@@ -30,17 +31,24 @@ class Organism:
     def get_dest(self):
         return self._destination
 
+    def set_direction(self, direction):
+        self._direction = direction
+
+    def get_direction(self):
+        return self._direction
+
     def update_dest(self):
         """Set random direction to go to with a step size of speed"""
-        direction = math.radians(random.randint(0, 360))
-        self._destination[0] = self._position[0] + (math.sin(direction) * self._speed)
-        self._destination[1] = self._position[1] + (math.cos(direction) * self._speed)
+        self._direction = math.radians(random.randint(0, 360))
+        self._destination[0] = self._position[0] + (math.sin(self._direction) * self._speed)
+        self._destination[1] = self._position[1] + (math.cos(self._direction) * self._speed)
 
     def get_sprite(self):
         return self._sprite
 
-    def move(self):
+    def move(self, organisms):
         """Move towards destination"""
+        neighbors = self.nearest_neighbors(organisms)
         self._position = self._destination
         self.update_dest()
 
@@ -52,6 +60,12 @@ class Organism:
         """Draw circle on position"""
         pass
 
+    def nearest_neighbors(self, organisms):
+        neighbors = []
+        for organism in organisms:
+            if math.dist(organism.get_pos(), self.get_pos()) < 10 and self is not organism:
+                neighbors.append(organism)
+        return neighbors
 
 class Predator(Organism):
     pass
