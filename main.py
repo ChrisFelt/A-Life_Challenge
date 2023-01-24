@@ -46,13 +46,13 @@ for i in range(population):
         new_organism(0, rand_coords, rand_coords, pred_health, pred_speed, pred_damage,
                      pred_separation_weight, pred_birth_rate, pred_mutation_rate)
 
-    organisms[i].get_sprite.hideturtle()  # hide default arrow
-    organisms[i].get_sprite.up()  # don't draw line
+    organisms[i].get_sprite().hideturtle()  # hide default arrow
+    organisms[i].get_sprite().up()  # don't draw line
     # todo: set colors
 
 
 def move(index):
-    organisms[index].get_sprite.clear()
+    organisms[index].get_sprite().clear()
     # todo: complete move method in Organism
 
 
