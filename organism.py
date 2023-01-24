@@ -5,67 +5,105 @@ import random
 
 class Organism:
 
-    def __init__(self, identifier, position, destination, direction, health, speed, damage,
+    def __init__(self, identifier, position, destination, health, speed, damage,
                  separation_weight, birth_rate, mutation_rate):
         self._sprite = turtle.Turtle()
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
-        self._direction = direction
         self._health = health
         self._speed = speed
         self._damage = damage
         self._separation_weight = separation_weight
         self._birth_rate = birth_rate
         self._mutation_rate = mutation_rate
+        self._direction = None
 
-    def set_pos(self, position):
-        self._position = position
+        # set initial direction automatically
+        self._update_direction()
+
+    def set_pos(self, pos_coords):
+        """Set new current position"""
+        self._position = pos_coords
 
     def get_pos(self):
+        """Return current position"""
         return self._position
 
-    def set_dest(self, destination):
-        self._destination = destination
+    def set_dest(self, dest_coords):
+        """Set new destination and update direction"""
+        # set new destination
+        self._destination[0] = dest_coords[0]
+        self._destination[1] = dest_coords[1]
+
+        # update direction
+        self._update_direction()
 
     def get_dest(self):
         return self._destination
 
     def set_direction(self, direction):
-        self._direction = direction
+        self._direction = direction  # might not need, see _update_direction
 
     def get_direction(self):
         return self._direction
 
-    def update_dest(self):
-        """Set random direction to go to with a step size of speed"""
-        self._direction = math.radians(random.randint(0, 360))
-        self._destination[0] = self._position[0] + (math.sin(self._direction) * self._speed)
-        self._destination[1] = self._position[1] + (math.cos(self._direction) * self._speed)
+    def _update_direction(self):
+        """Private method that updates direction given CURRENT position and destination"""
+        # atan2(destination y - current y, destination x - current x)
+        self._direction = math.atan2(self._destination[1] - self._position[1],
+                                     self._destination[0] - self._position[0])
 
-    def get_sprite(self):
-        return self._sprite
+    def proximity_check(self, distance_to_check):
+        """Returns True if Organism is within the given distance of the target destination"""
+        # find the cartesian distance to target from current position
+        x_proximity = (self._destination[0] - self._position[0]) ** 2
+        y_proximity = (self._destination[1] - self._position[1]) ** 2
+        distance = math.sqrt(x_proximity + y_proximity)
 
-    def move(self, organisms):
-        """Move towards destination"""
-        neighbors = self.nearest_neighbors(organisms)
-        self._position = self._destination
-        self.update_dest()
+        # return True if less than distance_to_check
+        if distance < distance_to_check:
+            return True
 
-    def clear(self):
-        """Remove circle"""
-        pass
+        else:
+            return False
 
-    def draw(self):
-        """Draw circle on position"""
-        pass
+    def move(self, speed, slow_factor):
+        """Move organism towards destination"""
+        # slow_factor reduces distance moved and makes the animation smoother
+        self._position[0] += speed / slow_factor * math.cos(self._direction)
+        self._position[1] += speed / slow_factor * math.sin(self._direction)
+
+        self._sprite.goto(self._position[1], self._position[0])
 
     def nearest_neighbors(self, organisms):
+
         neighbors = []
         for organism in organisms:
             if math.dist(organism.get_pos(), self.get_pos()) < 10 and self is not organism:
                 neighbors.append(organism)
         return neighbors
+
+    # ---------------------------------
+    # Turtle commands
+    # ---------------------------------
+
+    def hide_default(self):
+        """Hide default turtle arrow"""
+        self._sprite.hideturtle()
+
+    def up(self):
+        """No lines are drawn when turtle moves"""
+        self._sprite.up()
+
+    def clear(self):
+        """Clear shape"""
+        self._sprite.clear()
+
+    def draw_dot(self, diameter):
+        """Draw circle on position"""
+        self._sprite.dot(diameter)
+
 
 class Predator(Organism):
     pass
