@@ -43,7 +43,14 @@ def create_organism(identifier, position, destination, health, speed, damage,
     organisms[index].hide_default()  # hide default arrow
     organisms[index].up()  # don't draw line
 
-    # todo: set colors
+    # set color for predator
+    if identifier == 1:
+        organisms[index].set_color("#de3f3c")  # red
+
+    # set color for prey
+    else:
+        organisms[index].set_color("#68ed53")  # green
+
 
 
 def rand_coords() -> list:
@@ -83,7 +90,7 @@ def move(index) -> None:
     if organisms[index].proximity_check(proximity):
         organisms[index].set_dest(rand_coords())
 
-    sim_screen.update()
+    sim_screen.update()  # refresh screen
 
 
 def battle(index):

@@ -96,9 +96,14 @@ class Organism:
         """Clear shape"""
         self._sprite.clear()
 
-    def draw_dot(self, diameter):
-        """Draw circle on position"""
+    def draw_dot(self, diameter: int):
+        """Draw circle on position given diameter"""
         self._sprite.dot(diameter)
+
+    def set_color(self, color: str):
+        """Set turtle color to the given string.
+        WARNING: does not error check!"""
+        self._sprite.color(color)
 
     def move(self, speed, slow_factor):
         """Move organism towards destination"""
