@@ -102,7 +102,7 @@ class Organism:
 
     def set_color(self, color: str):
         """Set turtle color to the given string.
-        WARNING: does not error check!"""
+        Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
     def move(self, speed, slow_factor):

@@ -11,8 +11,8 @@ organisms = []
 
 # turtle specific globals
 turtle_diameter = 10
-speed = 20
-slow_factor = 200
+speed = 20  # base speed of organisms
+slow_factor = 200  # slows down animation to make it appear more smooth
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
@@ -50,7 +50,6 @@ def create_organism(identifier, position, destination, health, speed, damage,
     # set color for prey
     else:
         organisms[index].set_color("#68ed53")  # green
-
 
 
 def rand_coords() -> list:
