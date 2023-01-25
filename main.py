@@ -56,7 +56,6 @@ def initialize_organisms() -> None:
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
     for i in range(pred_population):
-
         create_organism(1, rand_coords(), rand_coords(), pred_health, pred_speed, pred_damage,
                         pred_separation_weight, pred_birth_rate, pred_mutation_rate)
 
@@ -66,7 +65,7 @@ def initialize_organisms() -> None:
                         prey_separation_weight, prey_birth_rate, prey_mutation_rate)
 
 
-def set_target():
+def set_target(index):
     """Step 1 of turn order.
     """
     pass
@@ -84,24 +83,40 @@ def move(index) -> None:
     if organisms[index].proximity_check(proximity):
         organisms[index].set_dest(rand_coords())
 
+    sim_screen.update()
 
-def battle():
+
+def battle(index):
     """Step 3 of turn order.
     """
     pass
 
 
-def conclude_turn():
+def conclude_turn(index):
     """Step 4 of turn order.
     """
-    pass
+    # remove an organism from the board if it reaches 0 health NOTE: untested!
+    if organisms[index].get_health == 0:
+        # clear organism animation and remove from list
+        organisms[index].clear()
+        sim_screen.update()
+        organisms.pop(index)
 
 
 if __name__ == "__main__":
-
     initialize_organisms()
 
+    # play through infinite turns
     while True:
         for i in range(pred_population + prey_population):
+            # step 1
+            set_target(i)
+
+            # step 2
             move(i)
-            sim_screen.update()
+
+            # step 3
+            battle(i)
+
+            # step 4
+            conclude_turn(i)

@@ -22,6 +22,10 @@ class Organism:
         # set initial direction automatically
         self.__update_direction()
 
+    def get_health(self):
+        """Return current health"""
+        return self._health
+
     def set_pos(self, pos_coords):
         """Set new current position"""
         self._position = pos_coords
