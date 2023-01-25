@@ -105,11 +105,11 @@ class Organism:
         Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
-    def move(self, speed, slow_factor):
+    def move(self, slow_factor):
         """Move organism towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
-        self._position[0] += speed / slow_factor * math.cos(self._direction)
-        self._position[1] += speed / slow_factor * math.sin(self._direction)
+        self._position[0] += self._speed / slow_factor * math.cos(self._direction)
+        self._position[1] += self._speed / slow_factor * math.sin(self._direction)
 
         self._sprite.goto(self._position[0], self._position[1])
 

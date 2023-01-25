@@ -2,27 +2,25 @@ import turtle
 import random
 from organism import *
 
+# turtle specific globals
+turtle_diameter = 10
+slow_factor = 200  # slows down animation to make it appear more smooth
+
 # global variables
 screen_size = 600
 pred_population = 3
 prey_population = 7
-predator_prevalence = 3  # every nth organism is a predator when simulation starts
 organisms = []
-
-# turtle specific globals
-turtle_diameter = 10
-speed = 20  # base speed of organisms
-slow_factor = 200  # slows down animation to make it appear more smooth
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
 
 # prey general attributes
-prey_health, prey_speed, prey_damage = 1, 1, 0
+prey_health, prey_speed, prey_damage = 1, 15, 0
 prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 
 # predator general attributes
-pred_health, pred_speed, pred_damage = 1, 1, 1
+pred_health, pred_speed, pred_damage = 1, 20, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
 
 # setup turtle
@@ -82,7 +80,7 @@ def move(index) -> None:
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
-    organisms[index].move(speed, slow_factor)
+    organisms[index].move(slow_factor)
     organisms[index].draw_dot(turtle_diameter)
 
     # check if within range of target
