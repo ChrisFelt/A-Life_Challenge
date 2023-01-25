@@ -41,7 +41,7 @@ def new_organism(identifier, position, destination, health, speed, damage,
 
 def rand_coords() -> list:
     """Returns a random list containing [x, y] coordinates"""
-    return [random.uniform(-screen_size, screen_size), random.uniform(-screen_size, screen_size)]
+    return [random.uniform(-screen_size/2, screen_size/2), random.uniform(-screen_size/2, screen_size/2)]
 
 
 for i in range(population):
