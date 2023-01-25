@@ -102,7 +102,7 @@ def conclude_turn(index):
     """Step 4 of turn order.
     """
     # remove an organism from the board if it reaches 0 health NOTE: untested!
-    if organisms[index].get_health == 0:
+    if organisms[index].get_health() <= 0:
         # clear organism animation and remove from list
         organisms[index].clear()
         sim_screen.update()
