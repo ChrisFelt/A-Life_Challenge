@@ -4,14 +4,15 @@ from organism import *
 
 # global variables
 screen_size = 600
-population = 10
+pred_population = 3
+prey_population = 7
 predator_prevalence = 3  # every nth organism is a predator when simulation starts
 organisms = []
 
 # turtle specific globals
 turtle_diameter = 10
-speed = 15
-slow_factor = 300
+speed = 20
+slow_factor = 200
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
@@ -32,36 +33,48 @@ turtle.speed(10)  # animation speed 1-10 (0 means no animation)
 turtle.tracer(0, 0)  # requires update method to be called on screen
 
 
-def new_organism(identifier, position, destination, health, speed, damage,
-                 separation_weight, birth_rate, mutation_rate) -> None:
+def create_organism(identifier, position, destination, health, speed, damage,
+                    separation_weight, birth_rate, mutation_rate) -> None:
     """Create a new Organism class object with the given parameters and add it to organisms list"""
-    organisms.append(Organism(identifier, position, destination, health, speed, damage, separation_weight,
-                              birth_rate, mutation_rate))
+    organisms.append(Organism(identifier, position, destination, health, speed, damage,
+                              separation_weight, birth_rate, mutation_rate))
 
+    index = len(organisms) - 1
+    organisms[index].hide_default()  # hide default arrow
+    organisms[index].up()  # don't draw line
 
-def rand_coords() -> list:
-    """Returns a random list containing [x, y] coordinates"""
-    return [random.uniform(-screen_size/2, screen_size/2), random.uniform(-screen_size/2, screen_size/2)]
-
-
-for i in range(population):
-
-    if i % predator_prevalence == 0:
-        # create predator
-        new_organism(1, rand_coords(), rand_coords(), pred_health, pred_speed, pred_damage,
-                     pred_separation_weight, pred_birth_rate, pred_mutation_rate)
-
-    else:
-        # create prey
-        new_organism(0, rand_coords(), rand_coords(), prey_health, prey_speed, prey_damage,
-                     prey_separation_weight, prey_birth_rate, prey_mutation_rate)
-
-    organisms[i].hide_default()  # hide default arrow
-    organisms[i].up()  # don't draw line
     # todo: set colors
 
 
-def move(index):
+def rand_coords() -> list:
+    """Returns a list containing random [x, y] coordinates"""
+    return [random.uniform(-screen_size/2, screen_size/2),
+            random.uniform(-screen_size/2, screen_size/2)]
+
+
+def initialize_organisms() -> None:
+    """Generate starting Organism objects for prey and predators"""
+    # generate initial predator population
+    for i in range(pred_population):
+
+        create_organism(1, rand_coords(), rand_coords(), pred_health, pred_speed, pred_damage,
+                        pred_separation_weight, pred_birth_rate, pred_mutation_rate)
+
+    # initial prey population
+    for i in range(prey_population):
+        create_organism(0, rand_coords(), rand_coords(), prey_health, prey_speed, prey_damage,
+                        prey_separation_weight, prey_birth_rate, prey_mutation_rate)
+
+
+def set_target():
+    """Step 1 of turn order.
+    """
+    pass
+
+
+def move(index) -> None:
+    """Step 2 of turn order.
+    Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
     organisms[index].move(speed, slow_factor)
@@ -72,7 +85,23 @@ def move(index):
         organisms[index].set_dest(rand_coords())
 
 
-while True:
-    for i in range(population):
-        move(i)
-        sim_screen.update()
+def battle():
+    """Step 3 of turn order.
+    """
+    pass
+
+
+def conclude_turn():
+    """Step 4 of turn order.
+    """
+    pass
+
+
+if __name__ == "__main__":
+
+    initialize_organisms()
+
+    while True:
+        for i in range(pred_population + prey_population):
+            move(i)
+            sim_screen.update()
