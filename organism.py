@@ -46,9 +46,6 @@ class Organism:
     def get_dest(self):
         return self._destination
 
-    def set_direction(self, direction):
-        self._direction = direction  # might not need, see _update_direction
-
     def get_direction(self):
         return self._direction
 
@@ -73,7 +70,6 @@ class Organism:
             return False
 
     def nearest_neighbors(self, organisms):
-
         neighbors = []
         for organism in organisms:
             if math.dist(organism.get_pos(), self.get_pos()) < 10 and self is not organism:
