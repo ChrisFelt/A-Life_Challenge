@@ -43,7 +43,7 @@ class Organism:
     def __hunt(self, other):
         """Predators move toward neighboring prey"""
         direction = math.atan2(other.get_pos[1] - self._position[1], other.get_pos[0] - self._position[0])
-        return np.array([math.sin(direction) * self._speed, math.cos(direction)])
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
 
     def __flock(self, other):
         """Prey move toward neighboring prey keeping separation"""

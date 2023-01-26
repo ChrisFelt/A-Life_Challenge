@@ -7,7 +7,7 @@ turtle_diameter = 10
 
 # global variables
 screen_size = 600
-pred_population = 10
+pred_population = 20
 prey_population = 20
 organisms = []
 
@@ -16,7 +16,7 @@ prey_health, pre_vision, prey_speed, prey_damage = 1, 10, 2, 0
 prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 
 # predator general attributes
-pred_health, pred_vision, pred_speed, pred_damage = 1, 20, 4, 1
+pred_health, pred_vision, pred_speed, pred_damage = 1, 30, 4, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
 
 # setup turtle
