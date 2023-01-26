@@ -3,11 +3,11 @@ import random
 from organism import *
 
 # turtle specific globals
+screen_size = 600
 turtle_diameter = 10
-slow_factor = 200  # slows down animation to make it appear more smooth
+slow_factor = 200  # controls global animation speed
 
 # global variables
-screen_size = 600
 pred_population = 3
 prey_population = 7
 organisms = []
@@ -99,7 +99,9 @@ def battle(index):
 def conclude_turn(index):
     """Step 4 of turn order.
     """
-    # remove an organism from the board if it reaches 0 health NOTE: untested!
+    # 1. create a new organism if offspring created
+
+    # 2. remove organism from the board if it reaches 0 health NOTE: untested!
     if organisms[index].get_health() <= 0:
         # clear organism animation and remove from list
         organisms[index].clear()
