@@ -12,11 +12,11 @@ prey_population = 20
 organisms = []
 
 # prey general attributes
-prey_health, pre_vision, prey_speed, prey_damage = 1, 10, 5, 0
+prey_health, pre_vision, prey_speed, prey_damage = 1, 10, 2, 0
 prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 
 # predator general attributes
-pred_health, pred_vision, pred_speed, pred_damage = 1, 20, 5, 1
+pred_health, pred_vision, pred_speed, pred_damage = 1, 20, 4, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
 
 # setup turtle

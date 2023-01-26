@@ -42,11 +42,16 @@ class Organism:
 
     def __hunt(self, other):
         """Predators move toward neighboring prey"""
-        return np.array([other.get_pos[0] - self._position[0], other.get_pos[1] - self._position[1]])
+        direction = math.atan2(other.get_pos[1] - self._position[1], other.get_pos[0] - self._position[0])
+        return np.array([math.sin(direction) * self._speed, math.cos(direction)])
 
     def __flock(self, other):
         """Prey move toward neighboring prey keeping separation"""
-        return np.array([(other.get_pos[0] - self._position[0])/2, (other.get_pos[1] - self._position[1])/2])
+        if math.dist(other.get_pos(), self._position) > self._vision * self._separation_weight:
+            direction = math.atan2(other.get_pos[1] - self._position[1], other.get_pos[0] - self._position[0])
+            return np.array([math.sin(direction) * self._speed, math.cos(direction)])
+        else:
+            return np.array([0, 0])
 
     def set_dest(self, organisms):
         """Set new destination and update direction"""
