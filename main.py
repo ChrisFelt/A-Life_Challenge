@@ -3,20 +3,21 @@ import random
 from organism import *
 
 # turtle specific globals
+screen_size = 600
 turtle_diameter = 10
+slow_factor = 200  # controls global animation speed
 
 # global variables
-screen_size = 600
-pred_population = 20
-prey_population = 20
+pred_population = 3
+prey_population = 7
 organisms = []
 
 # prey general attributes
-prey_health, pre_vision, prey_speed, prey_damage = 1, 10, 2, 0
+prey_health, prey_vision, prey_speed, prey_damage = 1, 30, 15, 0
 prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 
 # predator general attributes
-pred_health, pred_vision, pred_speed, pred_damage = 1, 30, 4, 1
+pred_health, pred_vision, pred_speed, pred_damage = 1, 40, 20, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
 
 # setup turtle
@@ -61,7 +62,7 @@ def initialize_organisms() -> None:
 
     # initial prey population
     for i in range(prey_population):
-        create_organism(0, rand_coords(), rand_coords(), prey_health, pre_vision, prey_speed, prey_damage,
+        create_organism(0, rand_coords(), rand_coords(), prey_health, prey_vision, prey_speed, prey_damage,
                         prey_separation_weight, prey_birth_rate, prey_mutation_rate)
 
 
@@ -77,7 +78,7 @@ def move(index) -> None:
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
-    organisms[index].move()
+    organisms[index].move(slow_factor)
     organisms[index].draw_dot(turtle_diameter)
 
     sim_screen.update()  # refresh screen

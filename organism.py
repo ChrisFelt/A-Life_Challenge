@@ -42,13 +42,13 @@ class Organism:
 
     def __hunt(self, other):
         """Predators move toward neighboring prey"""
-        direction = math.atan2(other.get_pos[1] - self._position[1], other.get_pos[0] - self._position[0])
+        direction = self.__direction_towards(other)
         return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
 
     def __flock(self, other):
         """Prey move toward neighboring prey keeping separation"""
         if math.dist(other.get_pos(), self._position) > self._vision * self._separation_weight:
-            direction = math.atan2(other.get_pos[1] - self._position[1], other.get_pos[0] - self._position[0])
+            direction = self.__direction_towards(other)
             return np.array([math.sin(direction) * self._speed, math.cos(direction)])
         else:
             return np.array([0, 0])
@@ -78,6 +78,12 @@ class Organism:
 
     def get_direction(self):
         return self._direction
+
+    def __direction_towards(self, other):
+        """Private method that returns a direction given CURRENT position and destination"""
+        # atan2(destination y - current y, destination x - current x)
+        return math.atan2(other.get_pos[1] - self._position[1],
+                          other.get_pos[0] - self._position[0])
 
     def __update_direction(self):
         """Private method that updates direction given CURRENT position and destination"""
@@ -117,11 +123,11 @@ class Organism:
         Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
-    def move(self):
+    def move(self, slow_factor):
         """Move organism towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
-        self._position[0] = self._destination[0]
-        self._position[1] = self._destination[1]
+        self._position[0] += self._speed / slow_factor * math.cos(self._direction)
+        self._position[1] += self._speed / slow_factor * math.sin(self._direction)
 
         self._sprite.goto(self._position[0], self._position[1])
 
