@@ -4,6 +4,12 @@ import random
 import numpy as np
 
 
+def rand_dest(screen_size) -> list:
+    """Returns a list containing random [x, y] coordinates"""
+    return [random.uniform(-screen_size / 2, screen_size / 2),
+            random.uniform(-screen_size / 2, screen_size / 2)]
+
+
 class Organism:
 
     def __init__(self, identifier, position, destination, health, vision, speed, damage,
@@ -58,13 +64,14 @@ class Organism:
         direction = self.__direction_towards(other) + math.pi
         return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
 
-    def set_dest(self, organisms):
+    def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
         # identify neighbors
         vector = np.array([0, 0])
         neighbors = self.__nearest_neighbors(organisms)
         if not neighbors:
-            vector += np.array([random.randint(-1 * self._speed, self._speed), random.randint(-1 * self._speed, self._speed)])
+            # set random destination
+            self._destination = rand_dest(screen_size)
         else:
             for neighbor in neighbors:
                 if self._identifier == 1 and neighbor.get_identifier() == 0:
@@ -73,9 +80,14 @@ class Organism:
                     vector = np.add(vector, self.__flock(neighbor))
                 elif self._identifier == 0 and neighbor.get_identifier() == 1:
                     vector = np.add(vector, self.__flee(neighbor))
-        # set new destination
-        self._destination[0] = self._position[0] + vector[0]
-        self._destination[1] = self._position[1] + vector[1]
+            # set new destination
+            self._destination[0] = self._position[0] + vector[0]
+            self._destination[1] = self._position[1] + vector[1]
+            for coord in self._destination:
+                if coord > screen_size / 2:
+                    coord = screen_size / 2
+                elif coord < -screen_size / 2:
+                    coord = -screen_size / 2
 
         # update direction
         self.__update_direction()

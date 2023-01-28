@@ -8,19 +8,19 @@ turtle_diameter = 10
 slow_factor = 1  # controls global animation speed
 
 # global variables
-pred_population = 30
-prey_population = 70
+pred_population = 3
+prey_population = 7
 organisms = []
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
 
 # prey general attributes
-prey_health, prey_vision, prey_speed, prey_damage = 1, 30, 15, 0
+prey_health, prey_vision, prey_speed, prey_damage = 1, 10, 10, 0
 prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
 
 # predator general attributes
-pred_health, pred_vision, pred_speed, pred_damage = 1, 40, 20, 1
+pred_health, pred_vision, pred_speed, pred_damage = 1, 10, 10, 1
 pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
 
 # setup turtle
@@ -74,7 +74,7 @@ def set_target(index):
     """
     # check if within range of target
     if organisms[index].proximity_check(proximity):
-        organisms[index].set_dest(organisms)
+        organisms[index].set_dest(organisms, screen_size)
     pass
 
 
