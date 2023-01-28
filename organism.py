@@ -98,6 +98,16 @@ class Organism:
         self._direction = math.atan2(self._destination[1] - self._position[1],
                                      self._destination[0] - self._position[0])
 
+    def proximity_check(self, distance_to_check):
+        """Returns True if Organism is within the given distance of the target destination"""
+        # find the cartesian distance to target from current position
+        distance = math.dist(self._position, self._destination)
+        # return True if less than distance_to_check
+        if distance < distance_to_check:
+            return True
+        else:
+            return False
+
     def __nearest_neighbors(self, organisms):
         neighbors = []
         for organism in organisms:
