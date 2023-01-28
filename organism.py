@@ -19,10 +19,7 @@ class Organism:
         self._separation_weight = separation_weight
         self._birth_rate = birth_rate
         self._mutation_rate = mutation_rate
-        self._direction = None
-
-        # set initial direction automatically
-        self.__update_direction()
+        self._direction = self.__update_direction()  # set initial direction automatically
 
     def get_health(self):
         """Return current health"""
@@ -78,7 +75,7 @@ class Organism:
         self._destination[1] = self._position[1] + vector[1]
 
         # update direction
-        self.__update_direction()
+        self._direction = self.__update_direction()
 
     def get_dest(self):
         return self._destination
@@ -93,10 +90,10 @@ class Organism:
                           other.get_pos()[0] - self._position[0])
 
     def __update_direction(self):
-        """Private method that updates direction given CURRENT position and destination"""
+        """Private method that returns a direction given CURRENT position and destination"""
         # atan2(destination y - current y, destination x - current x)
-        self._direction = math.atan2(self._destination[1] - self._position[1],
-                                     self._destination[0] - self._position[0])
+        return math.atan2(self._destination[1] - self._position[1],
+                          self._destination[0] - self._position[0])
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
