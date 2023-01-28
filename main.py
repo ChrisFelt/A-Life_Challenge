@@ -74,7 +74,7 @@ def set_target(index):
     """
     # check if within range of target
     if organisms[index].proximity_check(proximity):
-        organisms[index].set_dest(organisms, screen_size)
+        organisms[index].set_dest(organisms)
     pass
 
 
