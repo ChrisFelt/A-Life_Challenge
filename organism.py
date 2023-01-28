@@ -67,12 +67,12 @@ class Organism:
             vector += np.array([random.randint(-1 * self._speed, self._speed), random.randint(-1 * self._speed, self._speed)])
         else:
             for neighbor in neighbors:
-                if self._identifier == 1 and neighbor.get_identifier == 0:
-                    vector += self.__hunt(neighbor)
-                elif self._identifier == 0 and neighbor.get_identifier == 0:
-                    vector += self.__flock(neighbor)
-                elif self._identifier == 0 and neighbor.get_identifier == 1:
-                    vector += self.__flee(neighbor)
+                if self._identifier == 1 and neighbor.get_identifier() == 0:
+                    vector = np.add(vector, self.__hunt(neighbor))
+                elif self._identifier == 0 and neighbor.get_identifier() == 0:
+                    vector = np.add(vector, self.__flock(neighbor))
+                elif self._identifier == 0 and neighbor.get_identifier() == 1:
+                    vector = np.add(vector, self.__flee(neighbor))
         # set new destination
         self._destination[0] = self._position[0] + vector[0]
         self._destination[1] = self._position[1] + vector[1]
@@ -89,8 +89,8 @@ class Organism:
     def __direction_towards(self, other):
         """Private method that returns a direction given CURRENT position and destination"""
         # atan2(destination y - current y, destination x - current x)
-        return math.atan2(other.get_pos[1] - self._position[1],
-                          other.get_pos[0] - self._position[0])
+        return math.atan2(other.get_pos()[1] - self._position[1],
+                          other.get_pos()[0] - self._position[0])
 
     def __update_direction(self):
         """Private method that updates direction given CURRENT position and destination"""
@@ -111,7 +111,7 @@ class Organism:
     def __nearest_neighbors(self, organisms):
         neighbors = []
         for organism in organisms:
-            if math.dist(organism.get_pos(), self.get_pos()) < 10 and self is not organism:
+            if math.dist(self.get_pos(), organism.get_pos()) < self._vision and self is not organism:
                 neighbors.append(organism)
         return neighbors
 

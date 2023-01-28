@@ -5,11 +5,11 @@ from organism import *
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
-slow_factor = 10  # controls global animation speed
+slow_factor = 1  # controls global animation speed
 
 # global variables
-pred_population = 3
-prey_population = 7
+pred_population = 30
+prey_population = 70
 organisms = []
 
 # if within a given distance of their target destination, organism changes target
