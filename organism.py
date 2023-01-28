@@ -1,17 +1,19 @@
 import turtle
 import math
 import random
+import numpy as np
 
 
 class Organism:
 
-    def __init__(self, identifier, position, destination, health, speed, damage,
+    def __init__(self, identifier, position, destination, health, vision, speed, damage,
                  separation_weight, birth_rate, mutation_rate):
         self._sprite = turtle.Turtle()
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
         self._health = health
+        self._vision = vision
         self._speed = speed
         self._damage = damage
         self._separation_weight = separation_weight
@@ -23,6 +25,10 @@ class Organism:
         """Return current health"""
         return self._health
 
+    def get_identifier(self):
+        """Return organism identifier"""
+        return self._identifier
+
     def set_pos(self, pos_coords):
         """Set new current position"""
         self._position = pos_coords
@@ -31,11 +37,42 @@ class Organism:
         """Return current position"""
         return self._position
 
-    def set_dest(self, dest_coords):
+    def __hunt(self, other):
+        """Predators move toward neighboring prey"""
+        direction = self.__direction_towards(other)
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+
+    def __flock(self, other):
+        """Prey move toward neighboring prey keeping separation"""
+        if math.dist(other.get_pos(), self._position) > self._vision * self._separation_weight:
+            direction = self.__direction_towards(other)
+            return np.array([math.sin(direction) * self._speed, math.cos(direction)])
+        else:
+            return np.array([0, 0])
+
+    def __flee(self, other):
+        """Prey move away from neighboring predators"""
+        direction = self.__direction_towards(other) + math.pi
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+
+    def set_dest(self, organisms):
         """Set new destination and update direction"""
+        # identify neighbors
+        vector = np.array([0, 0])
+        neighbors = self.__nearest_neighbors(organisms)
+        if not neighbors:
+            vector += np.array([random.randint(-1 * self._speed, self._speed), random.randint(-1 * self._speed, self._speed)])
+        else:
+            for neighbor in neighbors:
+                if self._identifier == 1 and neighbor.get_identifier() == 0:
+                    vector = np.add(vector, self.__hunt(neighbor))
+                elif self._identifier == 0 and neighbor.get_identifier() == 0:
+                    vector = np.add(vector, self.__flock(neighbor))
+                elif self._identifier == 0 and neighbor.get_identifier() == 1:
+                    vector = np.add(vector, self.__flee(neighbor))
         # set new destination
-        self._destination[0] = dest_coords[0]
-        self._destination[1] = dest_coords[1]
+        self._destination[0] = self._position[0] + vector[0]
+        self._destination[1] = self._position[1] + vector[1]
 
         # update direction
         self._direction = self.__update_direction()
@@ -43,11 +80,14 @@ class Organism:
     def get_dest(self):
         return self._destination
 
-    def set_direction(self, direction):
-        self._direction = direction  # might not need, see _update_direction
-
     def get_direction(self):
         return self._direction
+
+    def __direction_towards(self, other):
+        """Private method that returns a direction given CURRENT position and destination"""
+        # atan2(destination y - current y, destination x - current x)
+        return math.atan2(other.get_pos()[1] - self._position[1],
+                          other.get_pos()[0] - self._position[0])
 
     def __update_direction(self):
         """Private method that returns a direction given CURRENT position and destination"""
@@ -58,22 +98,17 @@ class Organism:
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
         # find the cartesian distance to target from current position
-        x_proximity = (self._destination[0] - self._position[0]) ** 2
-        y_proximity = (self._destination[1] - self._position[1]) ** 2
-        distance = math.sqrt(x_proximity + y_proximity)
-
+        distance = math.dist(self._position, self._destination)
         # return True if less than distance_to_check
         if distance < distance_to_check:
             return True
-
         else:
             return False
 
-    def nearest_neighbors(self, organisms):
-
+    def __nearest_neighbors(self, organisms):
         neighbors = []
         for organism in organisms:
-            if math.dist(organism.get_pos(), self.get_pos()) < 10 and self is not organism:
+            if math.dist(self.get_pos(), organism.get_pos()) < self._vision and self is not organism:
                 neighbors.append(organism)
         return neighbors
 
