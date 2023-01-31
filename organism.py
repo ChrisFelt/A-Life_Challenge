@@ -50,15 +50,21 @@ class Organism:
 
     def __flock(self, other):
         """Prey move toward neighboring prey keeping separation"""
-        if math.dist(other.get_pos(), self._position) > self._vision * self._separation_weight:
+        if math.dist(other.get_pos(), self._position) > self._speed * self._separation_weight:
             direction = self.__direction_towards(other)
-            return np.array([math.sin(direction) * self._speed, math.cos(direction)])
+            return np.array([math.sin(direction) * self._speed, math.cos(direction) * self._speed])
         else:
             return np.array([0, 0])
 
     def __flee(self, other):
         """Prey move away from neighboring predators"""
         direction = self.__direction_towards(other) + math.pi
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+
+    def __separate(self, other):
+        """Predators keep minimum distance away from neighboring predators"""
+        if math.dist(other.get_pos(), self._position) < self._speed * self._separation_weight:
+            direction = self.__direction_towards(other) + math.pi
         return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
 
     def set_dest(self, organisms, screen_size):
@@ -77,6 +83,8 @@ class Organism:
                     vector = np.add(vector, self.__flock(neighbor))
                 elif self._identifier == 0 and neighbor.get_identifier() == 1:
                     vector = np.add(vector, self.__flee(neighbor))
+                else:
+                    vector = np.add(vector, self.__separate(neighbor))
             # set new destination
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
