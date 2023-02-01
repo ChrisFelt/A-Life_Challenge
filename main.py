@@ -5,7 +5,7 @@ from organism import *
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
-slow_factor = 2  # controls global animation speed
+slow_factor = 1  # controls global animation speed
 
 # global variables
 pred_population = 30
@@ -95,12 +95,15 @@ def battle(index):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index):
+def conclude_turn():
     """Step 4 of turn order.
     """
-    # remove an organism from the board if it reaches 0 health NOTE: untested!
-    if organisms[index].get_health() <= 0:
-        # clear organism animation and remove from list
+    deaths = []
+    for index in range(len(organisms)):
+        if organisms[index].get_health() <= 0:
+            deaths.append(organisms[index])
+
+    for index in range(len(deaths)):
         organisms[index].clear()
         sim_screen.update()
         organisms.pop(index)
@@ -121,5 +124,5 @@ if __name__ == "__main__":
             # step 3
             battle(i)
 
-            # step 4
-            conclude_turn(i)
+        conclude_turn()
+        print(len(organisms))

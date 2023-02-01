@@ -90,7 +90,7 @@ class Organism:
         else:
             return False
 
-    def __apply_behaviors(self, neighbors, screen_size):
+    def __apply_behaviors(self, neighbors):
         """A private method that returns the resultant movement vector based on behaviors"""
         vector = np.array([0, 0])
         for neighbor in neighbors:
@@ -126,7 +126,9 @@ class Organism:
         """Predators keep minimum distance away from neighboring predators"""
         if math.dist(other.get_pos(), self._position) < self._speed * self._separation_weight:
             direction = self.__direction_towards(other) + math.pi
-        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+            return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+        else:
+            return np.array([0, 0])
 
     def __direction_towards(self, other):
         """Private method that returns a direction given CURRENT position and destination"""
