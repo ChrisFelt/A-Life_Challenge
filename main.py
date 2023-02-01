@@ -5,11 +5,11 @@ from organism import *
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
-slow_factor = 1  # controls global animation speed
+slow_factor = 2  # controls global animation speed
 
 # global variables
-pred_population = 3
-prey_population = 7
+pred_population = 30
+prey_population = 70
 organisms = []
 
 # if within a given distance of their target destination, organism changes target
@@ -92,7 +92,7 @@ def move(index) -> None:
 def battle(index):
     """Step 3 of turn order.
     """
-    pass
+    organisms[index].battle(organisms)
 
 
 def conclude_turn(index):
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
     # play through infinite turns
     while True:
-        for i in range(pred_population + prey_population):
+        for i in range(len(organisms)):
             # step 1
             set_target(i)
 
