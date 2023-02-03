@@ -12,19 +12,18 @@ def rand_dest(screen_size) -> list:
 
 class Organism:
 
-    def __init__(self, identifier, position, destination, health, vision, speed, damage,
-                 separation_weight, birth_rate, mutation_rate):
+    def __init__(self, identifier, position, destination, attributes):
         self._sprite = turtle.Turtle()
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
-        self._health = health
-        self._vision = vision
-        self._speed = speed
-        self._damage = damage
-        self._separation_weight = separation_weight
-        self._birth_rate = birth_rate
-        self._mutation_rate = mutation_rate
+        self._health = attributes["health"]
+        self._vision = attributes["vision"]
+        self._speed = attributes["speed"]
+        self._damage = attributes["damage"]
+        self._separation_weight = attributes["separation_weight"]
+        self._birth_rate = attributes["birth_rate"]
+        self._mutation_rate = attributes["mutation_rate"]
         self._direction = self.__update_direction()  # set initial direction automatically
 
     def get_health(self):

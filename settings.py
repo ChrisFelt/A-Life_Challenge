@@ -1,5 +1,4 @@
 import tkinter
-import turtle
 
 # turtle specific globals
 screen_size = 600
@@ -14,13 +13,27 @@ organisms = []
 # if within a given distance of their target destination, organism changes target
 proximity = 10
 
-# prey general attributes
-prey_health, prey_vision, prey_speed, prey_damage = 1, 10, 10, 0
-prey_separation_weight, prey_birth_rate, prey_mutation_rate = 0.5, 0.5, 0.5
+# prey and predator general attributes
+# *NOTE: these initial values show up as the DEFAULT in the parameters screen
+prey_attributes = {"population": 7,
+                   "health": 1,
+                   "vision": 10,
+                   "speed": 10,
+                   "damage": 0,
+                   "separation_weight": 0.5,
+                   "birth_rate": 0.5,
+                   "mutation_rate": 0.5
+                   }
 
-# predator general attributes
-pred_health, pred_vision, pred_speed, pred_damage = 1, 10, 10, 1
-pred_separation_weight, pred_birth_rate, pred_mutation_rate = 0.5, 0.5, 0.5
+pred_attributes = {"population": 3,
+                   "health": 1,
+                   "vision": 10,
+                   "speed": 10,
+                   "damage": 0,
+                   "separation_weight": 0.5,
+                   "birth_rate": 0.5,
+                   "mutation_rate": 0.5
+                   }
 
 # tkinter frame parameters
 frame_height = screen_size + 10

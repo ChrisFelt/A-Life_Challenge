@@ -1,14 +1,13 @@
-from settings import *
-from organism import *
-from simulation_steps import *
-from parameters_frame import *
+import settings
+import organism
+import simulation_steps
+import turtle
+import random
 
 
-def create_organism(identifier, position, destination, health, vision, speed, damage,
-                    separation_weight, birth_rate, mutation_rate) -> None:
+def create_organism(organisms, identifier, position, destination, attributes):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
-    organisms.append(Organism(identifier, position, destination, health, vision, speed, damage,
-                              separation_weight, birth_rate, mutation_rate))
+    organisms.append(organism.Organism(identifier, position, destination, attributes))
 
     index = len(organisms) - 1
     organisms[index].hide_default()  # hide default arrow
@@ -25,45 +24,43 @@ def create_organism(identifier, position, destination, health, vision, speed, da
 
 def rand_coords() -> list:
     """Returns a list containing random [x, y] coordinates"""
-    return [random.uniform(-screen_size/2, screen_size/2),
-            random.uniform(-screen_size/2, screen_size/2)]
+    return [random.uniform(-settings.screen_size/2, settings.screen_size/2),
+            random.uniform(-settings.screen_size/2, settings.screen_size/2)]
 
 
-def initialize_organisms() -> None:
+def initialize_organisms(organisms, prey_attributes, pred_attributes):
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
-    for i in range(pred_population):
-        create_organism(1, rand_coords(), rand_coords(), pred_health, pred_vision, pred_speed, pred_damage,
-                        pred_separation_weight, pred_birth_rate, pred_mutation_rate)
+    for i in range(pred_attributes["population"]):
+        create_organism(organisms, 1, rand_coords(), rand_coords(), pred_attributes)
 
     # initial prey population
-    for i in range(prey_population):
-        create_organism(0, rand_coords(), rand_coords(), prey_health, prey_vision, prey_speed, prey_damage,
-                        prey_separation_weight, prey_birth_rate, prey_mutation_rate)
+    for i in range(prey_attributes["population"]):
+        create_organism(organisms, 0, rand_coords(), rand_coords(), prey_attributes)
 
 
-def change_to_simulation(screen):
+def change_to_simulation(screen, organisms, prey_attributes, pred_attributes):
 
     # setup turtle
     sim_screen = turtle.Screen()
-    sim_screen.setup(width=screen_size, height=screen_size)
+    sim_screen.setup(width=settings.screen_size, height=settings.screen_size)
     turtle.hideturtle()  # don't need this?
     turtle.speed(10)  # animation speed 1-10 (0 means no animation)
     turtle.tracer(0, 0)  # requires update method to be called on screen
 
-    initialize_organisms()
+    initialize_organisms(organisms, prey_attributes, pred_attributes)
 
     # play through infinite turns
     while True:
-        for i in range(pred_population + prey_population):
+        for i in range(len(organisms)):
             # step 1
-            set_target(i)
+            simulation_steps.set_target(i, organisms)
 
             # step 2
-            move(i, sim_screen)
+            simulation_steps.move(i, organisms, sim_screen)
 
             # step 3
-            battle(i)
+            simulation_steps.battle(i, organisms)
 
             # step 4
-            conclude_turn(i, sim_screen)
+            simulation_steps.conclude_turn(i, organisms, sim_screen)

@@ -1,18 +1,16 @@
-from settings import *
-from simulation_frame import *
+import tkinter
+import settings
+import simulation_frame
 
 
-def change_to_parameters(screen):
+def change_to_parameters(screen, organisms, prey_attributes, pred_attributes):
     """Build Parameters screen"""
     # remove any existing widgets
     for child in screen.winfo_children():
         child.destroy()
 
-    # global variables
-    global prey_population
-
     # basic frame canvas
-    parameters_screen = tkinter.Frame(screen, width=frame_width, height=frame_height)
+    parameters_screen = tkinter.Frame(screen, width=settings.frame_width, height=settings.frame_height)
     parameters_screen.pack()
 
     # labels for text entry boxes
@@ -21,12 +19,15 @@ def change_to_parameters(screen):
 
     # text entry boxes
     prey_nostart_entry = tkinter.Entry()
-    prey_nostart_entry.insert(0, prey_population)
-    prey_nostart_entry.pack()  # nostart_entry.get() pulls entry
+    prey_nostart_entry.insert(0, prey_attributes["population"])
+    prey_nostart_entry.pack()
 
     def start():
-        prey_population = prey_nostart_entry.get()
-        change_to_simulation(screen)
+        # grab input from entry fields
+        prey_attributes["population"] = int(prey_nostart_entry.get())
 
-    start_button = tkinter.Button(root, text="Start", command=start)
+        # swap screens
+        simulation_frame.change_to_simulation(screen, organisms, prey_attributes, pred_attributes)
+
+    start_button = tkinter.Button(screen, text="Start", command=start)
     start_button.pack(side="bottom")
