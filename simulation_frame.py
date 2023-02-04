@@ -44,7 +44,9 @@ def initialize_organisms(organisms, prey_attributes, pred_attributes):
 def turn_steps(organisms):
     global execute_steps
     # run all steps for each organism in the list
-    for i in range(len(organisms)):
+    i = 0
+    while i < len(organisms):
+
         # step 1
         simulation_steps.set_target(i, organisms)
 
@@ -55,7 +57,8 @@ def turn_steps(organisms):
         simulation_steps.battle(i, organisms)
 
         # step 4
-        simulation_steps.conclude_turn(i, organisms)
+        if simulation_steps.conclude_turn(i, organisms):    # if organism hasn't died
+            i += 1
 
     # skip until timer goes off again
     execute_steps = False

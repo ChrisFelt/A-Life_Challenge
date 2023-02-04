@@ -19,6 +19,7 @@ class Organism:
         self._destination = destination
         self._health = attributes["health"]
         self._vision = attributes["vision"]
+        self._peripheral = attributes["peripheral"]
         self._speed = attributes["speed"]
         self._damage = attributes["damage"]
         self._separation_weight = attributes["separation_weight"]
@@ -29,6 +30,10 @@ class Organism:
     def get_health(self):
         """Return current health"""
         return self._health
+
+    def decrement_health(self, damage):
+        """Decrement current health"""
+        self._health -= damage
 
     def get_identifier(self):
         """Return organism identifier"""
@@ -42,40 +47,22 @@ class Organism:
         """Return current position"""
         return self._position
 
-    def __hunt(self, other):
-        """Predators move toward neighboring prey"""
-        direction = self.__direction_towards(other)
-        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+    def get_dest(self):
+        """Return current destination"""
+        return self._destination
 
-    def __flock(self, other):
-        """Prey move toward neighboring prey keeping separation"""
-        if math.dist(other.get_pos(), self._position) > self._vision * self._separation_weight:
-            direction = self.__direction_towards(other)
-            return np.array([math.sin(direction) * self._speed, math.cos(direction)])
-        else:
-            return np.array([0, 0])
-
-    def __flee(self, other):
-        """Prey move away from neighboring predators"""
-        direction = self.__direction_towards(other) + math.pi
-        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+    def get_direction(self):
+        """Return current direction"""
+        return self._direction
 
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
-        # identify neighbors
-        vector = np.array([0, 0])
         neighbors = self.__nearest_neighbors(organisms)
         if not neighbors:
             # set random destination
             self._destination = rand_dest(screen_size)
         else:
-            for neighbor in neighbors:
-                if self._identifier == 1 and neighbor.get_identifier() == 0:
-                    vector = np.add(vector, self.__hunt(neighbor))
-                elif self._identifier == 0 and neighbor.get_identifier() == 0:
-                    vector = np.add(vector, self.__flock(neighbor))
-                elif self._identifier == 0 and neighbor.get_identifier() == 1:
-                    vector = np.add(vector, self.__flee(neighbor))
+            vector = self.__apply_behaviors(neighbors)
             # set new destination
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
@@ -84,15 +71,83 @@ class Organism:
                     coord = screen_size / 2
                 elif coord < -screen_size / 2:
                     coord = -screen_size / 2
-
-        # update direction
         self._direction = self.__update_direction()
 
-    def get_dest(self):
-        return self._destination
+    def battle(self, organisms):
+        """For neighbors of the opposing type, attack, reducing health by the damage value"""
+        neighbors = self.__nearest_neighbors(organisms)
+        for neighbor in neighbors:
+            if self._identifier != neighbor.get_identifier():
+                neighbor.decrement_health(self._damage)
 
-    def get_direction(self):
-        return self._direction
+    def is_fertile(self):
+        if random.uniform(0, 1) < self._birth_rate:
+            return True
+        else:
+            return False
+
+    def reproduce(self):
+        """Returns a new organism object with the attributes of the parent(self)"""
+        attributes = {"health": self._health,
+                      "vision": self._vision,
+                      "peripheral": math.pi / 4,
+                      "speed": self._speed,
+                      "damage": self._damage,
+                      "separation_weight": self._separation_weight,
+                      "birth_rate": self._birth_rate,
+                      "mutation_rate": self._mutation_rate
+                      }
+        return Organism(self._identifier, self._position, self._destination, attributes)
+
+    def proximity_check(self, distance_to_check):
+        """Returns True if Organism is within the given distance of the target destination"""
+        # find the cartesian distance to target from current position
+        distance = math.dist(self._position, self._destination)
+        # return True if less than distance_to_check
+        if distance < distance_to_check:
+            return True
+        else:
+            return False
+
+    def __apply_behaviors(self, neighbors):
+        """A private method that returns the resultant movement vector based on behaviors"""
+        vector = np.array([0, 0])
+        for neighbor in neighbors:
+            if self._identifier == 1 and neighbor.get_identifier() == 0:
+                vector = np.add(vector, self.__hunt(neighbor))
+            elif self._identifier == 0 and neighbor.get_identifier() == 0:
+                vector = np.add(vector, self.__flock(neighbor))
+            elif self._identifier == 0 and neighbor.get_identifier() == 1:
+                vector = np.add(vector, self.__flee(neighbor))
+            else:
+                vector = np.add(vector, self.__separate(neighbor))
+        return vector
+
+    def __hunt(self, other):
+        """Predators move toward neighboring prey"""
+        direction = self.__direction_towards(other)
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+
+    def __flock(self, other):
+        """Prey move toward neighboring prey keeping separation"""
+        if math.dist(other.get_pos(), self._position) > self._speed * self._separation_weight:
+            direction = self.__direction_towards(other)
+            return np.array([math.sin(direction) * self._speed, math.cos(direction) * self._speed])
+        else:
+            return np.array([0, 0])
+
+    def __flee(self, other):
+        """Prey move away from neighboring predators"""
+        direction = self.__direction_towards(other) + math.pi
+        return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+
+    def __separate(self, other):
+        """Predators keep minimum distance away from neighboring predators"""
+        if math.dist(other.get_pos(), self._position) < self._speed * self._separation_weight:
+            direction = self.__direction_towards(other) + math.pi
+            return np.array([math.cos(direction) * self._speed, math.sin(direction) * self._speed])
+        else:
+            return np.array([0, 0])
 
     def __direction_towards(self, other):
         """Private method that returns a direction given CURRENT position and destination"""
@@ -106,21 +161,15 @@ class Organism:
         return math.atan2(self._destination[1] - self._position[1],
                           self._destination[0] - self._position[0])
 
-    def proximity_check(self, distance_to_check):
-        """Returns True if Organism is within the given distance of the target destination"""
-        # find the cartesian distance to target from current position
-        distance = math.dist(self._position, self._destination)
-        # return True if less than distance_to_check
-        if distance < distance_to_check:
-            return True
-        else:
-            return False
-
     def __nearest_neighbors(self, organisms):
+        """Private method that returns a list of neighbors that are within vision"""
         neighbors = []
+        vision_min = self._direction - self._peripheral
+        vision_max = self._direction + self._peripheral
         for organism in organisms:
-            if math.dist(self.get_pos(), organism.get_pos()) < self._vision and self is not organism:
-                neighbors.append(organism)
+            if self is not organism and vision_min < self.__direction_towards(organism) < vision_max:
+                if math.dist(self.get_pos(), organism.get_pos()) < self._vision:
+                    neighbors.append(organism)
         return neighbors
 
     # ---------------------------------

@@ -22,7 +22,7 @@ def move(index, organisms) -> None:
 def battle(index, organisms):
     """Step 3 of turn order.
     """
-    pass
+    organisms[index].battle(organisms)
 
 
 def conclude_turn(index, organisms):
@@ -33,3 +33,6 @@ def conclude_turn(index, organisms):
         # clear organism animation and remove from list
         organisms[index].clear()
         organisms.pop(index)
+        return False
+    else:
+        return True
