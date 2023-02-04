@@ -62,14 +62,13 @@ def turn_steps(organisms):
 
 
 def change_to_simulation(screen, organisms, prey_attributes, pred_attributes):
-    """Build simulation screen and run the simulation"""  # todo: split?
-    global execute_steps
+    """Build simulation screen and run the simulation"""
 
     # setup turtle
     sim_screen = turtle.Screen()
     sim_screen.setup(width=settings.screen_size, height=settings.screen_size)
     turtle.hideturtle()  # don't need this?
-    turtle.speed(0)  # animation speed 1-10 (0 means no animation)
+    turtle.speed(10)  # animation speed 1-10 (0 means no animation)
     turtle.tracer(0, 0)  # requires update method to be called on screen
 
     def run_steps():

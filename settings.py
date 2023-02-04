@@ -1,22 +1,15 @@
-import tkinter
-
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
-slow_factor = 30  # controls global animation speed
+slow_factor = 20  # controls global animation speed
 timer = 1000 // slow_factor
-
-# global variables
-pred_population = 3
-prey_population = 7
-organisms = []
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
 
 # prey and predator general attributes
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
-prey_attributes = {"population": 7,
+prey_attributes = {"population": 70,
                    "health": 1,
                    "vision": 10,
                    "speed": 10,
@@ -26,7 +19,7 @@ prey_attributes = {"population": 7,
                    "mutation_rate": 0.5
                    }
 
-pred_attributes = {"population": 3,
+pred_attributes = {"population": 30,
                    "health": 1,
                    "vision": 10,
                    "speed": 10,
@@ -39,5 +32,3 @@ pred_attributes = {"population": 3,
 # tkinter frame parameters
 frame_height = screen_size + 10
 frame_width = screen_size + 200
-
-root = tkinter.Tk()
