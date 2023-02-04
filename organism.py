@@ -80,6 +80,25 @@ class Organism:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
 
+    def is_fertile(self):
+        if random.uniform(0, 1) < self._birth_rate:
+            return True
+        else:
+            return False
+
+    def reproduce(self):
+        """Returns a new organism object with the attributes of the parent(self)"""
+        attributes = {"health": self._health,
+                      "vision": self._vision,
+                      "peripheral": math.pi / 4,
+                      "speed": self._speed,
+                      "damage": self._damage,
+                      "separation_weight": self._separation_weight,
+                      "birth_rate": self._birth_rate,
+                      "mutation_rate": self._mutation_rate
+                      }
+        return Organism(self._identifier, self._position, self._destination, attributes)
+
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
         # find the cartesian distance to target from current position
