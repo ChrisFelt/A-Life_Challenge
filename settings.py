@@ -3,7 +3,8 @@ import tkinter
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
-slow_factor = 200  # controls global animation speed
+slow_factor = 30  # controls global animation speed
+timer = 1000 // slow_factor
 
 # global variables
 pred_population = 3

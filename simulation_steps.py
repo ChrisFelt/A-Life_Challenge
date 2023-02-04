@@ -10,15 +10,13 @@ def set_target(index, organisms):
     pass
 
 
-def move(index, organisms, screen) -> None:
+def move(index, organisms) -> None:
     """Step 2 of turn order.
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
     organisms[index].move(settings.slow_factor)
     organisms[index].draw_dot(settings.turtle_diameter)
-
-    screen.update()  # refresh screen
 
 
 def battle(index, organisms):
@@ -27,12 +25,11 @@ def battle(index, organisms):
     pass
 
 
-def conclude_turn(index, organisms, screen):
+def conclude_turn(index, organisms):
     """Step 4 of turn order.
     """
     # remove an organism from the board if it reaches 0 health NOTE: untested!
     if organisms[index].get_health() <= 0:
         # clear organism animation and remove from list
         organisms[index].clear()
-        screen.update()
         organisms.pop(index)

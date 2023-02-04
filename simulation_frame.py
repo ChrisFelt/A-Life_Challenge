@@ -4,6 +4,8 @@ import simulation_steps
 import turtle
 import random
 
+execute_steps = True
+
 
 def create_organism(organisms, identifier, position, destination, attributes):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
@@ -39,28 +41,47 @@ def initialize_organisms(organisms, prey_attributes, pred_attributes):
         create_organism(organisms, 0, rand_coords(), rand_coords(), prey_attributes)
 
 
+def turn_steps(organisms):
+    global execute_steps
+    # run all steps for each organism in the list
+    for i in range(len(organisms)):
+        # step 1
+        simulation_steps.set_target(i, organisms)
+
+        # step 2
+        simulation_steps.move(i, organisms)
+
+        # step 3
+        simulation_steps.battle(i, organisms)
+
+        # step 4
+        simulation_steps.conclude_turn(i, organisms)
+
+    # skip until timer goes off again
+    execute_steps = False
+
+
 def change_to_simulation(screen, organisms, prey_attributes, pred_attributes):
+    """Build simulation screen and run the simulation"""  # todo: split?
+    global execute_steps
 
     # setup turtle
     sim_screen = turtle.Screen()
     sim_screen.setup(width=settings.screen_size, height=settings.screen_size)
     turtle.hideturtle()  # don't need this?
-    turtle.speed(10)  # animation speed 1-10 (0 means no animation)
+    turtle.speed(0)  # animation speed 1-10 (0 means no animation)
     turtle.tracer(0, 0)  # requires update method to be called on screen
 
+    def run_steps():
+        """Timer function that sets the global boolean flag for turn_steps()"""
+        global execute_steps
+        execute_steps = True
+        sim_screen.ontimer(run_steps, settings.timer)
+
     initialize_organisms(organisms, prey_attributes, pred_attributes)
+    run_steps()
 
-    # play through infinite turns
+    # run simulation indefinitely
     while True:
-        for i in range(len(organisms)):
-            # step 1
-            simulation_steps.set_target(i, organisms)
-
-            # step 2
-            simulation_steps.move(i, organisms, sim_screen)
-
-            # step 3
-            simulation_steps.battle(i, organisms)
-
-            # step 4
-            simulation_steps.conclude_turn(i, organisms, sim_screen)
+        turn_steps(organisms)
+        sim_screen.update()

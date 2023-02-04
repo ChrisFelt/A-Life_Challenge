@@ -24,7 +24,13 @@ def change_to_parameters(screen, organisms, prey_attributes, pred_attributes):
 
     def start():
         # grab input from entry fields
-        prey_attributes["population"] = int(prey_nostart_entry.get())
+        try:
+            prey_attributes["population"] = int(prey_nostart_entry.get())
+
+        except ValueError:
+            # todo: create popup window to notify user of error
+            # todo: use flag to avoid executing subsequent lines
+            print("Error. Please enter an integer.")
 
         # swap screens
         simulation_frame.change_to_simulation(screen, organisms, prey_attributes, pred_attributes)
