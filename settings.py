@@ -1,6 +1,9 @@
+import math
+
 # turtle specific globals
 screen_size = 600
 turtle_diameter = 10
+
 slow_factor = 20  # controls global animation speed
 timer = 1000 // slow_factor
 
@@ -12,6 +15,7 @@ proximity = 10
 prey_attributes = {"population": 70,
                    "health": 1,
                    "vision": 10,
+                   "peripheral": math.pi / 4,
                    "speed": 10,
                    "damage": 1,
                    "separation_weight": 0.5,
@@ -22,6 +26,7 @@ prey_attributes = {"population": 70,
 pred_attributes = {"population": 30,
                    "health": 1,
                    "vision": 10,
+                   "peripheral": math.pi / 2,
                    "speed": 10,
                    "damage": 2,
                    "separation_weight": 0.5,

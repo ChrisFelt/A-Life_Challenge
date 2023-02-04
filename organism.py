@@ -19,6 +19,7 @@ class Organism:
         self._destination = destination
         self._health = attributes["health"]
         self._vision = attributes["vision"]
+        self._peripheral = attributes["peripheral"]
         self._speed = attributes["speed"]
         self._damage = attributes["damage"]
         self._separation_weight = attributes["separation_weight"]
@@ -144,9 +145,12 @@ class Organism:
     def __nearest_neighbors(self, organisms):
         """Private method that returns a list of neighbors that are within vision"""
         neighbors = []
+        vision_min = self._direction - self._peripheral
+        vision_max = self._direction + self._peripheral
         for organism in organisms:
-            if math.dist(self.get_pos(), organism.get_pos()) < self._vision and self is not organism:
-                neighbors.append(organism)
+            if self is not organism and vision_min < self.__direction_towards(organism) < vision_max:
+                if math.dist(self.get_pos(), organism.get_pos()) < self._vision:
+                    neighbors.append(organism)
         return neighbors
 
     # ---------------------------------
