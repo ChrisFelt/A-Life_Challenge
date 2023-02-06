@@ -11,7 +11,7 @@ execute_steps = True
 interrupt = False
 
 
-def create_organism(organisms, screen, identifier, position, destination, attributes):
+def create_organism(organisms, identifier, screen, position, destination, attributes):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
     organisms.append(organism.Organism(identifier, screen, position, destination, attributes))
 
