@@ -1,6 +1,6 @@
 import tkinter
 import settings
-import simulation_frame
+import simulation_window
 
 
 def change_to_parameters(canvas, organisms, prey_attributes, pred_attributes):
@@ -33,7 +33,7 @@ def change_to_parameters(canvas, organisms, prey_attributes, pred_attributes):
             print("Error. Please enter an integer.")
 
         # swap screens
-        simulation_frame.change_to_simulation(canvas, organisms, prey_attributes, pred_attributes)
+        simulation_window.change_to_simulation(canvas, organisms, prey_attributes, pred_attributes)
 
     start_button = tkinter.Button(canvas, text="Start", command=start)
     start_button.pack(side="bottom")

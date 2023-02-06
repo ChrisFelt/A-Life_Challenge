@@ -1,4 +1,4 @@
-import parameters_frame
+import parameters_window
 import settings
 import organism
 import simulation_steps
@@ -96,8 +96,7 @@ def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
         organisms.clear()
 
         # swap back to parameters screen
-        # todo: change parameters to default?
-        parameters_frame.change_to_parameters(canvas, organisms, prey_attributes, pred_attributes)
+        parameters_window.change_to_parameters(canvas, organisms, settings.prey_attributes, settings.pred_attributes)
 
     # control buttons frame
     bottom_frame = tkinter.Frame(canvas, width=settings.screen_size, height=35)

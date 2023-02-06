@@ -1,5 +1,5 @@
 import settings
-import parameters_frame
+import parameters_window
 import tkinter
 
 if __name__ == "__main__":
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # canvas.config(width=settings.frame_width, height=settings.frame_height)
     canvas.pack(side="top", anchor="nw")
 
-    parameters_frame.change_to_parameters(canvas,
+    parameters_window.change_to_parameters(canvas,
                                           organisms,
                                           settings.prey_attributes,
                                           settings.pred_attributes)
