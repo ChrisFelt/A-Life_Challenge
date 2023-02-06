@@ -1,4 +1,6 @@
 import settings
+import simulation_window
+import organism
 
 
 def set_target(index, organisms):
@@ -38,4 +40,9 @@ def conclude_turn(index, organisms, screen):
         organisms.pop(index)
         return False
     else:
+        if organisms[index].is_fertile():
+            identifier = organisms[index].get_identifier()
+            pos = simulation_window.rand_coords()
+            dest = simulation_window.rand_coords()
+            simulation_window.create_organism(organisms, screen, identifier, pos, dest, organisms[index].get_attributes())
         return True

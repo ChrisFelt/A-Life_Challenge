@@ -19,7 +19,7 @@ prey_attributes = {"population": 70,
                    "speed": 10,
                    "damage": 1,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.5,
+                   "birth_rate": 0.001,
                    "mutation_rate": 0.5
                    }
 
@@ -30,7 +30,7 @@ pred_attributes = {"population": 30,
                    "speed": 10,
                    "damage": 2,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.5,
+                   "birth_rate": 0.001,
                    "mutation_rate": 0.5
                    }
 
