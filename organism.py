@@ -70,11 +70,7 @@ class Organism:
             # set new destination
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
-            for coord in self._destination:
-                if coord > screen_size / 2:
-                    coord = screen_size / 2
-                elif coord < -screen_size / 2:
-                    coord = -screen_size / 2
+            self._enforce_boundaries(screen_size)
         self._direction = self.__update_direction()
 
     def battle(self, organisms):
@@ -173,6 +169,17 @@ class Organism:
         # atan2(destination y - current y, destination x - current x)
         return math.atan2(self._destination[1] - self._position[1],
                           self._destination[0] - self._position[0])
+
+    def __enforce_boundaries(self, screen_size):
+        """Private methods that updates the destination coordinates to enforce walls"""
+        if self._destination[0] > screen_size / 2:
+            self._destination[0] = screen_size / 2
+        elif self._destination[0] < -screen_size / 2:
+            self._destination[0] = -screen_size / 2
+        if self._destination[1] > screen_size / 2:
+            self._destination[1] = screen_size / 2
+        elif self._destination[1] < -screen_size / 2:
+            self._destination[1] = -screen_size / 2
 
     def __nearest_neighbors(self, organisms):
         """Private method that returns a list of neighbors that are within vision"""
