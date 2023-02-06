@@ -4,8 +4,8 @@ import math
 screen_size = 600
 turtle_diameter = 10
 
-slow_factor = 20  # controls global animation speed
-timer = 1000 // slow_factor
+slow_factor = 30  # controls global animation speed
+timer = int(1000 // slow_factor)
 
 # if within a given distance of their target destination, organism changes target
 proximity = 10
@@ -36,4 +36,4 @@ pred_attributes = {"population": 30,
 
 # tkinter frame parameters
 frame_height = screen_size + 10
-frame_width = screen_size + 200
+frame_width = screen_size + 300

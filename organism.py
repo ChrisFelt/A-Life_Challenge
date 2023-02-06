@@ -12,8 +12,8 @@ def rand_dest(screen_size) -> list:
 
 class Organism:
 
-    def __init__(self, identifier, position, destination, attributes):
-        self._sprite = turtle.Turtle()
+    def __init__(self, identifier, screen, position, destination, attributes):
+        self._sprite = turtle.RawTurtle(screen)
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
@@ -179,6 +179,10 @@ class Organism:
     def hide_default(self):
         """Hide default turtle arrow"""
         self._sprite.hideturtle()
+
+    def speed(self, num):
+        """Set turtle speed"""
+        self._sprite.speed(num)  # animation speed 1-10 (0 means no animation)
 
     def up(self):
         """No lines are drawn when turtle moves"""

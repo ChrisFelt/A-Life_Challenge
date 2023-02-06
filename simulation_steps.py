@@ -25,8 +25,11 @@ def battle(index, organisms):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index, organisms):
+def conclude_turn(index, organisms, sim_screen):
     """Step 4 of turn order.
+    index: current index of organisms
+    index: list of Organism objects
+    sim_screen: animation screen the Organism sprite will be drawn on
     """
     # remove an organism from the board if it reaches 0 health NOTE: untested!
     if organisms[index].get_health() <= 0:
