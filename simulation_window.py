@@ -39,11 +39,11 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
     for i in range(pred_attributes["population"]):
-        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes)
+        create_organism(organisms, 1, screen, rand_coords(), rand_coords(), pred_attributes)
 
     # initial prey population
     for i in range(prey_attributes["population"]):
-        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
+        create_organism(organisms, 0, screen, rand_coords(), rand_coords(), prey_attributes)
 
 
 def steps(organisms, screen):
