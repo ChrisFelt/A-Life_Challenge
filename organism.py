@@ -17,6 +17,7 @@ class Organism:
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
+        self._genome = attributes
         self._health = attributes["health"]
         self._vision = attributes["vision"]
         self._peripheral = attributes["peripheral"]
@@ -86,8 +87,8 @@ class Organism:
         else:
             return False
 
-    def reproduce(self):
-        """Returns a new organism object with the attributes of the parent(self)"""
+    def get_attributes(self):
+        """Returns a dictionary of attributes for use in creation of offspring organisms"""
         attributes = {"health": self._health,
                       "vision": self._vision,
                       "peripheral": math.pi / 4,
@@ -97,7 +98,7 @@ class Organism:
                       "birth_rate": self._birth_rate,
                       "mutation_rate": self._mutation_rate
                       }
-        return Organism(self._identifier, self._position, self._destination, attributes)
+        return attributes
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
