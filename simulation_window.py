@@ -46,7 +46,7 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
         create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
 
 
-def steps(organisms, sim_screen):
+def steps(organisms, screen):
     global execute_steps
     # run all steps for each organism in the list
     i = 0
@@ -62,7 +62,7 @@ def steps(organisms, sim_screen):
         simulation_steps.battle(i, organisms)
 
         # step 4
-        if simulation_steps.conclude_turn(i, organisms, sim_screen):    # if organism hasn't died
+        if simulation_steps.conclude_turn(i, organisms, screen):    # if organism hasn't died
             i += 1
 
     # skip until timer goes off again

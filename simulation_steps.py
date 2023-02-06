@@ -25,7 +25,7 @@ def battle(index, organisms):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index, organisms, sim_screen):
+def conclude_turn(index, organisms, screen):
     """Step 4 of turn order.
     index: current index of organisms
     index: list of Organism objects
