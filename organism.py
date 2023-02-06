@@ -12,7 +12,7 @@ def rand_dest(screen_size) -> list:
 
 class Organism:
 
-    def __init__(self, identifier, screen, position, destination, attributes):
+    def __init__(self, screen, identifier, position, destination, attributes):
         self._sprite = turtle.RawTurtle(screen)
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position

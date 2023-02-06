@@ -10,9 +10,9 @@ execute_steps = True
 interrupt = False
 
 
-def create_organism(organisms, identifier, screen, position, destination, attributes):
+def create_organism(organisms, screen, identifier, position, destination, attributes):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
-    organisms.append(organism.Organism(identifier, screen, position, destination, attributes))
+    organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
     index = len(organisms) - 1
     organisms[index].hide_default()  # hide default arrow
@@ -38,11 +38,11 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
     for i in range(pred_attributes["population"]):
-        create_organism(organisms, 1, screen, rand_coords(), rand_coords(), pred_attributes)
+        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes)
 
     # initial prey population
     for i in range(prey_attributes["population"]):
-        create_organism(organisms, 0, screen, rand_coords(), rand_coords(), prey_attributes)
+        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
 
 
 def steps(organisms, screen):
