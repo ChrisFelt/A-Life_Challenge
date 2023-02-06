@@ -70,7 +70,7 @@ class Organism:
             # set new destination
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
-            self._enforce_boundaries(screen_size)
+            self.__enforce_boundaries(screen_size)
         self._direction = self.__update_direction()
 
     def battle(self, organisms):
