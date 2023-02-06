@@ -5,7 +5,6 @@ import simulation_steps
 import turtle
 import random
 import tkinter
-import time
 
 execute_steps = True
 interrupt = False
@@ -90,8 +89,8 @@ def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
         global interrupt
 
         # stop running simulation steps and reset variables
+        # may need to check interrupt in each turn step (if steps are executed after next line of code, returns errors)
         interrupt = True
-        time.sleep(1)  # give while loop time to complete
         sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
         organisms.clear()
 
