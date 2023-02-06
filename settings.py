@@ -13,6 +13,7 @@ proximity = 10
 # prey and predator general attributes
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
 prey_attributes = {"population": 70,
+                   "lifespan": 10,
                    "health": 1,
                    "vision": 10,
                    "peripheral": math.pi / 4,
@@ -24,6 +25,7 @@ prey_attributes = {"population": 70,
                    }
 
 pred_attributes = {"population": 30,
+                   "lifespan": 10,
                    "health": 1,
                    "vision": 10,
                    "peripheral": math.pi / 2,

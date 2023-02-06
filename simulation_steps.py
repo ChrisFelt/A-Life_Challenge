@@ -34,7 +34,7 @@ def conclude_turn(index, organisms, screen):
     sim_screen: animation screen the Organism sprite will be drawn on
     """
     # remove an organism from the board if it reaches 0 health NOTE: untested!
-    if organisms[index].get_health() <= 0:
+    if organisms[index].is_dead():
         # clear organism animation and remove from list
         organisms[index].clear()
         organisms.pop(index)

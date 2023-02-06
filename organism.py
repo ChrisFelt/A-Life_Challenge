@@ -18,6 +18,8 @@ class Organism:
         self._position = position
         self._destination = destination
         self._genome = attributes
+        self._age = 0
+        self._lifespan = attributes["lifespan"]
         self._health = attributes["health"]
         self._vision = attributes["vision"]
         self._peripheral = attributes["peripheral"]
@@ -58,6 +60,7 @@ class Organism:
 
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
+        self._age += 1
         neighbors = self.__nearest_neighbors(organisms)
         if not neighbors:
             # set random destination
@@ -81,7 +84,15 @@ class Organism:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
 
+    def is_dead(self):
+        """If the organism has been killed or if they have died of old age, returns True, otherwise False"""
+        if self._health * self._lifespan < self._age or self._health <= 0:
+            return True
+        else:
+            return False
+
     def is_fertile(self):
+        """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
         if random.uniform(0, 1) < self._birth_rate:
             return True
         else:
@@ -89,7 +100,8 @@ class Organism:
 
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
-        attributes = {"health": self._health,
+        attributes = {"lifespan": self._lifespan,
+                      "health": self._health,
                       "vision": self._vision,
                       "peripheral": math.pi / 4,
                       "speed": self._speed,
