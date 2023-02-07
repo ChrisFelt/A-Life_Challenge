@@ -39,3 +39,16 @@ pred_attributes = {"population": 30,
 # tkinter frame parameters
 frame_height = screen_size + 10
 frame_width = screen_size + 300
+
+button_height = 35
+
+# tkinter widget padding
+x_pad = 20
+y_pad = 15
+x_pad_left = (x_pad, 0)
+x_pad_right = (0, x_pad)
+x_pad_both = (x_pad, x_pad)
+y_pad_top = (y_pad, 0)
+y_pad_bot = (0, y_pad)
+y_pad_both = (y_pad, y_pad)
+

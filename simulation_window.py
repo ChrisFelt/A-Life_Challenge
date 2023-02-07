@@ -98,7 +98,7 @@ def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
         parameters_window.change_to_parameters(canvas, organisms, settings.prey_attributes, settings.pred_attributes)
 
     # control buttons frame
-    bottom_frame = tkinter.Frame(canvas, width=settings.screen_size, height=35)
+    bottom_frame = tkinter.Frame(canvas, width=settings.screen_size, height=settings.button_height)
     bottom_frame.pack(side="bottom", anchor="sw")
 
     # control buttons
