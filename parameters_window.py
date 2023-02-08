@@ -26,7 +26,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     root.config(pady=settings.y_pad)
 
     # -----------------------------------------------------------------------------
-    # prey frame
+    # PREY frame
     # -----------------------------------------------------------------------------
     prey_frame = tkinter.Frame(root,
                                width=settings.screen_size,
@@ -36,7 +36,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     prey_frame.pack(side="top", anchor="n")
 
     prey_nostart_label = tkinter.Label(prey_frame, text="Prey Parameters", font=('Calibri 12 underline'), height=2)
-    prey_nostart_label.grid(row=0, column=0)
+    prey_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
     # -------------------------------
     # labels for text entry boxes
@@ -102,10 +102,10 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     # pad frame
     # -----------------------------------------------------------------------------
     pad_frame_1 = tkinter.Frame(root, height=settings.button_frame_height)
-    pad_frame_1.pack(side="top", anchor="n")
+    pad_frame_1.pack(side="top")
 
     # -----------------------------------------------------------------------------
-    # pred frame
+    # PREDATOR frame
     # -----------------------------------------------------------------------------
     pred_frame = tkinter.Frame(root,
                                width=settings.screen_size,
@@ -115,7 +115,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     pred_frame.pack(side="top", anchor="n")
 
     pred_nostart_label = tkinter.Label(pred_frame, text="Predator Parameters", font=('Calibri 12 underline'), height=2)
-    pred_nostart_label.grid(row=0, column=0)
+    pred_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
     # -------------------------------
     # labels for text entry boxes
@@ -186,7 +186,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     def start():
         """Get data from input fields and start simulation"""
         int_error = " error.\n\nPlease enter an integer."
-        float_error = " error.\n\nPlease enter an float."
+        float_error = " error.\n\nPlease enter a float."
 
         # --------------------------------------
         # grab input from PREY entry fields
