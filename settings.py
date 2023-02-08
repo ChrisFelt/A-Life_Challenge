@@ -20,13 +20,13 @@ prey_attributes = {"population": 70,
                    "speed": 10,
                    "damage": 1,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.001,
+                   "birth_rate": 0.002,
                    "mutation_rate": 0.5
                    }
 
 pred_attributes = {"population": 30,
                    "lifespan": 10,
-                   "health": 1,
+                   "health": 2,
                    "vision": 10,
                    "peripheral": math.pi / 2,
                    "speed": 10,
