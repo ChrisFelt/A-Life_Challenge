@@ -68,17 +68,19 @@ def steps(organisms, screen):
     execute_steps = False
 
 
-def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
+def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     """Build simulation screen and run the simulation"""
     global interrupt, execute_steps
     interrupt = False
 
     # remove any existing widgets
-    for child in canvas.winfo_children():
+    for child in root.winfo_children():
         child.destroy()
 
-    # basic frame canvas
-    sim_canvas = tkinter.Canvas(canvas, width=settings.screen_size, height=settings.screen_size)
+    root.config(pady=0)
+
+    # basic canvas for screen
+    sim_canvas = tkinter.Canvas(root, width=settings.screen_size, height=settings.screen_size)
     sim_canvas.pack(side="top", anchor="nw")
 
     # setup turtle screen
@@ -95,10 +97,10 @@ def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
         organisms.clear()
 
         # swap back to parameters screen
-        parameters_window.change_to_parameters(canvas, organisms, settings.prey_attributes, settings.pred_attributes)
+        parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
 
     # control buttons frame
-    bottom_frame = tkinter.Frame(canvas, width=settings.screen_size, height=settings.button_height)
+    bottom_frame = tkinter.Frame(root, width=settings.screen_size, height=settings.button_height)
     bottom_frame.pack(side="bottom", anchor="sw")
 
     # control buttons
@@ -106,7 +108,7 @@ def change_to_simulation(canvas, organisms, prey_attributes, pred_attributes):
     button.pack(side="bottom")
 
     # live stats frame
-    side_frame = tkinter.Frame(canvas, width=900)
+    side_frame = tkinter.Frame(root, width=900)
     side_frame.pack()
 
     def run_steps():

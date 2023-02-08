@@ -5,6 +5,8 @@ import tkinter
 if __name__ == "__main__":
     organisms = []
     root = tkinter.Tk()
+    root.minsize(settings.screen_size, settings.screen_size//2)
+    # root.eval('tk::PlaceWindow . center') # todo: find a better method to center window
 
     parameters_window.change_to_parameters(root,
                                            organisms,
