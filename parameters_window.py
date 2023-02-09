@@ -35,7 +35,10 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
                                highlightthickness=2)
     prey_frame.pack(side="top", anchor="n")
 
-    prey_nostart_label = tkinter.Label(prey_frame, text="Prey Parameters", font=('Calibri 12 underline'), height=2)
+    prey_nostart_label = tkinter.Label(prey_frame,
+                                       text="Prey Parameters",
+                                       font=('Calibri 12 underline'),
+                                       height=2)
     prey_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
     # -------------------------------
@@ -114,7 +117,10 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
                                highlightthickness=2)
     pred_frame.pack(side="top", anchor="n")
 
-    pred_nostart_label = tkinter.Label(pred_frame, text="Predator Parameters", font=('Calibri 12 underline'), height=2)
+    pred_nostart_label = tkinter.Label(pred_frame,
+                                       text="Predator Parameters",
+                                       font=('Calibri 12 underline'),
+                                       height=2)
     pred_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
     # -------------------------------
@@ -183,6 +189,16 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     pad_frame_1 = tkinter.Frame(root, height=settings.button_frame_height//2)
     pad_frame_1.pack(side="top", anchor="n")
 
+    # -----------------------------------------------------------------------------
+    # button frame
+    # -----------------------------------------------------------------------------
+    # create button frame
+    button_frame = tkinter.Frame(root, width=settings.screen_size, height=settings.button_frame_height)
+    button_frame.pack(side="top")
+
+    # ------------------------------
+    # start button
+    # ------------------------------
     def start():
         """Get data from input fields and start simulation"""
         int_error = " error.\n\nPlease enter an integer."
@@ -309,20 +325,19 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
         # ------------------------------
         simulation_window.change_to_simulation(root, organisms, prey_attributes, pred_attributes)
 
-    def load():
-        """Load simulation from save file"""
-        popup(root, "Error.\n\nLoad feature not yet enabled.")
-
-    # create button frame with buttons
-    button_frame = tkinter.Frame(root, width=settings.screen_size, height=settings.button_frame_height)
-    button_frame.pack(side="top")
-
     start_button = tkinter.Button(button_frame,
                                   text="Start",
                                   command=start,
                                   height=settings.button_height,
                                   width=settings.button_width)
     start_button.pack(side="left")
+
+    # ------------------------------
+    # load button
+    # ------------------------------
+    def load():
+        """Load simulation from save file"""
+        popup(root, "Error.\n\nLoad feature not yet enabled.")
 
     load_button = tkinter.Button(button_frame,
                                  text="Load",
