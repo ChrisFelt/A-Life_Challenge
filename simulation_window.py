@@ -2,6 +2,7 @@ import parameters_window
 import settings
 import organism
 import simulation_steps
+from population import Population
 import turtle
 import random
 import tkinter
@@ -45,7 +46,7 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
         create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
 
 
-def steps(organisms, screen):
+def steps(organisms, population, screen):
     global execute_steps
     # run all steps for each organism in the list
     i = 0
@@ -61,9 +62,9 @@ def steps(organisms, screen):
         simulation_steps.battle(i, organisms)
 
         # step 4
-        if simulation_steps.conclude_turn(i, organisms, screen):    # if organism hasn't died
+        if simulation_steps.conclude_turn(i, organisms, population, screen):    # if organism hasn't died
             i += 1
-
+    population.next_generation()
     # skip until timer goes off again
     execute_steps = False
 
@@ -72,6 +73,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     """Build simulation screen and run the simulation"""
     global interrupt, execute_steps
     interrupt = False
+    population = Population(pred_attributes, prey_attributes)
 
     # remove any existing widgets
     for child in root.winfo_children():
@@ -95,6 +97,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         interrupt = True
         sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
         organisms.clear()
+        population.log_population()
 
         # swap back to parameters screen
         parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
@@ -128,5 +131,5 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
 
         # run steps according to timer
         if execute_steps:
-            steps(organisms, sim_screen)
+            steps(organisms, population, sim_screen)
         sim_screen.update()
