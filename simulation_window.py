@@ -82,8 +82,12 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     root.config(pady=0)
 
     # basic canvas for screen
-    sim_canvas = tkinter.Canvas(root, width=settings.screen_size, height=settings.screen_size)
-    sim_canvas.pack(side="top", anchor="nw")
+    sim_canvas = tkinter.Canvas(root,
+                                width=settings.screen_size,
+                                height=settings.screen_size,
+                                highlightbackground="black",
+                                highlightthickness=1)
+    sim_canvas.pack(side="top", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
 
     # setup turtle screen
     sim_screen = turtle.TurtleScreen(sim_canvas)
@@ -163,6 +167,20 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
                                  height=settings.button_height,
                                  width=settings.button_width)
     load_button.pack(side="left")
+
+    # animation speed slider
+    def update_speed(event):
+        # todo: figure out what event parameter contains
+        print("Speed set to: " + str(speed_slider.get()) + ".")
+
+    # speed slider
+    speed_slider = tkinter.Scale(button_frame,
+                                 command=update_speed,
+                                 from_=1,
+                                 to=50,
+                                 label="Animation Speed",
+                                 orient="horizontal")
+    speed_slider.pack()
 
     # live stats frame
     side_frame = tkinter.Frame(root, width=settings.screen_size*2)
