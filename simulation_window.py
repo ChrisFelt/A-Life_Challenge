@@ -8,6 +8,7 @@ import tkinter
 
 execute_steps = True
 interrupt = False
+pause_simulation = False
 
 
 def create_organism(organisms, screen, identifier, position, destination, attributes):
@@ -70,8 +71,9 @@ def steps(organisms, screen):
 
 def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     """Build simulation screen and run the simulation"""
-    global interrupt, execute_steps
+    global interrupt, execute_steps, pause_simulation
     interrupt = False
+    pause_simulation = False
 
     # remove any existing widgets
     for child in root.winfo_children():
@@ -87,6 +89,39 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     sim_screen = turtle.TurtleScreen(sim_canvas)
     sim_screen.tracer(0, 0)  # requires update method to be called on screen
 
+    # control buttons frame
+    button_frame = tkinter.Frame(root,
+                                 width=settings.screen_size,
+                                 height=settings.button_height,
+                                 pady=settings.y_pad)
+    button_frame.pack(side="bottom")
+
+    def pause():
+        """Pause simulation"""
+        global interrupt
+        global pause_simulation
+
+        # toggle pause todo: fix with turtle.ontimer()
+        #if not pause_simulation:
+        #    pause_simulation = True
+        #else:
+        #    pause_simulation = False
+
+        # toggle button text
+        if pause_text.get() == "Pause":
+            pause_text.set("Resume")
+        else:
+            pause_text.set("Pause")
+
+    pause_text = tkinter.StringVar()
+    pause_button = tkinter.Button(button_frame,
+                                  textvariable=pause_text,
+                                  command=pause,
+                                  height=settings.button_height,
+                                  width=settings.button_width)
+    pause_button.pack(side="left")
+    pause_text.set("Pause")
+
     def quit_simulation():
         global interrupt
 
@@ -99,16 +134,38 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         # swap back to parameters screen
         parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
 
-    # control buttons frame
-    bottom_frame = tkinter.Frame(root, width=settings.screen_size, height=settings.button_height)
-    bottom_frame.pack(side="bottom", anchor="sw")
+    # stop button
+    stop_button = tkinter.Button(button_frame,
+                                 text="Stop",
+                                 command=quit_simulation,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    stop_button.pack(side="left")
 
-    # control buttons
-    button = tkinter.Button(bottom_frame, text="Stop", command=quit_simulation)
-    button.pack(side="bottom")
+    def save():
+        """Save current simulation"""
+        parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
+
+    save_button = tkinter.Button(button_frame,
+                                 text="Save",
+                                 command=save,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    save_button.pack(side="left")
+
+    def load():
+        """Save current simulation"""
+        parameters_window.popup(root, "Error.\n\nLoad feature not yet enabled.")
+
+    load_button = tkinter.Button(button_frame,
+                                 text="Load",
+                                 command=load,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    load_button.pack(side="left")
 
     # live stats frame
-    side_frame = tkinter.Frame(root, width=900)
+    side_frame = tkinter.Frame(root, width=settings.screen_size*2)
     side_frame.pack()
 
     def run_steps():
