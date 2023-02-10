@@ -96,83 +96,18 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     sim_screen = turtle.TurtleScreen(sim_canvas)
     sim_screen.tracer(0, 0)  # requires update method to be called on screen
 
+    # -----------------------------------------------------------------------------
     # control buttons frame
+    # -----------------------------------------------------------------------------
     button_frame = tkinter.Frame(root,
                                  width=settings.screen_size,
                                  height=settings.button_height,
                                  pady=settings.y_pad)
-    button_frame.pack(side="bottom")
+    button_frame.pack(side="bottom", anchor="sw")
 
-    def pause():
-        """Pause simulation"""
-        global interrupt
-        global pause_simulation
-
-        # toggle pause todo: fix with turtle.ontimer()
-        #if not pause_simulation:
-        #    pause_simulation = True
-        #else:
-        #    pause_simulation = False
-
-        # toggle button text
-        if pause_text.get() == "Pause":
-            pause_text.set("Resume")
-        else:
-            pause_text.set("Pause")
-
-    pause_text = tkinter.StringVar()
-    pause_button = tkinter.Button(button_frame,
-                                  textvariable=pause_text,
-                                  command=pause,
-                                  height=settings.button_height,
-                                  width=settings.button_width)
-    pause_button.pack(side="left")
-    pause_text.set("Pause")
-
-    def quit_simulation():
-        global interrupt
-
-        # stop running simulation steps and reset variables
-        # may need to check interrupt in each turn step (if steps are executed after next line of code, returns errors)
-        interrupt = True
-        sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
-        organisms.clear()
-        statistics.log_population()
-
-        # swap back to parameters screen
-        parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
-
-    # stop button
-    stop_button = tkinter.Button(button_frame,
-                                 text="Stop",
-                                 command=quit_simulation,
-                                 height=settings.button_height,
-                                 width=settings.button_width)
-    stop_button.pack(side="left")
-
-    def save():
-        """Save current simulation"""
-        parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
-
-    save_button = tkinter.Button(button_frame,
-                                 text="Save",
-                                 command=save,
-                                 height=settings.button_height,
-                                 width=settings.button_width)
-    save_button.pack(side="left")
-
-    def load():
-        """Save current simulation"""
-        parameters_window.popup(root, "Error.\n\nLoad feature not yet enabled.")
-
-    load_button = tkinter.Button(button_frame,
-                                 text="Load",
-                                 command=load,
-                                 height=settings.button_height,
-                                 width=settings.button_width)
-    load_button.pack(side="left")
-
+    # -------------------------------
     # animation speed slider
+    # -------------------------------
     def update_speed(event):
         # todo: figure out what event parameter contains
         print("Speed set to: " + str(speed_slider.get()) + ".")
@@ -183,15 +118,108 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
                                  from_=1,
                                  to=50,
                                  label="Animation Speed",
-                                 orient="horizontal")
-    speed_slider.pack()
+                                 showvalue=False,  # turn off current value display
+                                 orient="horizontal",
+                                 length=200,  # horizontal length of slider in pixels
+                                 width=20)  # slider height in pixels
+    speed_slider.pack(side="left", padx=(10, 100))
 
+    # -------------------------------
+    # pause button
+    # -------------------------------
+    def pause():
+        """Pause simulation"""
+        global interrupt
+        global pause_simulation
+
+        # toggle pause
+        if not pause_simulation:
+            pause_simulation = True
+        else:
+            pause_simulation = False
+
+        # toggle button text
+        if pause_text.get() == "Pause":
+            pause_text.set("Resume")
+        else:
+            pause_text.set("Pause")
+
+    # create pause button in button frame
+    pause_text = tkinter.StringVar()
+    pause_button = tkinter.Button(button_frame,
+                                  textvariable=pause_text,
+                                  command=pause,
+                                  height=settings.button_height,
+                                  width=settings.button_width)
+    pause_button.pack(side="left")
+    pause_text.set("Pause")
+
+    # -------------------------------
+    # save button
+    # -------------------------------
+    def save():
+        """Save current simulation"""
+        parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
+
+    # create save button
+    save_button = tkinter.Button(button_frame,
+                                 text="Save",
+                                 command=save,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    save_button.pack(side="left")
+
+    # -------------------------------
+    # load button
+    # -------------------------------
+    def load():
+        """Save current simulation"""
+        parameters_window.popup(root, "Error.\n\nLoad feature not yet enabled.")
+
+    # add load button to button frame
+    load_button = tkinter.Button(button_frame,
+                                 text="Load",
+                                 command=load,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    load_button.pack(side="left")
+
+    # -------------------------------
+    # stop button
+    # -------------------------------
+    def quit_simulation():
+        """Stop turtle animation and simulation turns, then switch to parameters window"""
+        global interrupt
+
+        # stop running simulation steps and reset variables
+        # may need to check interrupt in each turn step (if steps are executed after next line of code, returns errors)
+        interrupt = True
+        sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
+        organisms.clear()
+        statistics.log_population()
+
+        # swap back to parameters window
+        parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
+
+    # add stop button to button frame
+    stop_button = tkinter.Button(button_frame,
+                                 text="Stop",
+                                 command=quit_simulation,
+                                 height=settings.button_height,
+                                 width=settings.button_width)
+    stop_button.pack(side="left", anchor="e", padx=(50, 0))
+
+    # -----------------------------------------------------------------------------
     # live stats frame
+    # -----------------------------------------------------------------------------
     side_frame = tkinter.Frame(root, width=settings.screen_size*2)
     side_frame.pack()
 
+    # -----------------------------------------------------------------------------
+    # run simulation
+    # -----------------------------------------------------------------------------
     def run_steps():
-        """Timer function that sets the global boolean flag for turn_steps()"""
+        """Timer function that sets the global boolean flag for steps()"""
         global execute_steps
         execute_steps = True
         sim_screen.ontimer(run_steps, settings.timer)
@@ -201,11 +229,16 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
 
     # run simulation indefinitely
     while True:
-        # exit simulation
+        # exit simulation when stop button pressed
         if interrupt:
             break
 
-        # run steps according to timer
-        if execute_steps:
-            steps(organisms, statistics, sim_screen)
+        # unless paused, run steps
+        if not pause_simulation:
+
+            if execute_steps:
+                steps(organisms, statistics, sim_screen)
+
+        # still need to update the screen even if paused
+        # otherwise, program locks up
         sim_screen.update()
