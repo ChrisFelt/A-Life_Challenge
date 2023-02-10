@@ -6,6 +6,7 @@ from statistics import Statistics
 import turtle
 import random
 import tkinter
+import time
 
 execute_steps = True
 interrupt = False
@@ -74,6 +75,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     """Build simulation screen and run the simulation"""
     global interrupt, execute_steps, pause_simulation
     interrupt = False
+    execute_steps = True
+    pause_simulation = False
 
     statistics = Statistics(pred_attributes, prey_attributes)
     pause_simulation = False
@@ -82,7 +85,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     for child in root.winfo_children():
         child.destroy()
 
-    root.config(pady=0)
+    root.config(pady=0, width=settings.screen_size*2)
 
     # basic canvas for screen
     sim_canvas = tkinter.Canvas(root,
@@ -117,11 +120,11 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
                                  command=update_speed,
                                  from_=1,
                                  to=50,
-                                 label="Animation Speed",
+                                 label="Simulation Speed",
                                  showvalue=False,  # turn off current value display
                                  orient="horizontal",
                                  length=200,  # horizontal length of slider in pixels
-                                 width=20)  # slider height in pixels
+                                 width=15)  # slider height in pixels
     speed_slider.pack(side="left", padx=(10, 100))
 
     # -------------------------------
@@ -213,7 +216,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # live stats frame
     # -----------------------------------------------------------------------------
     side_frame = tkinter.Frame(root, width=settings.screen_size*2)
-    side_frame.pack()
+    side_frame.pack(side="right", anchor="ne")
+
+    # -------------------------------
+    # elapsed time
+    # -------------------------------
+    start_time = time.time()
+    #elapsed_time = tkinter.Label(side_frame, text=str(time.time() - start_time))
+    #elapsed_time.pack(side="right")
 
     # -----------------------------------------------------------------------------
     # run simulation
