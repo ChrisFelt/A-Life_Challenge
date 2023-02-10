@@ -29,6 +29,9 @@ class Organism:
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._direction = self.__update_direction()  # set initial direction automatically
+        self._fed = True
+        if self._identifier == 1:
+            self._fed = False
 
     def get_health(self):
         """Return current health"""
@@ -79,17 +82,21 @@ class Organism:
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
+                if neighbor.get_health() == 0 and self._identifier == 1:
+                    self._fed = True
 
     def is_dead(self):
         """If the organism has been killed or if they have died of old age, returns True, otherwise False"""
-        if self._health * self._lifespan < self._age or self._health <= 0:
+        if self._lifespan < self._age or self._health <= 0:
             return True
         else:
             return False
 
     def is_fertile(self):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate:
+        if random.uniform(0, 1) < self._birth_rate and self._fed:
+            if self._identifier == 1:
+                self._fed = False
             return True
         else:
             return False
