@@ -32,7 +32,7 @@ pred_attributes = {"population": 30,
                    "speed": 10,
                    "damage": 2,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.001,
+                   "birth_rate": 0.01,
                    "mutation_rate": 0.5
                    }
 
