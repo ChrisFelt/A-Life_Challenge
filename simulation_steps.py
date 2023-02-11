@@ -26,7 +26,7 @@ def battle(index, organisms):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index, organisms, population, screen):
+def conclude_turn(index, organisms, session_stats, screen):
     """Step 4 of turn order.
     index: current index of organisms
     index: list of Organism objects
@@ -36,7 +36,7 @@ def conclude_turn(index, organisms, population, screen):
     if organisms[index].is_dead():
         # clear organism animation and remove from list
         organisms[index].clear()
-        population.remove_organism(organisms[index].get_identifier())
+        session_stats.remove_organism(organisms[index].get_identifier())
         organisms.pop(index)
         return False
     else:
@@ -44,6 +44,6 @@ def conclude_turn(index, organisms, population, screen):
             identifier = organisms[index].get_identifier()
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()
-            population.add_organism(organisms[index].get_identifier())
+            session_stats.add_organism(organisms[index].get_identifier())
             simulation_window.create_organism(organisms, screen, identifier, pos, dest, organisms[index].get_attributes())
         return True
