@@ -226,7 +226,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # live stats frame
     # -----------------------------------------------------------------------------
     side_frame = tkinter.Frame(root,
-                               width=settings.screen_size*2,
+                               width=settings.screen_size//2,
                                highlightbackground="black",
                                highlightthickness=1)
     side_frame.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
