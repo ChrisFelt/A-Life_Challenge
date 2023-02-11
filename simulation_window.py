@@ -78,8 +78,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     execute_steps = True
     pause_simulation = False
 
+    # track current session statistics
     session_stats = statistics.Statistics(pred_attributes, prey_attributes)
-    pause_simulation = False
 
     # remove any existing widgets
     for child in root.winfo_children():
@@ -93,7 +93,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
                                 height=settings.screen_size,
                                 highlightbackground="black",
                                 highlightthickness=1)
-    sim_canvas.pack(side="top", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
+    sim_canvas.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
 
     # setup turtle screen
     sim_screen = turtle.TurtleScreen(sim_canvas)
@@ -102,11 +102,11 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # -----------------------------------------------------------------------------
     # control buttons frame
     # -----------------------------------------------------------------------------
-    button_frame = tkinter.Frame(root,
+    button_frame = tkinter.Frame(sim_canvas,
                                  width=settings.screen_size,
                                  height=settings.button_height,
                                  pady=settings.y_pad)
-    button_frame.pack(side="bottom", anchor="sw")
+    button_frame.pack(side="left", anchor="sw")
 
     # -------------------------------
     # animation speed slider
@@ -216,14 +216,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # live stats frame
     # -----------------------------------------------------------------------------
     side_frame = tkinter.Frame(root, width=settings.screen_size*2)
-    side_frame.pack(side="right", anchor="ne")
+    side_frame.pack(side="right")
 
     # -------------------------------
     # elapsed time
     # -------------------------------
     start_time = time.time()
-    #elapsed_time = tkinter.Label(side_frame, text=str(time.time() - start_time))
-    #elapsed_time.pack(side="right")
+    elapsed_time = tkinter.Label(side_frame, text=str(time.time() - start_time))
+    elapsed_time.pack(side="right", anchor="ne")
 
     # -----------------------------------------------------------------------------
     # run simulation
