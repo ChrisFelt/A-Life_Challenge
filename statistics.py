@@ -1,10 +1,12 @@
-import csv
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Statistics:
 
     def __init__(self, predator_attributes, prey_attributes):
-        self._generations = [[predator_attributes["population"], prey_attributes["population"]]]
+        self._predator_pop = []
+        self._prey_pop = []
         self._predator = {"population": predator_attributes["population"],
                           "births": 0,
                           "deaths": 0,
@@ -47,11 +49,18 @@ class Statistics:
         """Stores data for the current generation"""
         self._general["turn"] += 1
         if self._general["turn"] % self._general["gen_length"] == 0:
-            self._generations.append([self._predator["population"], self._prey["population"]])
+            self._predator_pop.append(self._predator["population"])
+            self._prey_pop.append((self._prey["population"]))
             # todo: resolve "generations" vs. "turns"
 
     def log_population(self):
         """Writes the simulation data to a csv file"""
-        with open('stats.csv', 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerows(self._generations)
+        pred = np.array(self._predator_pop)
+        prey = np.array(self._prey_pop)
+
+        plt.plot(pred, color='red', label='Predator')
+        plt.plot(prey, color='green', label='Prey')
+        plt.xlabel("Generation")
+        plt.ylabel("Population Size")
+        plt.legend()
+        plt.show()
