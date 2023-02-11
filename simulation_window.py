@@ -72,7 +72,7 @@ def steps(organisms, session_stats, screen):
 
 
 def plus_one(one_element_list):
-    """Add one to the first element in the list: great for lazy programmers"""
+    """Add one to the first element in the list. Great for lazy programmers :-)"""
     one_element_list[0] += 1
     return one_element_list[0]
 
