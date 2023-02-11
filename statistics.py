@@ -3,24 +3,32 @@ import csv
 
 class Statistics:
 
-    def __init__(self, predator_attributes, prey_attributes):
-        self._generations = [[predator_attributes["population"], prey_attributes["population"]]]
-        self._current_predator = predator_attributes["population"]
+    def __init__(self, pred_attributes, prey_attributes):
+        self._generations = [[pred_attributes["population"], prey_attributes["population"]]]
+        self._current_predator = pred_attributes["population"]
         self._current_prey = prey_attributes["population"]
+        self._pred_deaths = 0
+        self._prey_deaths = 0
+        self._pred_births = 0
+        self._prey_births = 0
 
     def add_organism(self, identifier):
         """Increments the population size of the organism type corresponding to the identifier"""
         if identifier == 1:
             self._current_predator += 1
+            self._pred_births += 1
         else:
             self._current_prey += 1
+            self._prey_births += 1
 
     def remove_organism(self, identifier):
         """Decrements the population size of the organism type corresponding to the identifier"""
         if identifier == 1:
             self._current_predator -= 1
+            self._pred_deaths += 1
         else:
             self._current_prey -= 1
+            self._prey_deaths += 1
 
     def next_generation(self):
         """Stores data for the current generation"""
