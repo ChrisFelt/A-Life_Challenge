@@ -67,7 +67,7 @@ def steps(organisms, session_stats, screen):
         # step 4
         if simulation_steps.conclude_turn(i, organisms, session_stats, screen):    # if organism hasn't died
             i += 1
-    session_stats.next_generation()
+    session_stats.next_turn()
     # skip until timer goes off again
     execute_steps = False
 

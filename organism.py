@@ -63,7 +63,6 @@ class Organism:
 
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
-        self._age += 1
         neighbors = self.__nearest_neighbors(organisms)
         if not neighbors:
             # set random destination
@@ -82,7 +81,7 @@ class Organism:
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
-                if neighbor.get_health() == 0 and self._identifier == 1:
+                if self._identifier == 1:
                     self._fed = True
 
     def is_dead(self):
@@ -233,7 +232,7 @@ class Organism:
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)
-
+        self._age += self._birth_rate
         self._sprite.goto(self._position[0], self._position[1])
 
 

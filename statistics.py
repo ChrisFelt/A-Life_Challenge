@@ -14,7 +14,7 @@ class Statistics:
                       "deaths": 0,
                       }
         self._general = {"turn": 0,
-                         }
+                         "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"])}
 
     def get_pred_stats(self):
         return self._predator
@@ -43,10 +43,12 @@ class Statistics:
             self._prey["population"] -= 1
             self._prey["deaths"] += 1
 
-    def next_generation(self):
+    def next_turn(self):
         """Stores data for the current generation"""
-        self._generations.append([self._predator["population"], self._prey["population"]])
-        self._general["turn"] += 1  # todo: resolve "generations" vs. "turns"
+        self._general["turn"] += 1
+        if self._general["turn"] % self._general["gen_length"] == 0:
+            self._generations.append([self._predator["population"], self._prey["population"]])
+            # todo: resolve "generations" vs. "turns"
 
     def log_population(self):
         """Writes the simulation data to a csv file"""
