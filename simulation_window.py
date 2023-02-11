@@ -31,7 +31,7 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
         organisms[index].set_color(settings.prey_color)  # green
 
 
-def rand_coords() -> list:
+def rand_coords():
     """Returns a list containing random [x, y] coordinates"""
     return [random.uniform(-settings.screen_size/2, settings.screen_size/2),
             random.uniform(-settings.screen_size/2, settings.screen_size/2)]
@@ -49,6 +49,7 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
 
 
 def steps(organisms, session_stats, screen):
+    """Run the turn steps for each organism"""
     global execute_steps
     # run all steps for each organism in the list
     i = 0
@@ -107,6 +108,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # animation speed slider
     # -------------------------------
     def update_speed(event):
+        """Update the simulation speed to reflect slider value"""
         # todo: figure out what event parameter contains
         print("Speed set to: " + str(speed_slider.get()) + ".")
 
@@ -375,6 +377,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     blank_row_label.grid(row=plus_one(current_row), column=1, sticky="w", padx=settings.x_pad_right_super)
 
     def update_stats_frame(stats_object):
+        """Update the values in the statistics frame"""
         pred_stats = stats_object.get_pred_stats()
         prey_stats = stats_object.get_prey_stats()
         general_stats = stats_object.get_general_stats()
