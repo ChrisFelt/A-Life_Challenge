@@ -48,9 +48,14 @@ button_frame_height = 35
 x_pad = 20
 y_pad = 15
 x_pad_left = (x_pad, 0)
+x_pad_left_super = (x_pad*10, 0)
 x_pad_right = (0, x_pad)
+x_pad_right_super = (0, x_pad*10)
 x_pad_both = (x_pad, x_pad)
 y_pad_top = (y_pad, 0)
 y_pad_bot = (0, y_pad)
 y_pad_both = (y_pad, y_pad)
 
+# prey and predator colors
+prey_color = "#68ed53"
+pred_color = "#de3f3c"

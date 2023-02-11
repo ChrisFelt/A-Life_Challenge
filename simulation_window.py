@@ -24,11 +24,11 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
 
     # set color for predator
     if identifier == 1:
-        organisms[index].set_color("#de3f3c")  # red
+        organisms[index].set_color(settings.pred_color)  # red
 
     # set color for prey
     else:
-        organisms[index].set_color("#68ed53")  # green
+        organisms[index].set_color(settings.prey_color)  # green
 
 
 def rand_coords() -> list:
@@ -71,12 +71,19 @@ def steps(organisms, session_stats, screen):
     execute_steps = False
 
 
+def plus_one(one_element_list):
+    """Add one to the first element in the list: great for lazy programmers"""
+    one_element_list[0] += 1
+    return one_element_list[0]
+
+
 def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     """Build simulation screen and run the simulation"""
     global interrupt, execute_steps, pause_simulation
     interrupt = False
     execute_steps = True
     pause_simulation = False
+    current_row = [0]
 
     # track current session statistics
     session_stats = statistics.Statistics(pred_attributes, prey_attributes)
@@ -87,26 +94,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
 
     root.config(pady=0, width=settings.screen_size*2)
 
-    # basic canvas for screen
-    sim_canvas = tkinter.Canvas(root,
-                                width=settings.screen_size,
-                                height=settings.screen_size,
-                                highlightbackground="black",
-                                highlightthickness=1)
-    sim_canvas.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
-
-    # setup turtle screen
-    sim_screen = turtle.TurtleScreen(sim_canvas)
-    sim_screen.tracer(0, 0)  # requires update method to be called on screen
-
     # -----------------------------------------------------------------------------
     # control buttons frame
     # -----------------------------------------------------------------------------
-    button_frame = tkinter.Frame(sim_canvas,
+    button_frame = tkinter.Frame(root,
                                  width=settings.screen_size,
                                  height=settings.button_height,
                                  pady=settings.y_pad)
-    button_frame.pack(side="left", anchor="sw")
+    button_frame.pack(side="bottom", anchor="sw")
 
     # -------------------------------
     # animation speed slider
@@ -213,17 +208,195 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     stop_button.pack(side="left", anchor="e", padx=(50, 0))
 
     # -----------------------------------------------------------------------------
+    # sim screen frame
+    # -----------------------------------------------------------------------------
+    # basic canvas for screen
+    sim_canvas = tkinter.Canvas(root,
+                                width=settings.screen_size,
+                                height=settings.screen_size,
+                                highlightbackground="black",
+                                highlightthickness=1)
+    sim_canvas.pack(side="left", anchor="ne", padx=settings.x_pad//4, pady=settings.y_pad//3)
+
+    # setup turtle screen
+    sim_screen = turtle.TurtleScreen(sim_canvas)
+    sim_screen.tracer(0, 0)  # requires update method to be called on screen
+
+    # -----------------------------------------------------------------------------
     # live stats frame
     # -----------------------------------------------------------------------------
-    side_frame = tkinter.Frame(root, width=settings.screen_size*2)
-    side_frame.pack(side="right")
+    side_frame = tkinter.Frame(root,
+                               width=settings.screen_size*2,
+                               highlightbackground="black",
+                               highlightthickness=1)
+    side_frame.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
+
+    # -------------------------------
+    # window title
+    # -------------------------------
+    elapsed_time_label = tkinter.Label(side_frame,
+                                       text="Session Statistics",
+                                       font='Calibri 12 underline',
+                                       height=2)
+    elapsed_time_label.grid(row=plus_one(current_row),
+                            column=0,
+                            padx=settings.x_pad_right)
+
+    # -------------------------------
+    # total population
+    # -------------------------------
+    # population label
+    tot_pop_label = tkinter.Label(side_frame, text="Total Population:")
+    tot_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show total population
+    tot_pop_text = tkinter.StringVar(value=str(int(settings.prey_attributes["population"]) +
+                                     int(settings.pred_attributes["population"])))
+    tot_pop = tkinter.Label(side_frame, textvariable=tot_pop_text)
+    tot_pop.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # turn number
+    # -------------------------------
+    # label
+    turn_number_label = tkinter.Label(side_frame, text="Turn Number:")
+    turn_number_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show turn number
+    turn_number_text = tkinter.StringVar(value="0")
+    turn_number = tkinter.Label(side_frame, textvariable=turn_number_text)
+    turn_number.grid(row=current_row[0], column=1, sticky="w")
 
     # -------------------------------
     # elapsed time
     # -------------------------------
+    # label
+    elapsed_time_label = tkinter.Label(side_frame, text="Time Elapsed:")
+    elapsed_time_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show time
     start_time = time.time()
-    elapsed_time = tkinter.Label(side_frame, text=str(time.time() - start_time))
-    elapsed_time.pack(side="right", anchor="ne")
+    # limit time display to two decimal places
+    elapsed_time_text = tkinter.StringVar(value="{:.2f}".format(time.time() - start_time))
+    elapsed_time = tkinter.Label(side_frame, textvariable=elapsed_time_text)
+    elapsed_time.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # prey label
+    # -------------------------------
+    # prey label
+    prey_label = tkinter.Label(side_frame, text="Prey", font='Calibri 11 underline')
+    prey_label.grid(row=plus_one(current_row), column=0, sticky="w", pady=settings.y_pad_top)
+
+    # -------------------------------
+    # prey population
+    # -------------------------------
+    # prey population label
+    prey_pop_label = tkinter.Label(side_frame, text="Population:")
+    prey_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show prey population
+    prey_pop_text = tkinter.StringVar(value=settings.prey_attributes["population"])
+    prey_pop = tkinter.Label(side_frame, textvariable=prey_pop_text)
+    prey_pop.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # prey births
+    # -------------------------------
+    # prey births label
+    prey_births_label = tkinter.Label(side_frame, text="Births:")
+    prey_births_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show prey births
+    prey_births_text = tkinter.StringVar(value="0")
+    prey_births = tkinter.Label(side_frame, textvariable=prey_births_text)
+    prey_births.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # prey deaths
+    # -------------------------------
+    # prey deaths label
+    prey_deaths_label = tkinter.Label(side_frame, text="Deaths:")
+    prey_deaths_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show prey deaths
+    prey_deaths_text = tkinter.StringVar(value="0")
+    prey_deaths = tkinter.Label(side_frame, textvariable=prey_deaths_text)
+    prey_deaths.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # predator label
+    # -------------------------------
+    # predator label
+    pred_label = tkinter.Label(side_frame, text="Predators", font='Calibri 11 underline')
+    pred_label.grid(row=plus_one(current_row), column=0, sticky="w", pady=settings.y_pad_top)
+
+    # -------------------------------
+    # predator population
+    # -------------------------------
+    # predator population label
+    pred_pop_label = tkinter.Label(side_frame, text="Population:")
+    pred_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show prey population
+    pred_pop_text = tkinter.StringVar(value=settings.pred_attributes["population"])
+    pred_pop = tkinter.Label(side_frame, textvariable=pred_pop_text)
+    pred_pop.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # pred births
+    # -------------------------------
+    # predator births label
+    pred_births_label = tkinter.Label(side_frame, text="Births:")
+    pred_births_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show pred births
+    pred_births_text = tkinter.StringVar(value="0")
+    pred_births = tkinter.Label(side_frame, textvariable=pred_births_text)
+    pred_births.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # pred deaths
+    # -------------------------------
+    # predator deaths label
+    pred_deaths_label = tkinter.Label(side_frame, text="Deaths:")
+    pred_deaths_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show pred deaths
+    pred_deaths_text = tkinter.StringVar(value="0")
+    pred_deaths = tkinter.Label(side_frame, textvariable=pred_deaths_text)
+    pred_deaths.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # blank row
+    # -------------------------------
+    # blank
+    blank_row_label = tkinter.Label(side_frame, text="")
+    blank_row_label.grid(row=plus_one(current_row), column=1, sticky="w", padx=settings.x_pad_right_super)
+
+    def update_stats_frame(stats_object):
+        pred_stats = stats_object.get_pred_stats()
+        prey_stats = stats_object.get_prey_stats()
+        general_stats = stats_object.get_general_stats()
+
+        # update total population
+        tot_pop_text.set(str(prey_stats["population"] + pred_stats["population"]))
+
+        # update prey stats
+        prey_pop_text.set(str(prey_stats["population"]))
+        prey_births_text.set(str(prey_stats["births"]))
+        prey_deaths_text.set(str(prey_stats["deaths"]))
+
+        # update predator stats
+        pred_pop_text.set(str(pred_stats["population"]))
+        pred_births_text.set(str(pred_stats["births"]))
+        pred_deaths_text.set(str(pred_stats["deaths"]))
+
+        # update turn number
+        turn_number_text.set(str(general_stats["turn"]))
+
+        # update elapsed time
+        elapsed_time_text.set("{:.2f}".format(time.time() - start_time))
 
     # -----------------------------------------------------------------------------
     # run simulation
@@ -248,6 +421,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
 
             if execute_steps:
                 steps(organisms, session_stats, sim_screen)
+
+            update_stats_frame(session_stats)
 
         # still need to update the screen even if paused
         # otherwise, program locks up

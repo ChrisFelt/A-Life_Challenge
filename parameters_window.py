@@ -31,13 +31,13 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     prey_frame = tkinter.Frame(root,
                                width=settings.screen_size,
                                height=settings.screen_size/2,
-                               highlightbackground="#68ed53",
+                               highlightbackground=settings.prey_color,
                                highlightthickness=2)
     prey_frame.pack(side="top", anchor="n")
 
     prey_nostart_label = tkinter.Label(prey_frame,
                                        text="Prey Parameters",
-                                       font=('Calibri 12 underline'),
+                                       font='Calibri 12 underline',
                                        height=2)
     prey_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
@@ -113,13 +113,13 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     pred_frame = tkinter.Frame(root,
                                width=settings.screen_size,
                                height=settings.screen_size / 2,
-                               highlightbackground="#de3f3c",
+                               highlightbackground=settings.pred_color,
                                highlightthickness=2)
     pred_frame.pack(side="top", anchor="n")
 
     pred_nostart_label = tkinter.Label(pred_frame,
                                        text="Predator Parameters",
-                                       font=('Calibri 12 underline'),
+                                       font='Calibri 12 underline',
                                        height=2)
     pred_nostart_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
 
