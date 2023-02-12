@@ -312,7 +312,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # prey generation
     # -------------------------------
     # prey generation label
-    prey_gen_label = tkinter.Label(side_frame, text="Current generation:")
+    prey_gen_label = tkinter.Label(side_frame, text="Generation:")
     prey_gen_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show prey generation
@@ -367,7 +367,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # pred generation
     # -------------------------------
     # pred generation label
-    pred_gen_label = tkinter.Label(side_frame, text="Current generation:")
+    pred_gen_label = tkinter.Label(side_frame, text="Generation:")
     pred_gen_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show pred generation
