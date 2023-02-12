@@ -45,5 +45,16 @@ def conclude_turn(index, organisms, session_stats, screen):
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()
             session_stats.add_organism(organisms[index].get_identifier())
-            simulation_window.create_organism(organisms, screen, identifier, pos, dest, organisms[index].get_attributes())
+            simulation_window.create_organism(organisms,
+                                              screen,
+                                              identifier,
+                                              pos,
+                                              dest,
+                                              organisms[index].get_attributes())
+
+            # increment generation statistics as needed
+            child_gen = organisms[len(organisms) - 1].get_generation()
+            if child_gen > session_stats.get_generation(identifier):
+                session_stats.set_generation(identifier, child_gen)
+
         return True

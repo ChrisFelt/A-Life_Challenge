@@ -28,6 +28,7 @@ class Organism:
         self._separation_weight = attributes["separation_weight"]
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
+        self._generation = attributes["generation"]
         self._direction = self.__update_direction()  # set initial direction automatically
         self._fed = True
         if self._identifier == 1:
@@ -60,6 +61,10 @@ class Organism:
     def get_direction(self):
         """Return current direction"""
         return self._direction
+
+    def get_generation(self):
+        """Return generation number"""
+        return self._generation
 
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
@@ -102,7 +107,8 @@ class Organism:
 
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
-        attributes = {"lifespan": self._lifespan,
+        attributes = {"generation": self._generation + 1,  # offspring's generation is always + 1
+                      "lifespan": self._lifespan,
                       "health": self._health,
                       "vision": self._vision,
                       "peripheral": math.pi / 4,

@@ -10,13 +10,16 @@ class Statistics:
         self._predator = {"population": predator_attributes["population"],
                           "births": 0,
                           "deaths": 0,
+                          "generation": 0,
                           }
         self._prey = {"population": prey_attributes["population"],
                       "births": 0,
                       "deaths": 0,
+                      "generation": 0,
                       }
         self._general = {"turn": 0,
-                         "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"])}
+                         "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"]),
+                         }
 
     def get_pred_stats(self):
         return self._predator
@@ -26,6 +29,20 @@ class Statistics:
 
     def get_general_stats(self):
         return self._general
+
+    def get_generation(self, identifier):
+        """Given an identifier, returns the corresponding organism's generation"""
+        if identifier == 1:
+            return self._predator["generation"]
+        else:
+            return self._prey["generation"]
+
+    def set_generation(self, identifier, generation_num):
+        """Given an identifier and generation, updates the corresponding organism's generation"""
+        if identifier == 1:
+            self._predator["generation"] = generation_num
+        else:
+            self._prey["generation"] = generation_num
 
     def add_organism(self, identifier):
         """Increments the population size of the organism type corresponding to the identifier"""
@@ -51,7 +68,6 @@ class Statistics:
         if self._general["turn"] % self._general["gen_length"] == 0:
             self._predator_pop.append(self._predator["population"])
             self._prey_pop.append((self._prey["population"]))
-            # todo: resolve "generations" vs. "turns"
 
     def log_population(self):
         """Writes the simulation data to a csv file"""

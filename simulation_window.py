@@ -234,6 +234,13 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     side_frame.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
 
     # -------------------------------
+    # get starting statistics todo: save/load feature proof
+    # -------------------------------
+    pred_stats = session_stats.get_pred_stats()
+    prey_stats = session_stats.get_prey_stats()
+    general_stats = session_stats.get_general_stats()
+
+    # -------------------------------
     # window title
     # -------------------------------
     elapsed_time_label = tkinter.Label(side_frame,
@@ -252,8 +259,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     tot_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show total population
-    tot_pop_text = tkinter.StringVar(value=str(int(settings.prey_attributes["population"]) +
-                                     int(settings.pred_attributes["population"])))
+    tot_pop_text = tkinter.StringVar(value=str(prey_stats["population"] + pred_stats["population"]))
     tot_pop = tkinter.Label(side_frame, textvariable=tot_pop_text)
     tot_pop.grid(row=current_row[0], column=1, sticky="w")
 
@@ -298,9 +304,21 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     prey_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show prey population
-    prey_pop_text = tkinter.StringVar(value=settings.prey_attributes["population"])
+    prey_pop_text = tkinter.StringVar(value=prey_stats["population"])
     prey_pop = tkinter.Label(side_frame, textvariable=prey_pop_text)
     prey_pop.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # prey generation
+    # -------------------------------
+    # prey generation label
+    prey_gen_label = tkinter.Label(side_frame, text="Current generation:")
+    prey_gen_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show prey generation
+    prey_gen_text = tkinter.StringVar(value=prey_stats["generation"])
+    prey_gen = tkinter.Label(side_frame, textvariable=prey_gen_text)
+    prey_gen.grid(row=current_row[0], column=1, sticky="w")
 
     # -------------------------------
     # prey births
@@ -310,7 +328,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     prey_births_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show prey births
-    prey_births_text = tkinter.StringVar(value="0")
+    prey_births_text = tkinter.StringVar(value=prey_stats["births"])
     prey_births = tkinter.Label(side_frame, textvariable=prey_births_text)
     prey_births.grid(row=current_row[0], column=1, sticky="w")
 
@@ -322,7 +340,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     prey_deaths_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show prey deaths
-    prey_deaths_text = tkinter.StringVar(value="0")
+    prey_deaths_text = tkinter.StringVar(value=prey_stats["deaths"])
     prey_deaths = tkinter.Label(side_frame, textvariable=prey_deaths_text)
     prey_deaths.grid(row=current_row[0], column=1, sticky="w")
 
@@ -341,9 +359,21 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     pred_pop_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show prey population
-    pred_pop_text = tkinter.StringVar(value=settings.pred_attributes["population"])
+    pred_pop_text = tkinter.StringVar(value=pred_stats["population"])
     pred_pop = tkinter.Label(side_frame, textvariable=pred_pop_text)
     pred_pop.grid(row=current_row[0], column=1, sticky="w")
+
+    # -------------------------------
+    # pred generation
+    # -------------------------------
+    # pred generation label
+    pred_gen_label = tkinter.Label(side_frame, text="Current generation:")
+    pred_gen_label.grid(row=plus_one(current_row), column=0, sticky="w")
+
+    # show pred generation
+    pred_gen_text = tkinter.StringVar(value=pred_stats["generation"])
+    pred_gen = tkinter.Label(side_frame, textvariable=pred_gen_text)
+    pred_gen.grid(row=current_row[0], column=1, sticky="w")
 
     # -------------------------------
     # pred births
@@ -353,7 +383,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     pred_births_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show pred births
-    pred_births_text = tkinter.StringVar(value="0")
+    pred_births_text = tkinter.StringVar(value=pred_stats["births"])
     pred_births = tkinter.Label(side_frame, textvariable=pred_births_text)
     pred_births.grid(row=current_row[0], column=1, sticky="w")
 
@@ -365,7 +395,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     pred_deaths_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show pred deaths
-    pred_deaths_text = tkinter.StringVar(value="0")
+    pred_deaths_text = tkinter.StringVar(value=pred_stats["deaths"])
     pred_deaths = tkinter.Label(side_frame, textvariable=pred_deaths_text)
     pred_deaths.grid(row=current_row[0], column=1, sticky="w")
 
@@ -378,28 +408,30 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
 
     def update_stats_frame(stats_object):
         """Update the values in the statistics frame"""
-        pred_stats = stats_object.get_pred_stats()
-        prey_stats = stats_object.get_prey_stats()
-        general_stats = stats_object.get_general_stats()
+        cur_pred_stats = stats_object.get_pred_stats()
+        cur_prey_stats = stats_object.get_prey_stats()
+        cur_general_stats = stats_object.get_general_stats()
 
         # update total population
-        tot_pop_text.set(str(prey_stats["population"] + pred_stats["population"]))
-
-        # update prey stats
-        prey_pop_text.set(str(prey_stats["population"]))
-        prey_births_text.set(str(prey_stats["births"]))
-        prey_deaths_text.set(str(prey_stats["deaths"]))
-
-        # update predator stats
-        pred_pop_text.set(str(pred_stats["population"]))
-        pred_births_text.set(str(pred_stats["births"]))
-        pred_deaths_text.set(str(pred_stats["deaths"]))
+        tot_pop_text.set(str(cur_prey_stats["population"] + cur_pred_stats["population"]))
 
         # update turn number
-        turn_number_text.set(str(general_stats["turn"]))
+        turn_number_text.set(str(cur_general_stats["turn"]))
 
         # update elapsed time
         elapsed_time_text.set("{:.2f}".format(time.time() - start_time))
+
+        # update prey stats
+        prey_pop_text.set(str(cur_prey_stats["population"]))
+        prey_gen_text.set(str(cur_prey_stats["generation"]))
+        prey_births_text.set(str(cur_prey_stats["births"]))
+        prey_deaths_text.set(str(cur_prey_stats["deaths"]))
+
+        # update predator stats
+        pred_pop_text.set(str(cur_pred_stats["population"]))
+        pred_gen_text.set(str(cur_pred_stats["generation"]))
+        pred_births_text.set(str(cur_pred_stats["births"]))
+        pred_deaths_text.set(str(cur_pred_stats["deaths"]))
 
     # -----------------------------------------------------------------------------
     # run simulation
