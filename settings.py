@@ -34,8 +34,8 @@ pred_color = "#de3f3c"
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
 prey_attributes = {"population": 70,
                    "generation": 0,
-                   "lifespan": 5,
-                   "health": 3,
+                   "lifespan": 3,
+                   "health": 1,
                    "vision": 10,
                    "peripheral": math.pi / 4,
                    "speed": 10,
