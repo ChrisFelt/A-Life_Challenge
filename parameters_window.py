@@ -205,7 +205,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
         float_error = " error.\n\nPlease enter a float."
 
         # --------------------------------------
-        # grab input from PREY entry fields
+        # grab input from PREY entry fields todo: error check negative numbers
         # --------------------------------------
         # population
         try:

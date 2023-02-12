@@ -276,7 +276,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     turn_number.grid(row=current_row[0], column=1, sticky="w")
 
     # -------------------------------
-    # elapsed time
+    # elapsed time todo: pause proof
     # -------------------------------
     # label
     elapsed_time_label = tkinter.Label(side_frame, text="Time Elapsed:")
