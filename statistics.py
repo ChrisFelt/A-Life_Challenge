@@ -76,7 +76,7 @@ class Statistics:
 
         plt.plot(pred, color='red', label='Predator')
         plt.plot(prey, color='green', label='Prey')
-        plt.xlabel("Generation")
+        plt.xlabel("Time (100 turns)")
         plt.ylabel("Population Size")
         plt.legend()
         plt.show()
