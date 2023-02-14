@@ -205,9 +205,11 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
         float_error = " error.\n\nPlease enter a float."
 
         # --------------------------------------
-        # grab input from PREY entry fields todo: error check negative numbers
+        # grab input from PREY entry fields
         # --------------------------------------
+        # --------------------
         # population
+        temp_population = prey_attributes["population"]
         try:
             prey_attributes["population"] = int(prey_population_entry.get())
 
@@ -215,7 +217,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Prey population" + int_error)
             return
 
+        # display popup warning for negative values
+        if prey_attributes["population"] < 0:
+            prey_attributes["population"] = temp_population  # reset value
+            popup(root, "Error.\n\nPrey population must be a positive integer.")
+            return
+
+        # --------------------
         # health
+        temp_health = prey_attributes["health"]
         try:
             prey_attributes["health"] = int(prey_health_entry.get())
 
@@ -223,7 +233,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Prey health" + int_error)
             return
 
+        # check for negative value
+        if prey_attributes["health"] < 1:
+            prey_attributes["health"] = temp_health
+            popup(root, "Error.\n\nPrey health must be >= 1.")
+            return
+
+        # --------------------
         # speed
+        temp_speed = prey_attributes["speed"]
         try:
             prey_attributes["speed"] = int(prey_speed_entry.get())
 
@@ -231,7 +249,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Prey speed" + int_error)
             return
 
+        # check for negative value
+        if prey_attributes["speed"] < 0:
+            prey_attributes["speed"] = temp_speed
+            popup(root, "Error.\n\nPrey speed must be a positive integer.")
+            return
+
+        # --------------------
         # damage
+        temp_damage = prey_attributes["damage"]
         try:
             prey_attributes["damage"] = int(prey_damage_entry.get())
 
@@ -239,6 +265,13 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Prey damage" + int_error)
             return
 
+        # check for negative value
+        if prey_attributes["damage"] < 0:
+            prey_attributes["damage"] = temp_damage
+            popup(root, "Error.\n\nPrey damage must be a positive integer.")
+            return
+
+        # --------------------
         # birth rate
         temp_birth_rate = prey_attributes["birth_rate"]
         try:
@@ -249,12 +282,14 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             return
 
         # check if birth rate is too high
-        if prey_attributes["birth_rate"] > 0.01:
+        if prey_attributes["birth_rate"] > 0.01 or prey_attributes["birth_rate"] <= 0:
             prey_attributes["birth_rate"] = temp_birth_rate  # reset birth rate to previous
-            popup(root, "Error.\n\nPrey birth rate must be <= 0.01.")
+            popup(root, "Error.\n\nPrey birth rate must be between (0, 0.01].")
             return
 
-        # population
+        # --------------------
+        # mutation rate
+        temp_mutation_rate = prey_attributes["mutation_rate"]
         try:
             prey_attributes["mutation_rate"] = float(prey_mutation_rate_entry.get())
 
@@ -262,10 +297,18 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Prey mutation rate" + float_error)
             return
 
+        # check for negative value
+        if prey_attributes["mutation_rate"] < 0:
+            prey_attributes["mutation_rate"] = temp_mutation_rate
+            popup(root, "Error.\n\nPrey mutation rate must be positive.")
+            return
+
         # --------------------------------------
         # grab input from PREDATOR entry fields
         # --------------------------------------
+        # --------------------
         # population
+        temp_population = pred_attributes["population"]
         try:
             pred_attributes["population"] = int(pred_population_entry.get())
 
@@ -273,7 +316,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Predator population" + int_error)
             return
 
+        # check for negative value
+        if pred_attributes["population"] < 0:
+            pred_attributes["population"] = temp_population
+            popup(root, "Error.\n\nPredator population must be a positive integer.")
+            return
+
+        # --------------------
         # health
+        temp_health = pred_attributes["health"]
         try:
             pred_attributes["health"] = int(pred_health_entry.get())
 
@@ -281,7 +332,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Predator health" + int_error)
             return
 
+        # check for negative value
+        if pred_attributes["health"] < 1:
+            pred_attributes["health"] = temp_health
+            popup(root, "Error.\n\nPredator health must be >= 1.")
+            return
+
+        # --------------------
         # speed
+        temp_speed = pred_attributes["speed"]
         try:
             pred_attributes["speed"] = int(pred_speed_entry.get())
 
@@ -289,7 +348,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Predator speed" + int_error)
             return
 
+        # check for negative value
+        if pred_attributes["speed"] < 0:
+            pred_attributes["speed"] = temp_speed
+            popup(root, "Error.\n\nPredator speed must be a positive integer.")
+            return
+
+        # --------------------
         # damage
+        temp_damage = pred_attributes["damage"]
         try:
             pred_attributes["damage"] = int(pred_damage_entry.get())
 
@@ -297,6 +364,13 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             popup(root, "Predator damage" + int_error)
             return
 
+        # check for negative value
+        if pred_attributes["damage"] < 0:
+            pred_attributes["damage"] = temp_damage
+            popup(root, "Error.\n\nPredator damage must be positive.")
+            return
+
+        # --------------------
         # birth rate
         temp_birth_rate = pred_attributes["birth_rate"]
         try:
@@ -307,17 +381,25 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             return
 
         # check if birth rate is too high
-        if pred_attributes["birth_rate"] > 0.01:
+        if pred_attributes["birth_rate"] > 0.01 or pred_attributes["birth_rate"] <= 0:
             pred_attributes["birth_rate"] = temp_birth_rate  # reset birth rate to previous
-            popup(root, "Error.\n\nPredator birth rate must be <= 0.01.")
+            popup(root, "Error.\n\nPredator birth rate must be between (0, 0.01].")
             return
 
-        # population
+        # --------------------
+        # mutation rate
+        temp_mutation_rate = pred_attributes["mutation_rate"]
         try:
             pred_attributes["mutation_rate"] = float(pred_mutation_rate_entry.get())
 
         except ValueError:
             popup(root, "Predator mutation rate" + float_error)
+            return
+
+        # check for negative value
+        if pred_attributes["mutation_rate"] < 0:
+            pred_attributes["mutation_rate"] = temp_mutation_rate
+            popup(root, "Error.\n\nPredator mutation rate must be a positive integer.")
             return
 
         # ------------------------------
