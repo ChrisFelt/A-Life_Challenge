@@ -250,9 +250,9 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             return
 
         # check for negative value
-        if prey_attributes["speed"] < 0:
+        if prey_attributes["speed"] < 0 or prey_attributes["speed"] > 100:
             prey_attributes["speed"] = temp_speed
-            popup(root, "Error.\n\nPrey speed must be a positive integer.")
+            popup(root, "Error.\n\nPrey speed must be between [0, 100].")
             return
 
         # --------------------
@@ -349,9 +349,9 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
             return
 
         # check for negative value
-        if pred_attributes["speed"] < 0:
+        if pred_attributes["speed"] < 0 or pred_attributes["speed"] > 100:
             pred_attributes["speed"] = temp_speed
-            popup(root, "Error.\n\nPredator speed must be a positive integer.")
+            popup(root, "Error.\n\nPredator speed must be between [0, 100].")
             return
 
         # --------------------
