@@ -159,6 +159,10 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # -------------------------------
     def save():
         """Save current simulation"""
+        # pause simulation
+        # save current state to hdd
+        # 1 - list of organisms
+        # 2 - session_stats
         parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
 
     # create save button

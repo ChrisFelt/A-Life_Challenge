@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 
 class Statistics:
@@ -19,7 +20,9 @@ class Statistics:
                       }
         self._general = {"turn": 0,
                          "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"]),
+                         "elapsed_time": 0.00
                          }
+        self._start_time = time.time()
 
     def get_pred_stats(self):
         return self._predator
@@ -43,6 +46,20 @@ class Statistics:
             self._predator["generation"] = generation_num
         else:
             self._prey["generation"] = generation_num
+
+    def __stopwatch(self):
+        """Updates the current elapsed time since start_time"""
+        self._general["elapsed_time"] = time.time() - self._start_time
+
+    def get_time_str(self):
+        """Return elapsed time as a string truncated to two decimal places"""
+        self.__stopwatch()
+        return "{:.2f}".format(self._general["elapsed_time"])
+
+    def reset_start_time(self):
+        """Resets start time to current time adjusted by elapsed time.
+        Use when loading a saved Statistics object!"""
+        self._start_time = time.time() - float(self._general["elapsed_time"])
 
     def add_organism(self, identifier):
         """Increments the population size of the organism type corresponding to the identifier"""
