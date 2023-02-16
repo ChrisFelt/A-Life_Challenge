@@ -20,7 +20,7 @@ class Statistics:
                       }
         self._general = {"turn": 0,
                          "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"]),
-                         "elapsed_time": 0.00
+                         "elapsed_time": 0.00,
                          }
         self._start_time = time.time()
 
@@ -59,7 +59,7 @@ class Statistics:
     def reset_start_time(self):
         """Resets start time to current time adjusted by elapsed time.
         Use when loading a saved Statistics object!"""
-        self._start_time = time.time() - float(self._general["elapsed_time"])
+        self._start_time = time.time() - self._general["elapsed_time"]
 
     def add_organism(self, identifier):
         """Increments the population size of the organism type corresponding to the identifier"""
