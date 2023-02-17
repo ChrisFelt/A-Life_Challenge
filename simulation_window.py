@@ -129,7 +129,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # -------------------------------
     def pause():
         """Pause simulation"""
-        global interrupt
         global pause_simulation
 
         # toggle pause
@@ -142,6 +141,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         if pause_text.get() == "Pause":
             pause_text.set("Resume")
         else:
+            session_stats.reset_start_time()  # restart stopwatch from current time
             pause_text.set("Pause")
 
     # create pause button in button frame
@@ -275,7 +275,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     turn_number_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
     # show turn number
-    turn_number_text = tkinter.StringVar(value="0")
+    turn_number_text = tkinter.StringVar(value=general_stats["turn"])
     turn_number = tkinter.Label(side_frame, textvariable=turn_number_text)
     turn_number.grid(row=current_row[0], column=1, sticky="w")
 
@@ -289,7 +289,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # show time
     start_time = time.time()
     # limit time display to two decimal places
-    elapsed_time_text = tkinter.StringVar(value="{:.2f}".format(time.time() - start_time))
+    elapsed_time_text = tkinter.StringVar(value=session_stats.get_time_str())
     elapsed_time = tkinter.Label(side_frame, textvariable=elapsed_time_text)
     elapsed_time.grid(row=current_row[0], column=1, sticky="w")
 
@@ -423,7 +423,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         turn_number_text.set(str(cur_general_stats["turn"]))
 
         # update elapsed time
-        elapsed_time_text.set("{:.2f}".format(time.time() - start_time))
+        elapsed_time_text.set(session_stats.get_time_str())
 
         # update prey stats
         prey_pop_text.set(str(cur_prey_stats["population"]))
