@@ -2,6 +2,7 @@ import turtle
 import math
 import random
 import numpy as np
+import settings
 
 
 def rand_dest(screen_size) -> list:
@@ -219,7 +220,7 @@ class Organism:
     # Turtle commands
     # ---------------------------------
 
-    def clear_sprite(self):
+    def delete_sprite(self):
         """Remove turtle sprite from the Organism object"""
         self._sprite = None
 
@@ -230,8 +231,17 @@ class Organism:
             self._sprite = turtle.RawTurtle(screen)
 
         self.hide_default()  # hide default arrow
-        self._sprite.speed(speed)
-        self._sprite.up()  # don't draw line
+        self.speed(speed)
+        self.up()  # don't draw line
+
+        # set color for predator
+        if self._identifier == 1:
+            self.set_color(settings.pred_color)  # red
+
+        # set color for prey
+        else:
+            self.set_color(settings.prey_color)  # green
+
         self.move()
         self.draw_dot(diameter)
 

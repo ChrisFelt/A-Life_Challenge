@@ -22,14 +22,6 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
     index = len(organisms) - 1
     organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
 
-    # set color for predator
-    if identifier == 1:
-        organisms[index].set_color(settings.pred_color)  # red
-
-    # set color for prey
-    else:
-        organisms[index].set_color(settings.prey_color)  # green
-
 
 def rand_coords():
     """Returns a list containing random [x, y] coordinates"""
@@ -46,6 +38,12 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
     # initial prey population
     for i in range(prey_attributes["population"]):
         create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
+
+
+def initialize_organisms_from_save(organisms, sim_screen):
+    """Load Organisms from a saved list"""
+    for organism_object in organisms:
+        organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
 
 
 def steps(organisms, session_stats, screen):
@@ -78,7 +76,7 @@ def plus_one(one_element_list):
     return one_element_list[0]
 
 
-def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
+def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save_data=None):
     """Build simulation screen and run the simulation"""
     global interrupt, execute_steps, pause_simulation
     interrupt = False
@@ -87,7 +85,11 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     current_row = [0]
 
     # track current session statistics
-    session_stats = statistics.Statistics(pred_attributes, prey_attributes)
+    if save_data is None:
+        session_stats = statistics.Statistics(pred_attributes, prey_attributes)
+    else:
+        session_stats = save_data[1]
+        session_stats.reset_start_time()  # reset stopwatch
 
     # remove any existing widgets
     for child in root.winfo_children():
@@ -159,24 +161,32 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # -------------------------------
     def save():
         """Save current simulation"""
-        global pause_simulation
+        # temporarily clear turtle sprites from Organism objects to prep for pickling
+        # can't use copy.deepcopy here since it also employs pickle
+        for organism_object in organisms:
+            organism_object.clear()
+            organism_object.delete_sprite()
 
         # save current organisms and statistics
-        save_obj = [session_stats]
+        pickle_data = [organisms, session_stats]
 
+        # open save as filename dialog and save the file name
+        # returns empty string on cancel
         file_name = filemanager.asksaveasfilename(initialfile='a_life_save',
                                                   initialdir=os.getcwd(),
                                                   filetypes=[('Pickle File', '*.pkl')],
                                                   defaultextension='.pkl')
+        # open the file and pickle the data IF user selected a file name
+        if file_name:
+            # 'with' automatically error checks and closes file after nested code
+            with open(file_name, 'wb') as save_file:
+                pickle.dump(pickle_data, save_file, pickle.HIGHEST_PROTOCOL)
 
-        with open(file_name, 'wb') as save_file:
-            pickle.dump(save_obj, save_file, pickle.HIGHEST_PROTOCOL)
-        #save_file.close()
-        # pause simulation
-        # save current state to hdd
-        # 1 - list of organisms
-        # 2 - session_stats
-        # parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
+        # reinitialize sprites
+        for organism_object in organisms:
+            organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+
+        session_stats.reset_start_time()  # restart stopwatch from current time
 
     # create save button
     save_button = tkinter.Button(button_frame,
@@ -190,8 +200,33 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # load button
     # -------------------------------
     def load():
-        """Save current simulation"""
-        parameters_window.popup(root, "Error.\n\nLoad feature not yet enabled.")
+        """Load simulation from save file"""
+        global interrupt
+
+        file_name = filemanager.askopenfilename(initialfile='a_life_save',
+                                                initialdir=os.getcwd(),
+                                                filetypes=[('Pickle File', '*.pkl')],
+                                                defaultextension='.pkl')
+
+        if file_name:
+            with open(file_name, 'rb') as load_file:
+                pickle_data = pickle.load(load_file)
+
+            # stop running simulation steps and reset variables
+            interrupt = True
+            sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
+            organisms.clear()
+
+            # restart simulation window
+            change_to_simulation(root,
+                                 organisms,
+                                 settings.prey_attributes,
+                                 settings.pred_attributes,
+                                 pickle_data)
+
+        # load aborted, restart stopwatch from current time
+        else:
+            session_stats.reset_start_time()
 
     # add load button to button frame
     load_button = tkinter.Button(button_frame,
@@ -216,7 +251,10 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         session_stats.log_population()
 
         # swap back to parameters window
-        parameters_window.change_to_parameters(root, organisms, settings.prey_attributes, settings.pred_attributes)
+        parameters_window.change_to_parameters(root,
+                                               organisms,
+                                               settings.prey_attributes,
+                                               settings.pred_attributes)
 
     # add stop button to button frame
     stop_button = tkinter.Button(button_frame,
@@ -457,7 +495,12 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         execute_steps = True
         sim_screen.ontimer(run_steps, settings.timer)
 
-    initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes)
+    if save_data is None:
+        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes)
+    else:
+        organisms = save_data[0]
+        initialize_organisms_from_save(organisms, sim_screen)
+
     run_steps()
 
     # run simulation indefinitely
