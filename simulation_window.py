@@ -84,9 +84,10 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     pause_simulation = False
     current_row = [0]
 
-    # track current session statistics
+    # track new session statistics
     if save_data is None:
         session_stats = statistics.Statistics(pred_attributes, prey_attributes)
+    # otherwise load saved session statistics
     else:
         session_stats = save_data[1]
         session_stats.reset_start_time()  # reset stopwatch
@@ -161,15 +162,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # -------------------------------
     def save():
         """Save current simulation"""
-        # temporarily clear turtle sprites from Organism objects to prep for pickling
-        # can't use copy.deepcopy here since it also employs pickle
-        for organism_object in organisms:
-            organism_object.clear()
-            organism_object.delete_sprite()
-
-        # save current organisms and statistics
-        pickle_data = [organisms, session_stats]
-
         # open save as filename dialog and save the file name
         # returns empty string on cancel
         file_name = filemanager.asksaveasfilename(initialfile='a_life_save',
@@ -178,13 +170,22 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                                   defaultextension='.pkl')
         # open the file and pickle the data IF user selected a file name
         if file_name:
+            # temporarily clear turtle sprites from Organism objects to prep for pickling
+            # can't use copy.deepcopy here since it also employs pickle
+            for organism_object in organisms:
+                organism_object.clear()
+                organism_object.delete_sprite()
+
+            # save current organisms and statistics
+            pickle_data = [organisms, session_stats]
+
             # 'with' automatically error checks and closes file after nested code
             with open(file_name, 'wb') as save_file:
                 pickle.dump(pickle_data, save_file, pickle.HIGHEST_PROTOCOL)
 
-        # reinitialize sprites
-        for organism_object in organisms:
-            organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+            # reinitialize sprites
+            for organism_object in organisms:
+                organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
 
         session_stats.reset_start_time()  # restart stopwatch from current time
 
@@ -203,18 +204,19 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         """Load simulation from save file"""
         global interrupt
 
+        # get file to load
         file_name = filemanager.askopenfilename(initialfile='a_life_save',
                                                 initialdir=os.getcwd(),
                                                 filetypes=[('Pickle File', '*.pkl')],
                                                 defaultextension='.pkl')
-
+        # if file selected, load data and restart simulation
         if file_name:
             with open(file_name, 'rb') as load_file:
                 pickle_data = pickle.load(load_file)
 
             # stop running simulation steps and reset variables
             interrupt = True
-            sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
+            sim_screen.resetscreen()
             organisms.clear()
 
             # restart simulation window
