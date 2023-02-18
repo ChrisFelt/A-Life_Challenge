@@ -6,7 +6,9 @@ import statistics
 import turtle
 import random
 import tkinter
-import time
+import tkinter.filedialog as filemanager
+import os
+import pickle
 
 execute_steps = True
 interrupt = False
@@ -18,9 +20,7 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
     organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
     index = len(organisms) - 1
-    organisms[index].hide_default()  # hide default arrow
-    organisms[index].speed(10)
-    organisms[index].up()  # don't draw line
+    organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
 
     # set color for predator
     if identifier == 1:
@@ -159,11 +159,24 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     # -------------------------------
     def save():
         """Save current simulation"""
+        global pause_simulation
+
+        # save current organisms and statistics
+        save_obj = [session_stats]
+
+        file_name = filemanager.asksaveasfilename(initialfile='a_life_save',
+                                                  initialdir=os.getcwd(),
+                                                  filetypes=[('Pickle File', '*.pkl')],
+                                                  defaultextension='.pkl')
+
+        with open(file_name, 'wb') as save_file:
+            pickle.dump(save_obj, save_file, pickle.HIGHEST_PROTOCOL)
+        #save_file.close()
         # pause simulation
         # save current state to hdd
         # 1 - list of organisms
         # 2 - session_stats
-        parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
+        # parameters_window.popup(root, "Error.\n\nSave feature not yet enabled.")
 
     # create save button
     save_button = tkinter.Button(button_frame,
@@ -280,15 +293,13 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
     turn_number.grid(row=current_row[0], column=1, sticky="w")
 
     # -------------------------------
-    # elapsed time todo: pause proof
+    # elapsed time
     # -------------------------------
     # label
     elapsed_time_label = tkinter.Label(side_frame, text="Time Elapsed:")
     elapsed_time_label.grid(row=plus_one(current_row), column=0, sticky="w")
 
-    # show time
-    start_time = time.time()
-    # limit time display to two decimal places
+    # display time using Statistics class method
     elapsed_time_text = tkinter.StringVar(value=session_stats.get_time_str())
     elapsed_time = tkinter.Label(side_frame, textvariable=elapsed_time_text)
     elapsed_time.grid(row=current_row[0], column=1, sticky="w")

@@ -12,14 +12,16 @@ def rand_dest(screen_size) -> list:
 
 class Organism:
 
-    def __init__(self, screen, identifier, position, destination, attributes):
+    def __init__(self, screen, identifier, position, destination, attributes, reinit=None):
+
+        # setup turtle data members
         self._sprite = turtle.RawTurtle(screen)
         self._identifier = identifier  # can set with child class once they're ready
         self._position = position
         self._destination = destination
-        self._genome = attributes
-        self._age = 0
-        self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._direction = self.__update_direction()  # set initial direction automatically
+
+        # set attributes
         self._health = attributes["health"]
         self._vision = attributes["vision"]
         self._peripheral = attributes["peripheral"]
@@ -29,10 +31,22 @@ class Organism:
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
-        self._direction = self.__update_direction()  # set initial direction automatically
-        self._energy = 0
-        if self._identifier == 0:
-            self._energy = 1
+
+        # initialize misc. for normal Organism creation
+        if reinit is None:
+            self._age = 0
+            self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+            self._energy = 0
+            if self._identifier == 0:
+                self._energy = 1
+
+        # set misc. from reinit - reinitializing Organism from saved file
+        else:
+            self._age = reinit["age"]
+            self._lifespan = reinit["lifespan"]
+            self._energy = reinit["energy"]
+
+        self._genome = self.get_attributes()  # currently not in use
 
     def get_health(self):
         """Return current health"""
@@ -45,10 +59,6 @@ class Organism:
     def get_identifier(self):
         """Return organism identifier"""
         return self._identifier
-
-    def set_pos(self, pos_coords):
-        """Set new current position"""
-        self._position = pos_coords
 
     def get_pos(self):
         """Return current position"""
@@ -209,6 +219,22 @@ class Organism:
     # Turtle commands
     # ---------------------------------
 
+    def clear_sprite(self):
+        """Remove turtle sprite from the Organism object"""
+        self._sprite = None
+
+    def init_sprite(self, speed, diameter, screen=None):
+        """Initialize the turtle sprite on screen"""
+
+        if self._sprite is None:
+            self._sprite = turtle.RawTurtle(screen)
+
+        self.hide_default()  # hide default arrow
+        self._sprite.speed(speed)
+        self._sprite.up()  # don't draw line
+        self.move()
+        self.draw_dot(diameter)
+
     def hide_default(self):
         """Hide default turtle arrow"""
         self._sprite.hideturtle()
@@ -234,12 +260,15 @@ class Organism:
         Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
-    def move(self, slow_factor):
-        """Move organism towards destination"""
+    def update_pos(self, slow_factor):
+        """Increment current position towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)
         self._age += self._birth_rate
+
+    def move(self):
+        """Move sprite to current position"""
         self._sprite.goto(self._position[0], self._position[1])
 
 
