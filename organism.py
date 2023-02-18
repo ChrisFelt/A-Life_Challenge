@@ -227,7 +227,7 @@ class Organism:
     def init_sprite(self, speed, diameter, screen=None):
         """Initialize the turtle sprite on screen"""
 
-        if self._sprite is None:
+        if screen is not None:
             self._sprite = turtle.RawTurtle(screen)
 
         self.hide_default()  # hide default arrow
