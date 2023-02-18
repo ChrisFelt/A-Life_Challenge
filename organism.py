@@ -226,7 +226,7 @@ class Organism:
 
     def init_sprite(self, speed, diameter, screen=None):
         """Initialize the turtle sprite on screen"""
-
+        # update sprite attribute with new turtle if screen provided
         if screen is not None:
             self._sprite = turtle.RawTurtle(screen)
 
@@ -242,6 +242,7 @@ class Organism:
         else:
             self.set_color(settings.prey_color)  # green
 
+        # set turtle location and draw
         self.move()
         self.draw_dot(diameter)
 
