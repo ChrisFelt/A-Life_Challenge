@@ -16,7 +16,8 @@ def move(index, organisms) -> None:
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
-    organisms[index].move(settings.slow_factor)
+    organisms[index].update_pos(settings.slow_factor)
+    organisms[index].move()
     organisms[index].draw_dot(settings.turtle_diameter)
 
 

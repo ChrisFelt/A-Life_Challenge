@@ -1,6 +1,9 @@
-import tkinter
 import settings
 import simulation_window
+import tkinter
+import tkinter.filedialog as filemanager
+import os
+import pickle
 
 
 def popup(root, message):
@@ -419,7 +422,22 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     # ------------------------------
     def load():
         """Load simulation from save file"""
-        popup(root, "Error.\n\nLoad feature not yet enabled.")
+        # get file to load
+        file_name = filemanager.askopenfilename(initialfile='a_life_save',
+                                                initialdir=os.getcwd(),
+                                                filetypes=[('Pickle File', '*.pkl')],
+                                                defaultextension='.pkl')
+        # if file selected, load data and restart simulation
+        if file_name:
+            with open(file_name, 'rb') as load_file:
+                pickle_data = pickle.load(load_file)
+
+            # switch to simulation window with load data
+            simulation_window.change_to_simulation(root,
+                                                   organisms,
+                                                   settings.prey_attributes,
+                                                   settings.pred_attributes,
+                                                   pickle_data)
 
     load_button = tkinter.Button(button_frame,
                                  text="Load",
