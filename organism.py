@@ -68,6 +68,10 @@ class Organism:
         """Return generation number"""
         return self._generation
 
+    def get_lifespan(self):
+        """Return lifespan"""
+        return self._lifespan
+
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms)
@@ -90,7 +94,7 @@ class Organism:
                 neighbor.decrement_health(self._damage)
                 if self._identifier == 1:
                     if self._energy < self._health:
-                        self._energy += 1
+                        self._energy += self._damage
 
     def is_dead(self):
         """If the organism has been killed or if they have died of old age, returns True, otherwise False"""
@@ -103,7 +107,7 @@ class Organism:
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
         if random.uniform(0, 1) < self._birth_rate and self._energy > 0:
             if self._identifier == 1:
-                self._energy -= 1
+                self._energy -= self._damage
             return True
         else:
             return False

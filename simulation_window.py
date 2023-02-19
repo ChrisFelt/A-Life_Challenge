@@ -15,11 +15,12 @@ interrupt = False
 pause_simulation = False
 
 
-def create_organism(organisms, screen, identifier, position, destination, attributes):
+def create_organism(organisms, screen, identifier, position, destination, attributes, session_stats):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
     organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
     index = len(organisms) - 1
+    session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
     organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
 
 
@@ -29,15 +30,15 @@ def rand_coords():
             random.uniform(-settings.screen_size/2, settings.screen_size/2)]
 
 
-def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
+def initialize_organisms(organisms, screen, prey_attributes, pred_attributes, session_stats):
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
     for i in range(pred_attributes["population"]):
-        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes)
+        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes, session_stats)
 
     # initial prey population
     for i in range(prey_attributes["population"]):
-        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
+        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes, session_stats)
 
 
 def initialize_organisms_from_save(organisms, sim_screen):
@@ -498,7 +499,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         sim_screen.ontimer(run_steps, settings.timer)
 
     if save_data is None:
-        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes)
+        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
     else:
         organisms = save_data[0]
         initialize_organisms_from_save(organisms, sim_screen)

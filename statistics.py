@@ -8,15 +8,19 @@ class Statistics:
     def __init__(self, predator_attributes, prey_attributes):
         self._predator_pop = []
         self._prey_pop = []
-        self._predator = {"population": predator_attributes["population"],
+        self._avg_pred_lifespans = []
+        self._avg_prey_lifespans = []
+        self._predator = {"population": 0,
                           "births": 0,
                           "deaths": 0,
                           "generation": 0,
+                          "lifespan": 0
                           }
-        self._prey = {"population": prey_attributes["population"],
+        self._prey = {"population": 0,
                       "births": 0,
                       "deaths": 0,
                       "generation": 0,
+                      "lifespan": 0
                       }
         self._general = {"turn": 0,
                          "gen_length": min(1/predator_attributes["birth_rate"], 1/prey_attributes["birth_rate"]),
@@ -61,23 +65,28 @@ class Statistics:
         Use when loading a saved Statistics object!"""
         self._start_time = time.time() - self._general["elapsed_time"]
 
-    def add_organism(self, identifier):
+    def add_organism(self, identifier, lifespan):
         """Increments the population size of the organism type corresponding to the identifier"""
         if identifier == 1:
             self._predator["population"] += 1
             self._predator["births"] += 1  # increment births too
+            self._predator["lifespan"] = (((self._predator["population"] - 1) * self._predator["lifespan"]) + lifespan) / self._predator["population"]
         else:
             self._prey["population"] += 1
             self._prey["births"] += 1
+            self._prey["lifespan"] = (((self._prey["population"] - 1) * self._prey["lifespan"]) + lifespan) / self._prey["population"]
 
-    def remove_organism(self, identifier):
+    def remove_organism(self, identifier, lifespan):
         """Decrements the population size of the organism type corresponding to the identifier"""
         if identifier == 1:
             self._predator["population"] -= 1
             self._predator["deaths"] += 1  # increment deaths too
+            self._predator["lifespan"] = (((self._predator["population"] + 1) * self._predator["lifespan"]) - lifespan) / self._predator["population"]
         else:
             self._prey["population"] -= 1
             self._prey["deaths"] += 1
+            self._prey["lifespan"] = (((self._prey["population"] + 1) * self._prey[
+                "lifespan"]) - lifespan) / self._prey["population"]
 
     def next_turn(self):
         """Stores data for the current generation"""
@@ -85,15 +94,23 @@ class Statistics:
         if self._general["turn"] % self._general["gen_length"] == 0:
             self._predator_pop.append(self._predator["population"])
             self._prey_pop.append((self._prey["population"]))
+            self._avg_pred_lifespans.append(self._predator["lifespan"])
+            self._avg_prey_lifespans.append(self._prey["lifespan"])
 
     def log_population(self):
-        """Writes the simulation data to a csv file"""
+        """Generates a graph of population data"""
         pred = np.array(self._predator_pop)
+        pred_lifespan = np.array(self._avg_pred_lifespans)
         prey = np.array(self._prey_pop)
+        prey_lifespan = np.array(self._avg_prey_lifespans)
 
-        plt.plot(pred, color='red', label='Predator')
-        plt.plot(prey, color='green', label='Prey')
-        plt.xlabel("Time (100 turns)")
-        plt.ylabel("Population Size")
-        plt.legend()
+        fig, (pop, lspan) = plt.subplots(2)
+        pop.plot(pred, color='red', label='Predator')
+        pop.plot(prey, color='green', label='Prey')
+        lspan.plot(pred_lifespan, color='red', linestyle='dashed', label='Predator Lifespan')
+        lspan.plot(prey_lifespan, color='green', linestyle='dashed', label='Prey Lifespan')
+        pop.set(ylabel="Population Size")
+        lspan.set(xlabel="Time (100 turns)", ylabel="Avg Lifespan")
+        pop.legend()
+        lspan.legend()
         plt.show()
