@@ -13,7 +13,7 @@ interrupt = False
 pause_simulation = False
 
 
-def create_organism(organisms, screen, identifier, position, destination, attributes):
+def create_organism(organisms, screen, identifier, position, destination, attributes, session_stats):
     """Create a new Organism class object with the given parameters and add it to organisms list"""
     organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
@@ -21,6 +21,7 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
     organisms[index].hide_default()  # hide default arrow
     organisms[index].speed(10)
     organisms[index].up()  # don't draw line
+    session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
 
     # set color for predator
     if identifier == 1:
@@ -37,15 +38,15 @@ def rand_coords():
             random.uniform(-settings.screen_size/2, settings.screen_size/2)]
 
 
-def initialize_organisms(organisms, screen, prey_attributes, pred_attributes):
+def initialize_organisms(organisms, screen, prey_attributes, pred_attributes, session_stats):
     """Generate starting Organism objects for prey and predators"""
     # generate initial predator population
     for i in range(pred_attributes["population"]):
-        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes)
+        create_organism(organisms, screen, 1, rand_coords(), rand_coords(), pred_attributes, session_stats)
 
     # initial prey population
     for i in range(prey_attributes["population"]):
-        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes)
+        create_organism(organisms, screen, 0, rand_coords(), rand_coords(), prey_attributes, session_stats)
 
 
 def steps(organisms, session_stats, screen):
@@ -446,7 +447,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes):
         execute_steps = True
         sim_screen.ontimer(run_steps, settings.timer)
 
-    initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes)
+    initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
     run_steps()
 
     # run simulation indefinitely

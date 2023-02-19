@@ -34,7 +34,7 @@ pred_color = "#de3f3c"
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
 prey_attributes = {"population": 80,
                    "generation": 0,
-                   "lifespan": 3,
+                   "lifespan": 4,
                    "health": 1,
                    "vision": 10,
                    "peripheral": math.pi / 4,
@@ -42,12 +42,12 @@ prey_attributes = {"population": 80,
                    "damage": 0,
                    "separation_weight": 0.5,
                    "birth_rate": 0.002,
-                   "mutation_rate": 0.5
+                   "mutation_rate": 0.25
                    }
 
 pred_attributes = {"population": 20,
                    "generation": 0,
-                   "lifespan": 4,
+                   "lifespan": 5,
                    "health": 2,
                    "vision": 30,
                    "peripheral": math.pi / 2,
@@ -55,5 +55,5 @@ pred_attributes = {"population": 20,
                    "damage": 1,
                    "separation_weight": 0.5,
                    "birth_rate": 0.01,
-                   "mutation_rate": 0.5
+                   "mutation_rate": 0.25
                    }

@@ -66,6 +66,10 @@ class Organism:
         """Return generation number"""
         return self._generation
 
+    def get_lifespan(self):
+        """Return lifespan"""
+        return self._lifespan
+
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms)

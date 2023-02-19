@@ -36,7 +36,7 @@ def conclude_turn(index, organisms, session_stats, screen):
     if organisms[index].is_dead():
         # clear organism animation and remove from list
         organisms[index].clear()
-        session_stats.remove_organism(organisms[index].get_identifier())
+        session_stats.remove_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
         organisms.pop(index)
         return False
     else:
@@ -44,13 +44,13 @@ def conclude_turn(index, organisms, session_stats, screen):
             identifier = organisms[index].get_identifier()
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()
-            session_stats.add_organism(organisms[index].get_identifier())
+            # session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
             simulation_window.create_organism(organisms,
                                               screen,
                                               identifier,
                                               pos,
                                               dest,
-                                              organisms[index].get_attributes())
+                                              organisms[index].get_attributes(), session_stats)
 
             # increment generation statistics as needed
             child_gen = organisms[len(organisms) - 1].get_generation()
