@@ -13,7 +13,7 @@ def rand_dest(screen_size) -> list:
 
 class Organism:
 
-    def __init__(self, screen, identifier, position, destination, attributes, reinit=None):
+    def __init__(self, screen, identifier, position, destination, attributes):
 
         # setup turtle data members
         self._sprite = turtle.RawTurtle(screen)
@@ -32,20 +32,11 @@ class Organism:
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
-
-        # initialize misc. for normal Organism creation
-        if reinit is None:
-            self._age = 0
-            self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
-            self._energy = 0
-            if self._identifier == 0:
-                self._energy = 1
-
-        # set misc. from reinit - reinitializing Organism from saved file
-        else:
-            self._age = reinit["age"]
-            self._lifespan = reinit["lifespan"]
-            self._energy = reinit["energy"]
+        self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._age = 0
+        self._energy = 0
+        if self._identifier == 0:
+            self._energy = 1
 
         self._genome = self.get_attributes()  # currently not in use
 
