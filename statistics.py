@@ -81,12 +81,14 @@ class Statistics:
         if identifier == 1:
             self._predator["population"] -= 1
             self._predator["deaths"] += 1  # increment deaths too
-            self._predator["lifespan"] = (((self._predator["population"] + 1) * self._predator["lifespan"]) - lifespan) / self._predator["population"]
+            if self._predator["population"] > 0:
+                self._predator["lifespan"] = (((self._predator["population"] + 1) * self._predator["lifespan"]) - lifespan) / self._predator["population"]
         else:
             self._prey["population"] -= 1
             self._prey["deaths"] += 1
-            self._prey["lifespan"] = (((self._prey["population"] + 1) * self._prey[
-                "lifespan"]) - lifespan) / self._prey["population"]
+            if self._prey["population"] > 0:
+                self._prey["lifespan"] = (((self._prey["population"] + 1) * self._prey[
+                    "lifespan"]) - lifespan) / self._prey["population"]
 
     def next_turn(self):
         """Stores data for the current generation"""
