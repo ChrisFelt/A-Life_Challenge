@@ -11,13 +11,13 @@ class Statistics:
         self._avg_pred_lifespans = []
         self._avg_prey_lifespans = []
         self._predator = {"population": 0,
-                          "births": 0,
+                          "births": -1 * predator_attributes["population"],
                           "deaths": 0,
                           "generation": 0,
                           "lifespan": 0
                           }
         self._prey = {"population": 0,
-                      "births": 0,
+                      "births": -1 * prey_attributes["population"],
                       "deaths": 0,
                       "generation": 0,
                       "lifespan": 0
