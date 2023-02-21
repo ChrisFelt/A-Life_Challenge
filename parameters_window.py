@@ -430,7 +430,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
         # if file selected, load data and restart simulation
         if file_name:
             with open(file_name, 'rb') as load_file:
-                pickle_data = pickle.load(load_file)
+                pickle_data = pickle.load(load_file)  # todo: popup on error
 
             # switch to simulation window with load data
             simulation_window.change_to_simulation(root,

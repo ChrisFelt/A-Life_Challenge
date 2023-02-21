@@ -21,7 +21,7 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
 
     index = len(organisms) - 1
     session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
-    organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
+    organisms[index].init_sprite(settings.turtle_settings["speed"], settings.turtle_settings["diameter"])
 
 
 def rand_coords():
@@ -44,7 +44,7 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes, se
 def initialize_organisms_from_save(organisms, sim_screen):
     """Load Organisms from a saved list"""
     for organism_object in organisms:
-        organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+        organism_object.init_sprite(settings.turtle_settings["speed"], settings.turtle_settings["diameter"], sim_screen)
 
 
 def steps(organisms, session_stats, screen):
@@ -186,7 +186,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
 
             # reinitialize sprites
             for organism_object in organisms:
-                organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+                organism_object.init_sprite(settings.turtle_settings["speed"],
+                                            settings.turtle_settings["diameter"],
+                                            sim_screen)
 
         session_stats.reset_start_time()  # restart stopwatch from current time
 
@@ -213,7 +215,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         # if file selected, load data and restart simulation
         if file_name:
             with open(file_name, 'rb') as load_file:
-                pickle_data = pickle.load(load_file)
+                pickle_data = pickle.load(load_file)  # todo: popup on error
 
             # stop running simulation steps and reset variables
             interrupt = True
