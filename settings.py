@@ -2,10 +2,12 @@ import math
 
 # turtle specific globals
 screen_size = 600
-turtle_diameter = 10
-turtle_speed = 10
-slow_factor = 30  # controls global animation speed
-timer = int(1000 // slow_factor)
+timer = int(1000 // 30)
+
+turtle_settings = {"diameter": 10,
+                   "speed": 10,
+                   "slow_factor": 30,
+                   }
 
 # if within a given distance of their target destination, organism changes target
 proximity = 40
