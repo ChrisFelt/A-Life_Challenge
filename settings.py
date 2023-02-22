@@ -6,7 +6,7 @@ timer = int(1000 // 30)
 
 turtle_settings = {"diameter": 10,
                    "speed": 10,
-                   "slow_factor": 15,
+                   "slow_factor": 10,
                    }
 
 # if within a given distance of their target destination, organism changes target
