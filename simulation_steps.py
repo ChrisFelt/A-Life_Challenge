@@ -18,7 +18,7 @@ def move(index, organisms) -> None:
     organisms[index].clear()
     organisms[index].update_pos(settings.turtle_settings["slow_factor"])
     organisms[index].move()
-    organisms[index].draw_dot(settings.turtle_diameter)
+    organisms[index].draw_dot(settings.turtle_settings["diameter"])
 
 
 def battle(index, organisms):
@@ -31,7 +31,7 @@ def conclude_turn(index, organisms, session_stats, screen):
     """Step 4 of turn order.
     index: current index of organisms
     index: list of Organism objects
-    sim_screen: animation screen the Organism sprite will be drawn on
+    screen: animation screen the Organism sprite will be drawn on
     """
     # remove an organism from the board if it reaches 0 health NOTE: untested!
     if organisms[index].is_dead():
