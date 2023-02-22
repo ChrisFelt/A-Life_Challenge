@@ -68,7 +68,7 @@ def steps(organisms, session_stats, screen):
             i += 1
     session_stats.next_turn()
     # skip until timer goes off again
-    execute_steps = False
+    #execute_steps = False
 
 
 def plus_one(one_element_list):
@@ -85,6 +85,12 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     pause_simulation = False
     current_row = [0]
 
+    # remove any existing widgets
+    for child in root.winfo_children():
+        child.destroy()
+
+    root.config(pady=0, width=settings.screen_size*2)
+
     # track new session statistics
     if save_data is None:
         session_stats = statistics.Statistics(pred_attributes, prey_attributes)
@@ -92,12 +98,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     else:
         session_stats = save_data[1]
         session_stats.reset_start_time()  # reset stopwatch
-
-    # remove any existing widgets
-    for child in root.winfo_children():
-        child.destroy()
-
-    root.config(pady=0, width=settings.screen_size*2)
 
     # -----------------------------------------------------------------------------
     # control buttons frame
@@ -283,6 +283,13 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # setup turtle screen
     sim_screen = turtle.TurtleScreen(sim_canvas)
     sim_screen.tracer(0, 0)  # requires update method to be called on screen
+
+    # initialize list of organisms - must happen before stats frame is populated
+    if save_data is None:
+        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
+    else:
+        organisms = save_data[0]
+        initialize_organisms_from_save(organisms, sim_screen)
 
     # -----------------------------------------------------------------------------
     # live stats frame
@@ -499,12 +506,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         global execute_steps
         execute_steps = True
         sim_screen.ontimer(run_steps, settings.timer)
-
-    if save_data is None:
-        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
-    else:
-        organisms = save_data[0]
-        initialize_organisms_from_save(organisms, sim_screen)
 
     run_steps()
 
