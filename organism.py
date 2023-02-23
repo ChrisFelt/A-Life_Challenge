@@ -74,7 +74,7 @@ class Organism:
 
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
-        neighbors = self.__nearest_neighbors(organisms)
+        neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
             # set random destination
             self._destination = rand_dest(screen_size)
@@ -88,7 +88,7 @@ class Organism:
 
     def battle(self, organisms):
         """For neighbors of the opposing type, attack, reducing health by the damage value"""
-        neighbors = self.__nearest_neighbors(organisms)
+        neighbors = self.__nearest_neighbors(organisms, 5)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
@@ -200,14 +200,14 @@ class Organism:
         elif self._destination[1] < -screen_size / 2:
             self._destination[1] = -screen_size / 2
 
-    def __nearest_neighbors(self, organisms):
+    def __nearest_neighbors(self, organisms, distance):
         """Private method that returns a list of neighbors that are within vision"""
         neighbors = []
         vision_min = self._direction - self._peripheral
         vision_max = self._direction + self._peripheral
         for organism in organisms:
             if self is not organism and vision_min < self.__direction_towards(organism) < vision_max:
-                if math.dist(self.get_pos(), organism.get_pos()) < self._vision:
+                if math.dist(self.get_pos(), organism.get_pos()) < distance:
                     neighbors.append(organism)
         return neighbors
 
