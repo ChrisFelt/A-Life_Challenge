@@ -131,6 +131,10 @@ class Organism:
                       }
         return attributes
 
+    def increment_age(self):
+        """Increments the age of the organism"""
+        self._age += self._birth_rate
+
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
         # find the cartesian distance to target from current position
@@ -275,7 +279,6 @@ class Organism:
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)
-        self._age += self._birth_rate
 
     def move(self):
         """Move sprite to current position"""
