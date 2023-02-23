@@ -12,7 +12,7 @@ def rand_dest(screen_size) -> list:
 
 
 class Organism:
-
+    """Represents a single organism and its genome."""
     def __init__(self, screen, identifier, position, destination, attributes):
 
         # setup turtle data members

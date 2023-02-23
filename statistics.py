@@ -4,7 +4,7 @@ import time
 
 
 class Statistics:
-
+    """Track interesting statistics for the current simulation session."""
     def __init__(self, predator_attributes, prey_attributes):
         self._predator_pop = []
         self._prey_pop = []
