@@ -267,7 +267,7 @@ class Organism:
         self._sprite.color(color)
 
     def update_pos(self, slow_factor):
-        """Increment current position towards destination"""
+        """Increment current position towards destination"""  # todo: enforce screen boundaries
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)

@@ -6,7 +6,7 @@ def set_target(index, organisms):
     """Step 1 of turn order.
     """
     # check if within range of target
-    if organisms[index].proximity_check(settings.proximity):
+    if organisms[index].proximity_check(settings.general["proximity"]):
         organisms[index].set_dest(organisms, settings.screen_size)
     pass
 
@@ -16,9 +16,9 @@ def move(index, organisms) -> None:
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
-    organisms[index].update_pos(settings.turtle_settings["slow_factor"])
+    organisms[index].update_pos(settings.general["slow_factor"])
     organisms[index].move()
-    organisms[index].draw_dot(settings.turtle_settings["diameter"])
+    organisms[index].draw_dot(settings.general["diameter"])
 
 
 def battle(index, organisms):
