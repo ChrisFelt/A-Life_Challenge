@@ -11,12 +11,12 @@ def set_target(index, organisms):
     pass
 
 
-def move(index, organisms) -> None:
+def move(index, organisms, speed_factors) -> None:
     """Step 2 of turn order.
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
     organisms[index].clear()
-    organisms[index].update_pos(settings.general["slow_factor"])
+    organisms[index].update_pos(speed_factors.get_slow_factor())
     organisms[index].move()
     organisms[index].draw_dot(settings.general["diameter"])
 

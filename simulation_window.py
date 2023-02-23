@@ -3,6 +3,7 @@ import settings
 import organism
 import simulation_steps
 import statistics
+import speed_control
 import turtle
 import random
 import tkinter
@@ -47,9 +48,14 @@ def initialize_organisms_from_save(organisms, sim_screen):
         organism_object.init_sprite(settings.general["speed"], settings.general["diameter"], sim_screen)
 
 
-def steps(organisms, session_stats, screen):
+def steps(organisms, session_stats, screen, speed_factors):
     """Run the turn steps for each organism"""
     global execute_steps
+
+    # auto-update slow_factor
+    speed_factors.auto_adjust(session_stats.get_pred_stats()["population"] +
+                              session_stats.get_prey_stats()["population"])
+
     # run all steps for each organism in the list
     i = 0
     while i < len(organisms):
@@ -58,7 +64,7 @@ def steps(organisms, session_stats, screen):
         simulation_steps.set_target(i, organisms)
 
         # step 2
-        simulation_steps.move(i, organisms)
+        simulation_steps.move(i, organisms, speed_factors)
 
         # step 3
         simulation_steps.battle(i, organisms)
@@ -98,6 +104,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     else:
         session_stats = save_data[1]
         session_stats.reset_start_time()  # reset stopwatch
+
+    # track speed factors
+    speed_factors = speed_control.SpeedControl(settings.general)
 
     # -----------------------------------------------------------------------------
     # control buttons frame
@@ -519,7 +528,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         if not pause_simulation:
 
             if execute_steps:
-                steps(organisms, session_stats, sim_screen)
+                steps(organisms, session_stats, sim_screen, speed_factors)
 
             update_stats_frame(session_stats)
 

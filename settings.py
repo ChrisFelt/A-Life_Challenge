@@ -2,7 +2,7 @@ import math
 
 general = {"diameter": 10,  # turtle diameter
            "speed": 10,  # animation speed
-           "slow_factor": 1,  # controls movement speed of turtles
+           "slow_factor": 30,  # controls movement speed of turtles
            "timer": int(1000 // 30),  # ontimer() turtle delay timer
            "fast_forward": 1,  # fast-forward modifier, base 1
            "proximity": 40,  # proximity check in simulation steps
@@ -34,7 +34,7 @@ pred_color = "#de3f3c"
 
 # prey and predator general attributes
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
-prey_attributes = {"population": 1000,
+prey_attributes = {"population": 180,
                    "generation": 0,
                    "lifespan": 4,
                    "health": 1,
@@ -47,7 +47,7 @@ prey_attributes = {"population": 1000,
                    "mutation_rate": 0.25
                    }
 
-pred_attributes = {"population": 0,
+pred_attributes = {"population": 20,
                    "generation": 0,
                    "lifespan": 6,
                    "health": 5,
