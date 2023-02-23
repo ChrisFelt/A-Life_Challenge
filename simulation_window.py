@@ -20,7 +20,7 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
     organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
     index = len(organisms) - 1
-    session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
+    session_stats.add_organism(organisms[index].get_attributes())
     organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
 
 

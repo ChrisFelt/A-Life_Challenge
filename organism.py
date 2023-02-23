@@ -118,6 +118,7 @@ class Organism:
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
         attributes = {"generation": self._generation + 1,  # offspring's generation is always + 1
+                      "identifier": self._identifier,
                       "lifespan": self._lifespan,
                       "health": self._health,
                       "vision": self._vision,
