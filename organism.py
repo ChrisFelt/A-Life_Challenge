@@ -23,17 +23,20 @@ class Organism:
         self._direction = self.__update_direction()  # set initial direction automatically
 
         # set attributes
-        self._health = attributes["health"]
-        self._vision = attributes["vision"]
-        self._peripheral = attributes["peripheral"]
-        self._speed = attributes["speed"]
-        self._damage = attributes["damage"]
+        self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
         self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._age = 0
+        self._health = attributes["health"] - ((self._vision + self._peripheral + self._speed + self._damage +
+                                                self._lifespan) - (attributes["vision"] + attributes["peripheral"] +
+                                                                   attributes["speed"] + attributes["damage"] +
+                                                                   attributes["lifespan"]))
         self._energy = 0
         if self._identifier == 0:
             self._energy = 1
