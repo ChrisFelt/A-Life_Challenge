@@ -17,8 +17,8 @@ class SpeedControl:
     def auto_adjust(self, population):
         """Adjusts slow_factor based on population parameter.
         Lower values -> faster movement speeds"""
-        # with population as x and slow_factor as y, best fit line is:
-        # y = 1271.2x^0.899
+        # with slow_factor as y and population as x, best fit line is:
+        # y = 1271.2x^-0.899
         # additionally adjust by fast-forward factor
         if population > 0:  # if population is 0, divide by zero error occurs
             self._slow_factor = (1271.2 * population ** -0.899) / self._fast_forward
