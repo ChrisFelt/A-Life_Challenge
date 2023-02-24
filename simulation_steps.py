@@ -40,7 +40,6 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
         # clear organism animation and remove from list
         organisms[index].clear()
         session_stats.remove_organism(organisms[index].get_attributes())
-        session_stats.remove_organism(organisms[index].get_attributes())
         organisms.pop(index)
         return False
     else:
