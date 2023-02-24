@@ -34,11 +34,13 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     index: list of Organism objects
     screen: animation screen the Organism sprite will be drawn on
     """
+    organisms[index].increment_age()
     # remove an organism from the board if it reaches 0 health NOTE: untested!
     if organisms[index].is_dead():
         # clear organism animation and remove from list
         organisms[index].clear()
-        session_stats.remove_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
+        session_stats.remove_organism(organisms[index].get_attributes())
+        session_stats.remove_organism(organisms[index].get_attributes())
         organisms.pop(index)
         return False
     else:

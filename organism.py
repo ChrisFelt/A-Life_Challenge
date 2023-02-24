@@ -23,17 +23,20 @@ class Organism:
         self._direction = self.__update_direction()  # set initial direction automatically
 
         # set attributes
-        self._health = attributes["health"]
-        self._vision = attributes["vision"]
-        self._peripheral = attributes["peripheral"]
-        self._speed = attributes["speed"]
-        self._damage = attributes["damage"]
+        self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
         self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._age = 0
+        self._health = attributes["health"] - ((self._vision + self._peripheral + self._speed + self._damage +
+                                                self._lifespan) - (attributes["vision"] + attributes["peripheral"] +
+                                                                   attributes["speed"] + attributes["damage"] +
+                                                                   attributes["lifespan"]))
         self._energy = 0
         if self._identifier == 0:
             self._energy = 1
@@ -115,6 +118,7 @@ class Organism:
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
         attributes = {"generation": self._generation + 1,  # offspring's generation is always + 1
+                      "identifier": self._identifier,
                       "lifespan": self._lifespan,
                       "health": self._health,
                       "vision": self._vision,
@@ -126,6 +130,10 @@ class Organism:
                       "mutation_rate": self._mutation_rate
                       }
         return attributes
+
+    def increment_age(self):
+        """Increments the age of the organism"""
+        self._age += self._birth_rate
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
@@ -271,7 +279,6 @@ class Organism:
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)
-        self._age += self._birth_rate
 
     def move(self):
         """Move sprite to current position"""
