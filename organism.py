@@ -103,9 +103,9 @@ class Organism:
         else:
             return False
 
-    def is_fertile(self):
+    def is_fertile(self, fast_forward):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate and self._energy > 0:
+        if random.uniform(0, 1) < self._birth_rate * (fast_forward/3) and self._energy > 0:
             if self._identifier == 1:
                 self._energy -= self._damage
             return True

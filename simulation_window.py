@@ -11,7 +11,6 @@ import tkinter.filedialog as filemanager
 import os
 import pickle
 
-execute_steps = True
 interrupt = False
 pause_simulation = False
 
@@ -50,8 +49,6 @@ def initialize_organisms_from_save(organisms, sim_screen):
 
 def steps(organisms, session_stats, screen, speed_factors):
     """Run the turn steps for each organism"""
-    global execute_steps
-
     # auto-update slow_factor
     speed_factors.auto_adjust(session_stats.get_pred_stats()["population"] +
                               session_stats.get_prey_stats()["population"])
@@ -70,11 +67,9 @@ def steps(organisms, session_stats, screen, speed_factors):
         simulation_steps.battle(i, organisms)
 
         # step 4
-        if simulation_steps.conclude_turn(i, organisms, session_stats, screen):    # if organism hasn't died
+        if simulation_steps.conclude_turn(i, organisms, session_stats, screen, speed_factors):  # if organism hasn't died
             i += 1
     session_stats.next_turn()
-    # skip until timer goes off again
-    #execute_steps = False
 
 
 def plus_one(one_element_list):
@@ -85,9 +80,8 @@ def plus_one(one_element_list):
 
 def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save_data=None):
     """Build simulation screen and run the simulation"""
-    global interrupt, execute_steps, pause_simulation
+    global interrupt, pause_simulation
     interrupt = False
-    execute_steps = True
     pause_simulation = False
     current_row = [0]
 
@@ -123,13 +117,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     def update_speed(event):
         """Update the simulation speed to reflect slider value"""
         # todo: figure out what event parameter contains
-        print("Speed set to: " + str(speed_slider.get()) + ".")
+        speed_factors.set_fast_forward(speed_slider.get())
+        # print("Speed set to: " + str(speed_slider.get()) + ".")
 
     # speed slider
     speed_slider = tkinter.Scale(button_frame,
                                  command=update_speed,
                                  from_=1,
-                                 to=50,
+                                 to=10,
                                  label="Simulation Speed",
                                  showvalue=False,  # turn off current value display
                                  orient="horizontal",
@@ -510,14 +505,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # -----------------------------------------------------------------------------
     # run simulation
     # -----------------------------------------------------------------------------
-    def run_steps():
-        """Timer function that sets the global boolean flag for steps()"""
-        global execute_steps
-        execute_steps = True
-        sim_screen.ontimer(run_steps, settings.general["timer"])
-
-    run_steps()
-
     # run simulation indefinitely
     while True:
         # exit simulation when stop button pressed
@@ -527,9 +514,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         # unless paused, run steps
         if not pause_simulation:
 
-            if execute_steps:
-                steps(organisms, session_stats, sim_screen, speed_factors)
-
+            steps(organisms, session_stats, sim_screen, speed_factors)
             update_stats_frame(session_stats)
 
         # still need to update the screen even if paused

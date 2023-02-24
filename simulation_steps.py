@@ -15,8 +15,9 @@ def move(index, organisms, speed_factors) -> None:
     """Step 2 of turn order.
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
-    organisms[index].clear()
     organisms[index].update_pos(speed_factors.get_slow_factor())
+
+    organisms[index].clear()
     organisms[index].move()
     organisms[index].draw_dot(settings.general["diameter"])
 
@@ -27,7 +28,7 @@ def battle(index, organisms):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index, organisms, session_stats, screen):
+def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     """Step 4 of turn order.
     index: current index of organisms
     index: list of Organism objects
@@ -41,7 +42,7 @@ def conclude_turn(index, organisms, session_stats, screen):
         organisms.pop(index)
         return False
     else:
-        if organisms[index].is_fertile():
+        if organisms[index].is_fertile(speed_factors.get_fast_forward()):
             identifier = organisms[index].get_identifier()
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()
