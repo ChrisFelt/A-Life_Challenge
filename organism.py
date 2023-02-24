@@ -12,7 +12,7 @@ def rand_dest(screen_size) -> list:
 
 
 class Organism:
-
+    """Represents a single organism and its genome."""
     def __init__(self, screen, identifier, position, destination, attributes):
 
         # setup turtle data members
@@ -106,9 +106,9 @@ class Organism:
         else:
             return False
 
-    def is_fertile(self):
+    def is_fertile(self, fast_forward):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate and self._energy > 0:
+        if random.uniform(0, 1) < self._birth_rate * (fast_forward/3) and self._energy > 0:
             if self._identifier == 1:
                 self._energy -= self._damage
             return True
@@ -275,7 +275,7 @@ class Organism:
         self._sprite.color(color)
 
     def update_pos(self, slow_factor):
-        """Increment current position towards destination"""
+        """Increment current position towards destination"""  # todo: enforce screen boundaries
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)

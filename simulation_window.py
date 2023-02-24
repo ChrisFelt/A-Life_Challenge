@@ -1,8 +1,11 @@
+import _pickle
+
 import parameters_window
 import settings
 import organism
 import simulation_steps
 import statistics
+import speed_control
 import turtle
 import random
 import tkinter
@@ -10,7 +13,6 @@ import tkinter.filedialog as filemanager
 import os
 import pickle
 
-execute_steps = True
 interrupt = False
 pause_simulation = False
 
@@ -20,8 +22,9 @@ def create_organism(organisms, screen, identifier, position, destination, attrib
     organisms.append(organism.Organism(screen, identifier, position, destination, attributes))
 
     index = len(organisms) - 1
+
     session_stats.add_organism(organisms[index].get_attributes())
-    organisms[index].init_sprite(settings.turtle_speed, settings.turtle_diameter)
+    organisms[index].init_sprite(settings.general["speed"], settings.general["diameter"])
 
 
 def rand_coords():
@@ -44,12 +47,15 @@ def initialize_organisms(organisms, screen, prey_attributes, pred_attributes, se
 def initialize_organisms_from_save(organisms, sim_screen):
     """Load Organisms from a saved list"""
     for organism_object in organisms:
-        organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+        organism_object.init_sprite(settings.general["speed"], settings.general["diameter"], sim_screen)
 
 
-def steps(organisms, session_stats, screen):
+def steps(organisms, session_stats, screen, speed_factors):
     """Run the turn steps for each organism"""
-    global execute_steps
+    # auto-update slow_factor
+    speed_factors.auto_adjust(session_stats.get_pred_stats()["population"] +
+                              session_stats.get_prey_stats()["population"])
+
     # run all steps for each organism in the list
     i = 0
     while i < len(organisms):
@@ -58,17 +64,15 @@ def steps(organisms, session_stats, screen):
         simulation_steps.set_target(i, organisms)
 
         # step 2
-        simulation_steps.move(i, organisms)
+        simulation_steps.move(i, organisms, speed_factors)
 
         # step 3
         simulation_steps.battle(i, organisms)
 
         # step 4
-        if simulation_steps.conclude_turn(i, organisms, session_stats, screen):    # if organism hasn't died
+        if simulation_steps.conclude_turn(i, organisms, session_stats, screen, speed_factors):  # if organism hasn't died
             i += 1
     session_stats.next_turn()
-    # skip until timer goes off again
-    execute_steps = False
 
 
 def plus_one(one_element_list):
@@ -79,11 +83,16 @@ def plus_one(one_element_list):
 
 def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save_data=None):
     """Build simulation screen and run the simulation"""
-    global interrupt, execute_steps, pause_simulation
+    global interrupt, pause_simulation
     interrupt = False
-    execute_steps = True
     pause_simulation = False
     current_row = [0]
+
+    # remove any existing widgets
+    for child in root.winfo_children():
+        child.destroy()
+
+    root.config(pady=0, width=settings.screen_size*2)
 
     # track new session statistics
     if save_data is None:
@@ -93,11 +102,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         session_stats = save_data[1]
         session_stats.reset_start_time()  # reset stopwatch
 
-    # remove any existing widgets
-    for child in root.winfo_children():
-        child.destroy()
-
-    root.config(pady=0, width=settings.screen_size*2)
+    # track speed factors
+    speed_factors = speed_control.SpeedControl(settings.general)
 
     # -----------------------------------------------------------------------------
     # control buttons frame
@@ -114,13 +120,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     def update_speed(event):
         """Update the simulation speed to reflect slider value"""
         # todo: figure out what event parameter contains
-        print("Speed set to: " + str(speed_slider.get()) + ".")
+        speed_factors.set_fast_forward(speed_slider.get())
+        # print("Speed set to: " + str(speed_slider.get()) + ".")
 
     # speed slider
     speed_slider = tkinter.Scale(button_frame,
                                  command=update_speed,
                                  from_=1,
-                                 to=50,
+                                 to=10,
                                  label="Simulation Speed",
                                  showvalue=False,  # turn off current value display
                                  orient="horizontal",
@@ -186,7 +193,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
 
             # reinitialize sprites
             for organism_object in organisms:
-                organism_object.init_sprite(settings.turtle_speed, settings.turtle_diameter, sim_screen)
+                organism_object.init_sprite(settings.general["speed"],
+                                            settings.general["diameter"],
+                                            sim_screen)
 
         session_stats.reset_start_time()  # restart stopwatch from current time
 
@@ -213,7 +222,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         # if file selected, load data and restart simulation
         if file_name:
             with open(file_name, 'rb') as load_file:
-                pickle_data = pickle.load(load_file)
+                try:
+                    pickle_data = pickle.load(load_file)
+                except (pickle.UnpicklingError, AttributeError, ImportError, EOFError, IndexError):
+                    parameters_window.popup(root, "Bad file. Please try again.")
+                    return
+                except Exception:
+                    parameters_window.popup(root, "Unknown error occurred. Please try again.")
+                    return
 
             # stop running simulation steps and reset variables
             interrupt = True
@@ -281,6 +297,13 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # setup turtle screen
     sim_screen = turtle.TurtleScreen(sim_canvas)
     sim_screen.tracer(0, 0)  # requires update method to be called on screen
+
+    # initialize list of organisms - must happen before stats frame is populated
+    if save_data is None:
+        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
+    else:
+        organisms = save_data[0]
+        initialize_organisms_from_save(organisms, sim_screen)
 
     # -----------------------------------------------------------------------------
     # live stats frame
@@ -492,20 +515,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # -----------------------------------------------------------------------------
     # run simulation
     # -----------------------------------------------------------------------------
-    def run_steps():
-        """Timer function that sets the global boolean flag for steps()"""
-        global execute_steps
-        execute_steps = True
-        sim_screen.ontimer(run_steps, settings.timer)
-
-    if save_data is None:
-        initialize_organisms(organisms, sim_screen, prey_attributes, pred_attributes, session_stats)
-    else:
-        organisms = save_data[0]
-        initialize_organisms_from_save(organisms, sim_screen)
-
-    run_steps()
-
     # run simulation indefinitely
     while True:
         # exit simulation when stop button pressed
@@ -515,9 +524,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         # unless paused, run steps
         if not pause_simulation:
 
-            if execute_steps:
-                steps(organisms, session_stats, sim_screen)
-
+            steps(organisms, session_stats, sim_screen, speed_factors)
             update_stats_frame(session_stats)
 
         # still need to update the screen even if paused

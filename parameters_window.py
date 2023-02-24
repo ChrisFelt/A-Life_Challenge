@@ -430,7 +430,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
         # if file selected, load data and restart simulation
         if file_name:
             with open(file_name, 'rb') as load_file:
-                pickle_data = pickle.load(load_file)
+                # check for bad file
+                try:
+                    pickle_data = pickle.load(load_file)
+                except (pickle.UnpicklingError, AttributeError, ImportError, EOFError, IndexError):
+                    popup(root, "Bad file. Please try again.")
+                    return
+                except Exception:
+                    popup(root, "Unknown error occurred. Please try again.")
+                    return
 
             # switch to simulation window with load data
             simulation_window.change_to_simulation(root,

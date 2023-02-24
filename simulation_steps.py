@@ -6,19 +6,20 @@ def set_target(index, organisms):
     """Step 1 of turn order.
     """
     # check if within range of target
-    if organisms[index].proximity_check(settings.proximity):
+    if organisms[index].proximity_check(settings.general["proximity"]):
         organisms[index].set_dest(organisms, settings.screen_size)
     pass
 
 
-def move(index, organisms) -> None:
+def move(index, organisms, speed_factors) -> None:
     """Step 2 of turn order.
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
+    organisms[index].update_pos(speed_factors.get_slow_factor())
+
     organisms[index].clear()
-    organisms[index].update_pos(settings.slow_factor)
     organisms[index].move()
-    organisms[index].draw_dot(settings.turtle_diameter)
+    organisms[index].draw_dot(settings.general["diameter"])
 
 
 def battle(index, organisms):
@@ -27,11 +28,11 @@ def battle(index, organisms):
     organisms[index].battle(organisms)
 
 
-def conclude_turn(index, organisms, session_stats, screen):
+def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     """Step 4 of turn order.
     index: current index of organisms
     index: list of Organism objects
-    sim_screen: animation screen the Organism sprite will be drawn on
+    screen: animation screen the Organism sprite will be drawn on
     """
     organisms[index].increment_age()
     # remove an organism from the board if it reaches 0 health NOTE: untested!
@@ -43,7 +44,7 @@ def conclude_turn(index, organisms, session_stats, screen):
         organisms.pop(index)
         return False
     else:
-        if organisms[index].is_fertile():
+        if organisms[index].is_fertile(speed_factors.get_fast_forward()):
             identifier = organisms[index].get_identifier()
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()

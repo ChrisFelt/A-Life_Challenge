@@ -1,14 +1,15 @@
 import math
 
-# turtle specific globals
-screen_size = 600
-turtle_diameter = 10
-turtle_speed = 10
-slow_factor = 30  # controls global animation speed
-timer = int(1000 // slow_factor)
+general = {"diameter": 10,  # turtle diameter
+           "speed": 10,  # animation speed
+           "slow_factor": 30,  # controls movement speed of turtles
+           "timer": int(1000 // 30),  # ontimer() turtle delay timer
+           "fast_forward": 1,  # fast-forward modifier, base 1
+           "proximity": 40,  # proximity check in simulation steps
+           }
 
-# if within a given distance of their target destination, organism changes target
-proximity = 40
+# turtle screen
+screen_size = 600
 
 # tkinter frame parameters
 button_height = 2
@@ -33,7 +34,7 @@ pred_color = "#de3f3c"
 
 # prey and predator general attributes
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
-prey_attributes = {"population": 80,
+prey_attributes = {"population": 180,
                    "generation": 0,
                    "lifespan": 4,
                    "health": 1,
