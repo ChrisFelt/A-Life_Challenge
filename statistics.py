@@ -94,9 +94,10 @@ class Statistics:
 
     def __rm_prey_avg(self, keys, data):
         """Recomputes average attribute values for newly added prey"""
-        for attribute in keys:
-            self._prey[attribute] = (((self._prey["population"] - 1) * self._prey[attribute]) +
-                                     data[attribute]) / self._prey["population"]
+        if self._prey["population"] > 0:
+            for attribute in keys:
+                self._prey[attribute] = (((self._prey["population"] - 1) * self._prey[attribute]) +
+                                         data[attribute]) / self._prey["population"]
 
     def add_organism(self, attributes):
         """Increments the population size of the organism type corresponding to the identifier"""
