@@ -8,6 +8,8 @@ class Statistics:
     def __init__(self, predator_attributes, prey_attributes):
         self._predator_pop = []
         self._prey_pop = []
+        self._avg_pred_visions = []
+        self._avg_prey_visions = []
         self._avg_pred_lifespans = []
         self._avg_prey_lifespans = []
         self._predator = {"population": 0,
@@ -127,23 +129,30 @@ class Statistics:
         if self._general["turn"] % self._general["gen_length"] == 0:
             self._predator_pop.append(self._predator["population"])
             self._prey_pop.append((self._prey["population"]))
+            self._avg_pred_visions.append(self._predator["vision"])
+            self._avg_prey_visions.append(self._prey["vision"])
             self._avg_pred_lifespans.append(self._predator["lifespan"])
             self._avg_prey_lifespans.append(self._prey["lifespan"])
 
     def log_population(self):
         """Generates a graph of population data"""
         pred = np.array(self._predator_pop)
+        pred_vision = np.array(self._avg_pred_visions)
         pred_lifespan = np.array(self._avg_pred_lifespans)
+
         prey = np.array(self._prey_pop)
+        prey_vision = np.array(self._avg_prey_visions)
         prey_lifespan = np.array(self._avg_prey_lifespans)
 
-        fig, (pop, lspan) = plt.subplots(2)
+        fig, (pop, vis, lspan) = plt.subplots(3)
         pop.plot(pred, color='red', label='Predator')
         pop.plot(prey, color='green', label='Prey')
+        vis.plot(pred_vision, color='red', linestyle='dashed', label='Predator Vision')
+        vis.plot(prey_vision, color='green', linestyle='dashed', label='Prey Vision')
         lspan.plot(pred_lifespan, color='red', linestyle='dashed', label='Predator Lifespan')
         lspan.plot(prey_lifespan, color='green', linestyle='dashed', label='Prey Lifespan')
         pop.set(ylabel="Population Size")
+        vis.set(ylabel="Avg Vision")
         lspan.set(xlabel="Time (100 turns)", ylabel="Avg Lifespan")
         pop.legend()
-        lspan.legend()
         plt.show()
