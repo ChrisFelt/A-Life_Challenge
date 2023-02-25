@@ -103,14 +103,20 @@ class Organism:
         else:
             return False
 
-    def is_fertile(self, fast_forward):
+    def is_fertile(self, fast_forward, prey_population):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate * fast_forward and self._energy > 0:
-            if self._identifier == 1:
+        if self._identifier == 1:
+            if random.uniform(0, 1) < self._birth_rate * fast_forward and self._energy > 0:
                 self._energy -= self._damage
-            return True
+                return True
+            else:
+                return False
         else:
-            return False
+            if random.uniform(0, 1) < (self._birth_rate * fast_forward) / (prey_population/100):
+                return True
+            else:
+                return False
+
 
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""

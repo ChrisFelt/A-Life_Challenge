@@ -54,6 +54,9 @@ class Statistics:
     def get_prey_stats(self):
         return self._prey
 
+    def get_prey_pop(self):
+        return self._prey["population"]
+
     def get_general_stats(self):
         return self._general
 

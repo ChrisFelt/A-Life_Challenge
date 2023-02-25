@@ -43,11 +43,10 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
         organisms.pop(index)
         return False
     else:
-        if organisms[index].is_fertile(speed_factors.get_fast_forward()):
+        if organisms[index].is_fertile(speed_factors.get_fast_forward(), session_stats.get_prey_pop()):
             identifier = organisms[index].get_identifier()
             pos = simulation_window.rand_coords()
             dest = simulation_window.rand_coords()
-            # session_stats.add_organism(organisms[index].get_identifier(), organisms[index].get_lifespan())
             simulation_window.create_organism(organisms,
                                               screen,
                                               identifier,
