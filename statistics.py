@@ -139,7 +139,9 @@ class Statistics:
         """Stores data for the current generation"""
         self._general["turn"] += 1
         if self._general["turn"] % self._general["gen_length"] == 0:
-            attributes = ["population", "vision", "peripheral", "speed", "damage", "lifespan"]
+            self._pred_avg["population"].append(self._predator["population"])
+            self._prey_avg["population"].append(self._prey["population"])
+            attributes = ["vision", "peripheral", "speed", "damage", "lifespan"]
             for attribute in attributes:
                 self._pred_avg[attribute].append(self._pred_init[attribute] - self._predator[attribute])
                 self._prey_avg[attribute].append(self._prey_init[attribute] - self._prey[attribute])
