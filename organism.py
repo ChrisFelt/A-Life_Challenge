@@ -23,8 +23,8 @@ class Organism:
         self._direction = self.__update_direction()  # set initial direction automatically
 
         # set attributes
-        self._vision = attributes["vision"] + (random.uniform(-1 * (math.pi/6), math.pi/6) * attributes["mutation_rate"])
-        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._peripheral = attributes["peripheral"]
         self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
