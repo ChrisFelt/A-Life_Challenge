@@ -106,17 +106,16 @@ class Organism:
     def is_fertile(self, fast_forward, prey_population):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
         if self._identifier == 1:
-            if random.uniform(0, 1) < self._birth_rate * fast_forward and self._energy > 0:
+            if random.uniform(0, 1) < self._birth_rate * fast_forward / 3 and self._energy > 0:
                 self._energy -= self._damage
                 return True
             else:
                 return False
         else:
-            if random.uniform(0, 1) < (self._birth_rate * fast_forward) / (prey_population/100):
+            if random.uniform(0, 1) < (self._birth_rate * fast_forward / 3) / (prey_population/100):
                 return True
             else:
                 return False
-
 
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
@@ -136,7 +135,7 @@ class Organism:
 
     def increment_age(self, fast_forward):
         """Increments the age of the organism"""
-        self._age += 0.01 * fast_forward
+        self._age += 0.01 * fast_forward / 3
         if self._identifier == 1 and self._energy == 0:
             self._health -= random.uniform(0, 0.1) * fast_forward     # simulated starvation
 
