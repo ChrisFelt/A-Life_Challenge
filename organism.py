@@ -137,7 +137,7 @@ class Organism:
         """Increments the age of the organism"""
         self._age += 0.01 * fast_forward / 3
         if self._identifier == 1 and self._energy == 0:
-            self._health -= random.uniform(0, 0.1) * fast_forward     # simulated starvation
+            self._health -= random.uniform(0, 0.1) * fast_forward / 3    # simulated starvation
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
