@@ -31,7 +31,7 @@ class Statistics:
                       "lifespan": 0
                       }
         self._general = {"turn": 0,
-                         "gen_length": min(1 / predator_attributes["birth_rate"], 1 / prey_attributes["birth_rate"]),
+                         "gen_length": 100,
                          "elapsed_time": 0.00,
                          }
         self._start_time = time.time()

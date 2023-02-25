@@ -33,13 +33,10 @@ class Organism:
         self._generation = attributes["generation"]
         self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._age = 0
-        self._health = attributes["health"] - ((self._vision + self._peripheral + self._speed + self._damage +
-                                                self._lifespan) - (attributes["vision"] + attributes["peripheral"] +
-                                                                   attributes["speed"] + attributes["damage"] +
-                                                                   attributes["lifespan"]))
+        self._health = attributes["health"]
         self._energy = 0
         if self._identifier == 0:
-            self._energy = 1
+            self._energy = self._health
 
         self._genome = self.get_attributes()  # currently not in use
 
@@ -91,7 +88,7 @@ class Organism:
 
     def battle(self, organisms):
         """For neighbors of the opposing type, attack, reducing health by the damage value"""
-        neighbors = self.__nearest_neighbors(organisms, 5)
+        neighbors = self.__nearest_neighbors(organisms, 8)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
@@ -108,7 +105,7 @@ class Organism:
 
     def is_fertile(self, fast_forward):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate * (fast_forward/3) and self._energy > 0:
+        if random.uniform(0, 1) < self._birth_rate * fast_forward and self._energy > 0:
             if self._identifier == 1:
                 self._energy -= self._damage
             return True
@@ -131,9 +128,11 @@ class Organism:
                       }
         return attributes
 
-    def increment_age(self):
+    def increment_age(self, fast_forward):
         """Increments the age of the organism"""
-        self._age += self._birth_rate
+        self._age += 0.01 * fast_forward
+        if self._identifier == 1 and self._energy == 0:
+            self._health -= random.uniform(0, 0.1)      # simulated starvation
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
@@ -198,7 +197,7 @@ class Organism:
                           self._destination[0] - self._position[0])
 
     def __enforce_boundaries(self, screen_size):
-        """Private methods that updates the destination coordinates to enforce walls"""
+        """Private method that updates the destination coordinates to enforce walls"""
         if self._destination[0] > screen_size / 2:
             self._destination[0] = screen_size / 2
         elif self._destination[0] < -screen_size / 2:
@@ -275,7 +274,7 @@ class Organism:
         self._sprite.color(color)
 
     def update_pos(self, slow_factor):
-        """Increment current position towards destination"""  # todo: enforce screen boundaries
+        """Increment current position towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)

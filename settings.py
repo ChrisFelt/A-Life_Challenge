@@ -34,28 +34,28 @@ pred_color = "#de3f3c"
 
 # prey and predator general attributes
 # *NOTE: these initial values show up as the DEFAULT in the parameters screen
-prey_attributes = {"population": 180,
+prey_attributes = {"population": 100,
                    "generation": 0,
-                   "lifespan": 4,
+                   "lifespan": 7,
                    "health": 1,
                    "vision": 10,
                    "peripheral": math.pi / 4,
                    "speed": 10,
                    "damage": 0,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.001,
+                   "birth_rate": 0.003,
                    "mutation_rate": 0.25
                    }
 
 pred_attributes = {"population": 20,
                    "generation": 0,
-                   "lifespan": 6,
-                   "health": 5,
+                   "lifespan": 10,
+                   "health": 10,
                    "vision": 30,
                    "peripheral": math.pi / 2,
-                   "speed": 30,
+                   "speed": 25,
                    "damage": 1,
                    "separation_weight": 0.5,
-                   "birth_rate": 0.01,
+                   "birth_rate": 0.009,
                    "mutation_rate": 0.25
                    }
