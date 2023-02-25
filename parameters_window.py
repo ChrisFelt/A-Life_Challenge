@@ -433,8 +433,12 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
                 # check for bad file
                 try:
                     pickle_data = pickle.load(load_file)
-                except (pickle.UnpicklingError, AttributeError, ImportError, EOFError, IndexError):
+                except (pickle.UnpicklingError, AttributeError, EOFError, IndexError):
                     popup(root, "Bad file. Please try again.")
+                    return
+                except ImportError:
+                    popup(root, "Error importing module associated with file."
+                                "\n\nPlease try again.")
                     return
                 except Exception:
                     popup(root, "Unknown error occurred. Please try again.")

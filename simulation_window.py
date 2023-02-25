@@ -117,11 +117,10 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # -------------------------------
     # animation speed slider
     # -------------------------------
-    def update_speed(event):
+    def update_speed(num):
         """Update the simulation speed to reflect slider value"""
-        # todo: figure out what event parameter contains
-        speed_factors.set_fast_forward(speed_slider.get())
-        # print("Speed set to: " + str(speed_slider.get()) + ".")
+        speed_factors.set_fast_forward(int(num))
+        print("Speed set to: " + num + ".")
 
     # speed slider
     speed_slider = tkinter.Scale(button_frame,
@@ -224,8 +223,12 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
             with open(file_name, 'rb') as load_file:
                 try:
                     pickle_data = pickle.load(load_file)
-                except (pickle.UnpicklingError, AttributeError, ImportError, EOFError, IndexError):
+                except (pickle.UnpicklingError, AttributeError, EOFError, IndexError):
                     parameters_window.popup(root, "Bad file. Please try again.")
+                    return
+                except ImportError:
+                    parameters_window.popup(root, "Error importing module associated with file."
+                                                  "\n\nPlease try again.")
                     return
                 except Exception:
                     parameters_window.popup(root, "Unknown error occurred. Please try again.")
