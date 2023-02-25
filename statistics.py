@@ -6,12 +6,24 @@ import time
 class Statistics:
     """Track interesting statistics for the current simulation session."""
     def __init__(self, predator_attributes, prey_attributes):
-        self._predator_pop = []
-        self._prey_pop = []
-        self._avg_pred_visions = []
-        self._avg_prey_visions = []
-        self._avg_pred_lifespans = []
-        self._avg_prey_lifespans = []
+        self._pred_init = predator_attributes
+        self._prey_init = prey_attributes
+        self._pred_avg = {
+            "population": [],
+            "vision": [],
+            "peripheral": [],
+            "speed": [],
+            "damage": [],
+            "lifespan": []
+        }
+        self._prey_avg = {
+            "population": [],
+            "vision": [],
+            "peripheral": [],
+            "speed": [],
+            "damage": [],
+            "lifespan": []
+        }
         self._predator = {"population": 0,
                           "births": -1 * predator_attributes["population"],
                           "deaths": 0,
@@ -127,32 +139,48 @@ class Statistics:
         """Stores data for the current generation"""
         self._general["turn"] += 1
         if self._general["turn"] % self._general["gen_length"] == 0:
-            self._predator_pop.append(self._predator["population"])
-            self._prey_pop.append((self._prey["population"]))
-            self._avg_pred_visions.append(self._predator["vision"])
-            self._avg_prey_visions.append(self._prey["vision"])
-            self._avg_pred_lifespans.append(self._predator["lifespan"])
-            self._avg_prey_lifespans.append(self._prey["lifespan"])
+            attributes = ["population", "vision", "peripheral", "speed", "damage", "lifespan"]
+            for attribute in attributes:
+                self._pred_avg[attribute].append(self._pred_init[attribute] - self._predator[attribute])
+                self._prey_avg[attribute].append(self._prey_init[attribute] - self._prey[attribute])
 
     def log_population(self):
         """Generates a graph of population data"""
-        pred = np.array(self._predator_pop)
-        pred_vision = np.array(self._avg_pred_visions)
-        pred_lifespan = np.array(self._avg_pred_lifespans)
+        pred_pop = np.array(self._pred_avg["population"])
+        pred_vis = np.array(self._pred_avg["vision"])
+        pred_per = np.array(self._pred_avg["peripheral"])
+        pred_spd = np.array(self._pred_avg["speed"])
+        pred_dmg = np.array(self._pred_avg["damage"])
+        pred_spn = np.array(self._pred_avg["lifespan"])
 
-        prey = np.array(self._prey_pop)
-        prey_vision = np.array(self._avg_prey_visions)
-        prey_lifespan = np.array(self._avg_prey_lifespans)
+        prey_pop = np.array(self._prey_avg["population"])
+        prey_vis = np.array(self._prey_avg["vision"])
+        prey_per = np.array(self._prey_avg["peripheral"])
+        prey_spd = np.array(self._prey_avg["speed"])
+        prey_dmg = np.array(self._prey_avg["damage"])
+        prey_spn = np.array(self._prey_avg["lifespan"])
 
-        fig, (pop, vis, lspan) = plt.subplots(3)
-        pop.plot(pred, color='red', label='Predator')
-        pop.plot(prey, color='green', label='Prey')
-        vis.plot(pred_vision, color='red', linestyle='dashed', label='Predator Vision')
-        vis.plot(prey_vision, color='green', linestyle='dashed', label='Prey Vision')
-        lspan.plot(pred_lifespan, color='red', linestyle='dashed', label='Predator Lifespan')
-        lspan.plot(prey_lifespan, color='green', linestyle='dashed', label='Prey Lifespan')
+        fig, (pop, pred, prey) = plt.subplots(3)
+
+        pop.plot(pred_pop, color='red', label='Predator')
+        pop.plot(prey_pop, color='green', label='Prey')
         pop.set(ylabel="Population Size")
-        vis.set(ylabel="Avg Vision")
-        lspan.set(xlabel="Time (100 turns)", ylabel="Avg Lifespan")
+
+        pred.plot(pred_vis, color='red', linestyle='dashed', label='Vision')
+        pred.plot(pred_per, color='red', linestyle='dotted', label='Peripheral')
+        pred.plot(pred_spd, color='red', linestyle='solid', label='Speed')
+        pred.plot(pred_dmg, color='red', linestyle='dashdot', label='Damage')
+        pred.plot(pred_spn, color='red', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='Lifespan')
+        pred.set(ylabel="Deviation")
+
+        prey.plot(prey_vis, color='green', linestyle='dashed', label='Vision')
+        prey.plot(prey_per, color='green', linestyle='dotted', label='Peripheral')
+        prey.plot(prey_spd, color='green', linestyle='solid', label='Speed')
+        prey.plot(prey_dmg, color='green', linestyle='dashdot', label='Damage')
+        prey.plot(prey_spn, color='green', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='Lifespan')
+        prey.set(xlabel="Time (100 turns)", ylabel="Deviation")
+
         pop.legend()
+        pred.legend()
+        prey.legend()
         plt.show()
