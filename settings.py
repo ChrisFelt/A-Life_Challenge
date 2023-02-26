@@ -4,7 +4,7 @@ general = {"diameter": 10,  # turtle diameter
            "speed": 10,  # animation speed
            "slow_factor": 30,  # controls movement speed of turtles
            "timer": int(1000 // 30),  # ontimer() turtle delay timer
-           "fast_forward": 10,  # fast-forward modifier, base 1
+           "fast_forward": 1,  # fast-forward modifier, base 1
            "proximity": 40,  # proximity check in simulation steps
            }
 
