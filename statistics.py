@@ -6,10 +6,22 @@ import time
 class Statistics:
     """Track interesting statistics for the current simulation session."""
     def __init__(self, predator_attributes, prey_attributes):
-        self._predator_pop = []
-        self._prey_pop = []
-        self._avg_pred_lifespans = []
-        self._avg_prey_lifespans = []
+        self._pred_init = predator_attributes
+        self._prey_init = prey_attributes
+        self._pred_avg = {
+            "population": [],
+            "vision": [0],
+            "speed": [0],
+            "damage": [0],
+            "lifespan": [0]
+        }
+        self._prey_avg = {
+            "population": [],
+            "vision": [0],
+            "speed": [0],
+            "damage": [0],
+            "lifespan": [0]
+        }
         self._predator = {"population": 0,
                           "births": -1 * predator_attributes["population"],
                           "deaths": 0,
@@ -41,6 +53,9 @@ class Statistics:
 
     def get_prey_stats(self):
         return self._prey
+
+    def get_prey_pop(self):
+        return self._prey["population"]
 
     def get_general_stats(self):
         return self._general
@@ -104,46 +119,67 @@ class Statistics:
         if attributes["identifier"] == 1:
             self._predator["population"] += 1
             self._predator["births"] += 1  # increment births too
-            self.__add_pred_avg(["vision", "peripheral", "speed", "damage", "lifespan"], attributes)
+            self.__add_pred_avg(["vision", "speed", "damage", "lifespan"], attributes)
         else:
             self._prey["population"] += 1
             self._prey["births"] += 1
-            self.__add_prey_avg(["vision", "peripheral", "speed", "damage", "lifespan"], attributes)
+            self.__add_prey_avg(["vision", "speed", "damage", "lifespan"], attributes)
 
     def remove_organism(self, attributes):
         """Decrements the population size of the organism type corresponding to the identifier"""
         if attributes["identifier"] == 1:
             self._predator["population"] -= 1
             self._predator["deaths"] += 1  # increment deaths too
-            self.__rm_pred_avg(["vision", "peripheral", "speed", "damage", "lifespan"], attributes)
+            self.__rm_pred_avg(["vision", "speed", "damage", "lifespan"], attributes)
         else:
             self._prey["population"] -= 1
             self._prey["deaths"] += 1
-            self.__rm_prey_avg(["vision", "peripheral", "speed", "damage", "lifespan"], attributes)
+            self.__rm_prey_avg(["vision", "speed", "damage", "lifespan"], attributes)
 
     def next_turn(self):
         """Stores data for the current generation"""
         self._general["turn"] += 1
         if self._general["turn"] % self._general["gen_length"] == 0:
-            self._predator_pop.append(self._predator["population"])
-            self._prey_pop.append((self._prey["population"]))
-            self._avg_pred_lifespans.append(self._predator["lifespan"])
-            self._avg_prey_lifespans.append(self._prey["lifespan"])
+            self._pred_avg["population"].append(self._predator["population"])
+            self._prey_avg["population"].append(self._prey["population"])
+            attributes = ["vision", "speed", "damage", "lifespan"]
+            for attribute in attributes:
+                self._pred_avg[attribute].append(self._pred_init[attribute] - self._predator[attribute])
+                self._prey_avg[attribute].append(self._prey_init[attribute] - self._prey[attribute])
 
     def log_population(self):
         """Generates a graph of population data"""
-        pred = np.array(self._predator_pop)
-        pred_lifespan = np.array(self._avg_pred_lifespans)
-        prey = np.array(self._prey_pop)
-        prey_lifespan = np.array(self._avg_prey_lifespans)
+        pred_pop = np.array(self._pred_avg["population"])
+        pred_vis = np.array(self._pred_avg["vision"])
+        pred_spd = np.array(self._pred_avg["speed"])
+        pred_dmg = np.array(self._pred_avg["damage"])
+        pred_spn = np.array(self._pred_avg["lifespan"])
 
-        fig, (pop, lspan) = plt.subplots(2)
-        pop.plot(pred, color='red', label='Predator')
-        pop.plot(prey, color='green', label='Prey')
-        lspan.plot(pred_lifespan, color='red', linestyle='dashed', label='Predator Lifespan')
-        lspan.plot(prey_lifespan, color='green', linestyle='dashed', label='Prey Lifespan')
+        prey_pop = np.array(self._prey_avg["population"])
+        prey_vis = np.array(self._prey_avg["vision"])
+        prey_spd = np.array(self._prey_avg["speed"])
+        prey_dmg = np.array(self._prey_avg["damage"])
+        prey_spn = np.array(self._prey_avg["lifespan"])
+
+        fig, (pop, pred, prey) = plt.subplots(3)
+
+        pop.plot(pred_pop, color='red', label='Predator')
+        pop.plot(prey_pop, color='green', label='Prey')
         pop.set(ylabel="Population Size")
-        lspan.set(xlabel="Time (100 turns)", ylabel="Avg Lifespan")
+
+        pred.plot(pred_vis, color='red', linestyle='dashed', label='Vision')
+        pred.plot(pred_spd, color='red', linestyle='solid', label='Speed')
+        pred.plot(pred_dmg, color='red', linestyle='dashdot', label='Damage')
+        pred.plot(pred_spn, color='red', linestyle='dotted', label='Lifespan')
+        pred.set(ylabel="Deviation")
+
+        prey.plot(prey_vis, color='green', linestyle='dashed', label='Vision')
+        prey.plot(prey_spd, color='green', linestyle='solid', label='Speed')
+        prey.plot(prey_dmg, color='green', linestyle='dashdot', label='Damage')
+        prey.plot(prey_spn, color='green', linestyle='dotted', label='Lifespan')
+        prey.set(xlabel="Time (100 turns)", ylabel="Deviation")
+
         pop.legend()
-        lspan.legend()
+        pred.legend()
+        prey.legend()
         plt.show()

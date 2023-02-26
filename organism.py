@@ -24,7 +24,7 @@ class Organism:
 
         # set attributes
         self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
-        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._peripheral = attributes["peripheral"]
         self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
@@ -103,14 +103,20 @@ class Organism:
         else:
             return False
 
-    def is_fertile(self, fast_forward):
+    def is_fertile(self, fast_forward, prey_population):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
-        if random.uniform(0, 1) < self._birth_rate * fast_forward / 3 and self._energy > 0:
-            if self._identifier == 1:
-                self._energy -= self._damage
-            return True
+        if self._identifier == 1:
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > 0:
+                # energy cost scaled down with faster speeds as consumption/attack rate doesn't increase
+                self._energy -= (self._damage / (math.log(fast_forward, 10) + 1))
+                return True
+            else:
+                return False
         else:
-            return False
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) / (prey_population/100):
+                return True
+            else:
+                return False
 
     def get_attributes(self):
         """Returns a dictionary of attributes for use in creation of offspring organisms"""
@@ -130,9 +136,9 @@ class Organism:
 
     def increment_age(self, fast_forward):
         """Increments the age of the organism"""
-        self._age += 0.01 * fast_forward / 3
+        self._age += 0.01 * (math.log(fast_forward, 10) + 1)
         if self._identifier == 1 and self._energy == 0:
-            self._health -= random.uniform(0, 0.1) * fast_forward / 3    # simulated starvation
+            self._health -= random.uniform(0, 0.1) * (math.log(fast_forward, 10) + 1)    # simulated starvation
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
