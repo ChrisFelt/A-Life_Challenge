@@ -91,10 +91,10 @@ class Organism:
         neighbors = self.__nearest_neighbors(organisms, 8)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
-                neighbor.decrement_health((self._damage / (math.log(fast_forward, 10) + 1)))
+                neighbor.decrement_health(self._damage)
                 if self._identifier == 1:
                     if self._energy < self._health:
-                        self._energy += (self._damage / (math.log(fast_forward, 10) + 1))
+                        self._energy += (self._damage * (math.log(fast_forward, 10) + 1))
 
     def is_dead(self):
         """If the organism has been killed or if they have died of old age, returns True, otherwise False"""
@@ -108,7 +108,7 @@ class Organism:
         if self._identifier == 1:
             if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > 0:
                 # energy cost scaled down with faster speeds as consumption/attack rate doesn't increase
-                self._energy -= (self._damage / (math.log(fast_forward, 10) + 1))
+                self._energy -= (self._damage * (math.log(fast_forward, 10) + 1))
                 return True
             else:
                 return False
