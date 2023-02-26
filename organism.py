@@ -86,15 +86,15 @@ class Organism:
             self.__enforce_boundaries(screen_size)
         self._direction = self.__update_direction()
 
-    def battle(self, organisms):
+    def battle(self, organisms, fast_forward):
         """For neighbors of the opposing type, attack, reducing health by the damage value"""
         neighbors = self.__nearest_neighbors(organisms, 8)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
-                neighbor.decrement_health(self._damage)
+                neighbor.decrement_health((self._damage / (math.log(fast_forward, 10) + 1)))
                 if self._identifier == 1:
                     if self._energy < self._health:
-                        self._energy += self._damage
+                        self._energy += (self._damage / (math.log(fast_forward, 10) + 1))
 
     def is_dead(self):
         """If the organism has been killed or if they have died of old age, returns True, otherwise False"""

@@ -22,10 +22,10 @@ def move(index, organisms, speed_factors) -> None:
     organisms[index].draw_dot(settings.general["diameter"])
 
 
-def battle(index, organisms):
+def battle(index, organisms, speed_factors):
     """Step 3 of turn order.
     """
-    organisms[index].battle(organisms)
+    organisms[index].battle(organisms, speed_factors.get_fast_forward())
 
 
 def conclude_turn(index, organisms, session_stats, screen, speed_factors):
@@ -35,7 +35,7 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     screen: animation screen the Organism sprite will be drawn on
     """
     organisms[index].increment_age(speed_factors.get_fast_forward())
-    # remove an organism from the board if it reaches 0 health NOTE: untested!
+    # remove an organism from the board if it reaches 0 health
     if organisms[index].is_dead():
         # clear organism animation and remove from list
         organisms[index].clear()

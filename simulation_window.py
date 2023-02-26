@@ -67,7 +67,7 @@ def steps(organisms, session_stats, screen, speed_factors):
         simulation_steps.move(i, organisms, speed_factors)
 
         # step 3
-        simulation_steps.battle(i, organisms)
+        simulation_steps.battle(i, organisms, speed_factors)
 
         # step 4
         if simulation_steps.conclude_turn(i, organisms, session_stats, screen, speed_factors):  # if organism hasn't died
