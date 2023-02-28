@@ -55,6 +55,7 @@ def steps(organisms, session_stats, screen, speed_factors):
     # auto-update slow_factor
     speed_factors.auto_adjust(session_stats.get_pred_stats()["population"] +
                               session_stats.get_prey_stats()["population"])
+    #print(speed_factors.get_slow_factor())
 
     # run all steps for each organism in the list
     i = 0

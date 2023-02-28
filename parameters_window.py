@@ -17,7 +17,20 @@ def popup(root, message):
                                command=popup_win.destroy,
                                height=settings.button_height,
                                width=settings.button_width)
+    center_window(popup_win)  # center popup!
     close_win.pack()
+
+
+def center_window(window):
+    """Centers the given tkinter window on the screen"""
+    # inspiration: https://stackoverflow.com/questions/3352918/how-to-center-a-window-on-the-screen-in-tkinter
+    window.update_idletasks()  # required to ensure winfo width and height queries return accurate values
+    x_coord = window.winfo_screenwidth() // 2 - window.winfo_width() // 2
+    y_coord = window.winfo_screenheight() // 2 - window.winfo_height() // 2
+    # geometry method: window.geometry(f'{width}x{height}+{x}+{y}')
+    # where {width}x{height} is window height and width
+    # and +{x}+{y} are the x and y coordinates of the window's top left corner
+    window.geometry("+" + str(x_coord) + "+" + str(y_coord-200))
 
 
 def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
@@ -198,6 +211,11 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     # create button frame
     button_frame = tkinter.Frame(root, width=settings.screen_size, height=settings.button_frame_height)
     button_frame.pack(side="top")
+
+    # -----------------------------------------------------------------------------
+    # center tkinter window
+    # -----------------------------------------------------------------------------
+    center_window(root)
 
     # ------------------------------
     # start button
