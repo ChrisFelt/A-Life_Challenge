@@ -25,12 +25,17 @@ def center_window(window):
     """Centers the given tkinter window on the screen"""
     # inspiration: https://stackoverflow.com/questions/3352918/how-to-center-a-window-on-the-screen-in-tkinter
     window.update_idletasks()  # required to ensure winfo width and height queries return accurate values
+
+    # calculate x, y coordinates for top left corner of centered window
+    w_height = window.winfo_screenheight()
     x_coord = window.winfo_screenwidth() // 2 - window.winfo_width() // 2
-    y_coord = window.winfo_screenheight() // 2 - window.winfo_height() // 2
+    y_coord = w_height // 2 - window.winfo_height() // 2
+    y_coord = y_coord - w_height // 6  # move window up slightly
+
     # geometry method: window.geometry(f'{width}x{height}+{x}+{y}')
     # where {width}x{height} is window height and width
     # and +{x}+{y} are the x and y coordinates of the window's top left corner
-    window.geometry("+" + str(x_coord) + "+" + str(y_coord-200))
+    window.geometry("+" + str(x_coord) + "+" + str(y_coord))
 
 
 def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
