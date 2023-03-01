@@ -5,12 +5,6 @@ import numpy as np
 import settings
 
 
-def rand_dest(screen_size) -> list:
-    """Returns a list containing random [x, y] coordinates"""
-    return [random.uniform(-screen_size / 2, screen_size / 2),
-            random.uniform(-screen_size / 2, screen_size / 2)]
-
-
 class Organism:
     """Represents a single organism and its genome."""
     def __init__(self, screen, identifier, position, destination, attributes):
@@ -72,12 +66,19 @@ class Organism:
         """Return lifespan"""
         return self._lifespan
 
+    def rand_dest(self) -> list:
+        """Returns a random [x, y] coordinate destination within visual field"""
+        vision_min = self._direction - self._peripheral
+        vision_max = self._direction + self._peripheral
+        self._direction = random.uniform(vision_min, vision_max)
+        return [math.cos(self._direction) * self._vision * 3, math.sin(self._direction) * self._vision * 3]
+
     def set_dest(self, organisms, screen_size):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
             # set random destination
-            self._destination = rand_dest(screen_size)
+            self._destination = self.rand_dest()
         else:
             vector = self.__apply_behaviors(neighbors)
             # set new destination
