@@ -50,6 +50,10 @@ class Organism:
         """Return current position"""
         return self._position
 
+    def get_offspring_pos(self):
+        """Return position near current position"""
+        return [self._position[0] + random.uniform(-10.0, 10.0), self._position[0] + random.uniform(-10.0, 10.0)]
+
     def get_dest(self):
         """Return current destination"""
         return self._destination
