@@ -15,7 +15,7 @@ def move(index, organisms, speed_factors) -> None:
     """Step 2 of turn order.
     Animate movement of the Organism at the given index"""
     # clear shape, move turtle, and draw shape at new location
-    organisms[index].update_pos(speed_factors.get_slow_factor())
+    organisms[index].update_pos(speed_factors.get_slow_factor(), settings.screen_size)
 
     organisms[index].clear()
     organisms[index].move()
