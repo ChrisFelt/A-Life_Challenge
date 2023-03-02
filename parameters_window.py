@@ -38,7 +38,7 @@ def center_window(window):
     window.geometry("+" + str(x_coord) + "+" + str(y_coord))
 
 
-def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
+def change_to_parameters(root, organisms, prey_attributes, pred_attributes, initialize=False):
     """Build Parameters screen"""
     # remove any existing widgets
     for child in root.winfo_children():
@@ -220,7 +220,8 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes):
     # -----------------------------------------------------------------------------
     # center tkinter window
     # -----------------------------------------------------------------------------
-    center_window(root)
+    if initialize:
+        center_window(root)
 
     # ------------------------------
     # start button

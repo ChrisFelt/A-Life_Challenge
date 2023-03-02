@@ -287,6 +287,17 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  width=settings.button_width)
     stop_button.pack(side="left", anchor="e", padx=(50, 0))
 
+    def show_graph():
+        pass
+
+    graph_checkbox = tkinter.Checkbutton(button_frame,
+                                         text="Show graph results on completion",
+                                         command=show_graph,
+                                         onvalue='1',
+                                         offvalue='0')
+    graph_checkbox.pack(side="left", anchor="e", padx=settings.x_pad_left)
+    graph_checkbox.select()
+
     # -----------------------------------------------------------------------------
     # sim screen frame
     # -----------------------------------------------------------------------------

@@ -12,5 +12,6 @@ if __name__ == "__main__":
     parameters_window.change_to_parameters(root,
                                            organisms,
                                            settings.prey_attributes,
-                                           settings.pred_attributes)
+                                           settings.pred_attributes,
+                                           True)  # initial call of parameters_window
     root.mainloop()
