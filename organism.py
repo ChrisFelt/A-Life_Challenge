@@ -290,10 +290,9 @@ class Organism:
         if self._position[0] > screen_size / 2 or self._position[0] < -screen_size / 2 \
                 or self._position[1] > screen_size / 2 or self._position[1] < -screen_size / 2:
             # NOTE: __enforce_boundaries approach results in organisms sticking to edges at very high speeds
-            # randomize new position to avoid sticking
-            new_pos = rand_dest(screen_size)
-            self._position[0] = new_pos[0]
-            self._position[1] = new_pos[1]
+            # assume organism arrived at destination to avoid sticking
+            self._position[0] = self._destination[0]
+            self._position[1] = self._destination[1]
 
     def move(self):
         """Move sprite to current position"""
