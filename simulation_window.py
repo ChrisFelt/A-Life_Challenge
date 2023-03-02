@@ -15,6 +15,7 @@ import pickle
 
 interrupt = False
 pause_simulation = False
+show_results = True
 
 
 def create_organism(organisms, screen, identifier, position, destination, attributes, session_stats):
@@ -84,9 +85,10 @@ def plus_one(one_element_list):
 
 def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save_data=None):
     """Build simulation screen and run the simulation"""
-    global interrupt, pause_simulation
+    global interrupt, pause_simulation, show_results
     interrupt = False
     pause_simulation = False
+    show_results = True
     current_row = [0]
 
     # remove any existing widgets
@@ -264,14 +266,15 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # -------------------------------
     def quit_simulation():
         """Stop turtle animation and simulation turns, then switch to parameters window"""
-        global interrupt
+        global interrupt, show_results
 
         # stop running simulation steps and reset variables
         # may need to check interrupt in each turn step (if steps are executed after next line of code, returns errors)
         interrupt = True
         sim_screen.resetscreen()  # DO NOT USE bye() - cannot restart turtle graphics after bye()
         organisms.clear()
-        session_stats.log_population()
+        if show_results:
+            session_stats.log_population()
 
         # swap back to parameters window
         parameters_window.change_to_parameters(root,
@@ -287,14 +290,25 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  width=settings.button_width)
     stop_button.pack(side="left", anchor="e", padx=(50, 0))
 
+    # -------------------------------
+    # show session results check box
+    # -------------------------------
     def show_graph():
-        pass
+        global show_results
 
+        # toggle show results
+        if graph_checkbox_var.get():
+            show_results = True
+        else:
+            show_results = False
+
+    graph_checkbox_var = tkinter.BooleanVar()
     graph_checkbox = tkinter.Checkbutton(button_frame,
-                                         text="Show graph results on completion",
+                                         text="Show session results on completion",
                                          command=show_graph,
-                                         onvalue='1',
-                                         offvalue='0')
+                                         variable=graph_checkbox_var,
+                                         onvalue=True,
+                                         offvalue=False)
     graph_checkbox.pack(side="left", anchor="e", padx=settings.x_pad_left)
     graph_checkbox.select()
 
