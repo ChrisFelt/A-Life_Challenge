@@ -294,6 +294,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # show session results check box
     # -------------------------------
     def show_graph():
+        """Toggles the show_results global variable:
+        when True, graph displayed after stop button is pressed,
+        when False, graph is not displayed"""
         global show_results
 
         # toggle show results
@@ -302,6 +305,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         else:
             show_results = False
 
+    # add checkbox to button_frame
     graph_checkbox_var = tkinter.BooleanVar()
     graph_checkbox = tkinter.Checkbutton(button_frame,
                                          text="Show session results on completion",
