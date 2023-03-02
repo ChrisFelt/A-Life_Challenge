@@ -88,7 +88,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     global interrupt, pause_simulation, show_results
     interrupt = False
     pause_simulation = False
-    show_results = True
     current_row = [0]
 
     # remove any existing widgets
@@ -314,7 +313,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                          onvalue=True,
                                          offvalue=False)
     graph_checkbox.pack(side="left", anchor="e", padx=settings.x_pad_left)
-    graph_checkbox.select()
+    if show_results:
+        graph_checkbox.select()
 
     # -----------------------------------------------------------------------------
     # sim screen frame
