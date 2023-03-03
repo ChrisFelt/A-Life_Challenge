@@ -46,7 +46,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
         child.destroy()
 
     # -----------------------------------------------------------------------------
-    # HELP frame
+    # HELP menu
     # -----------------------------------------------------------------------------
     help_menu = tkinter.Menu(root)
     root.config(pady=settings.y_pad, menu=help_menu)
