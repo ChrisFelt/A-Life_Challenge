@@ -52,6 +52,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     root.config(pady=settings.y_pad, menu=help_menu)
 
     def show_help():
+        """Displays a popup when help menu is clicked"""
         popup(root, "Welcome to A-Life Challenge Help!\n\n"
                     "PARAMETER INFORMATION\n"
                     "Hover over any label or field to see details,\n"
