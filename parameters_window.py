@@ -45,13 +45,11 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     for child in root.winfo_children():
         child.destroy()
 
-    root.config(pady=settings.y_pad)
-
     # -----------------------------------------------------------------------------
     # HELP frame
     # -----------------------------------------------------------------------------
     help_menu = tkinter.Menu(root)
-    root.config(men=help_menu)
+    root.config(pady=settings.y_pad, menu=help_menu)
 
     def show_help():
         popup(root, "Welcome to A-Life Challenge Help!\n\n"
