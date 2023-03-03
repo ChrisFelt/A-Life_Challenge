@@ -93,7 +93,7 @@ class Organism:
 
     def battle(self, organisms, fast_forward):
         """For neighbors of the opposing type, attack, reducing health by the damage value"""
-        neighbors = self.__nearest_neighbors(organisms, 8)
+        neighbors = self.__nearest_neighbors(organisms, 5)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
@@ -111,7 +111,8 @@ class Organism:
     def is_fertile(self, fast_forward, prey_population):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
         if self._identifier == 1:
-            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > 0:
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > \
+                    self._damage * (math.log(fast_forward, 10) + 1):
                 # energy cost scaled down with faster speeds as consumption/attack rate doesn't increase
                 self._energy -= (self._damage * (math.log(fast_forward, 10) + 1))
                 return True
