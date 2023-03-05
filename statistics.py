@@ -13,14 +13,14 @@ class Statistics:
             "vision": [0],
             "speed": [0],
             "damage": [0],
-            "lifespan": [0]
+            "peripheral": [0]
         }
         self._prey_avg = {
             "population": [],
             "vision": [0],
             "speed": [0],
             "damage": [0],
-            "lifespan": [0]
+            "peripheral": [0]
         }
         self._predator = {"population": 0,
                           "births": -1 * predator_attributes["population"],
@@ -119,22 +119,22 @@ class Statistics:
         if attributes["identifier"] == 1:
             self._predator["population"] += 1
             self._predator["births"] += 1  # increment births too
-            self.__add_pred_avg(["vision", "speed", "damage", "lifespan"], attributes)
+            self.__add_pred_avg(["vision", "speed", "damage", "peripheral"], attributes)
         else:
             self._prey["population"] += 1
             self._prey["births"] += 1
-            self.__add_prey_avg(["vision", "speed", "damage", "lifespan"], attributes)
+            self.__add_prey_avg(["vision", "speed", "damage", "peripheral"], attributes)
 
     def remove_organism(self, attributes):
         """Decrements the population size of the organism type corresponding to the identifier"""
         if attributes["identifier"] == 1:
             self._predator["population"] -= 1
             self._predator["deaths"] += 1  # increment deaths too
-            self.__rm_pred_avg(["vision", "speed", "damage", "lifespan"], attributes)
+            self.__rm_pred_avg(["vision", "speed", "damage", "peripheral"], attributes)
         else:
             self._prey["population"] -= 1
             self._prey["deaths"] += 1
-            self.__rm_prey_avg(["vision", "speed", "damage", "lifespan"], attributes)
+            self.__rm_prey_avg(["vision", "speed", "damage", "peripheral"], attributes)
 
     def next_turn(self):
         """Stores data for the current generation"""
@@ -142,7 +142,7 @@ class Statistics:
         if self._general["turn"] % self._general["gen_length"] == 0:
             self._pred_avg["population"].append(self._predator["population"])
             self._prey_avg["population"].append(self._prey["population"])
-            attributes = ["vision", "speed", "damage", "lifespan"]
+            attributes = ["vision", "speed", "damage", "peripheral"]
             for attribute in attributes:
                 self._pred_avg[attribute].append(self._pred_init[attribute] - self._predator[attribute])
                 self._prey_avg[attribute].append(self._prey_init[attribute] - self._prey[attribute])
@@ -153,13 +153,13 @@ class Statistics:
         pred_vis = np.array(self._pred_avg["vision"])
         pred_spd = np.array(self._pred_avg["speed"])
         pred_dmg = np.array(self._pred_avg["damage"])
-        pred_spn = np.array(self._pred_avg["lifespan"])
+        pred_per = np.array(self._pred_avg["peripheral"])
 
         prey_pop = np.array(self._prey_avg["population"])
         prey_vis = np.array(self._prey_avg["vision"])
         prey_spd = np.array(self._prey_avg["speed"])
         prey_dmg = np.array(self._prey_avg["damage"])
-        prey_spn = np.array(self._prey_avg["lifespan"])
+        prey_per = np.array(self._prey_avg["peripheral"])
 
         fig, (pop, pred, prey) = plt.subplots(3)
 
@@ -170,13 +170,13 @@ class Statistics:
         pred.plot(pred_vis, color='red', linestyle='dashed', label='Vision')
         pred.plot(pred_spd, color='red', linestyle='solid', label='Speed')
         pred.plot(pred_dmg, color='red', linestyle='dashdot', label='Damage')
-        pred.plot(pred_spn, color='red', linestyle='dotted', label='Lifespan')
+        pred.plot(pred_per, color='red', linestyle='dotted', label='Peripheral')
         pred.set(ylabel="Deviation")
 
         prey.plot(prey_vis, color='green', linestyle='dashed', label='Vision')
         prey.plot(prey_spd, color='green', linestyle='solid', label='Speed')
         prey.plot(prey_dmg, color='green', linestyle='dashdot', label='Damage')
-        prey.plot(prey_spn, color='green', linestyle='dotted', label='Lifespan')
+        prey.plot(prey_per, color='green', linestyle='dotted', label='Peripheral')
         prey.set(xlabel="Time (100 turns)", ylabel="Deviation")
 
         pop.legend()

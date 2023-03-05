@@ -63,7 +63,7 @@ def steps(organisms, session_stats, screen, speed_factors):
     while i < len(organisms):
 
         # step 1
-        simulation_steps.set_target(i, organisms)
+        simulation_steps.set_target(i, organisms, speed_factors)
 
         # step 2
         simulation_steps.move(i, organisms, speed_factors)

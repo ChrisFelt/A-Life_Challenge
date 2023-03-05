@@ -5,7 +5,7 @@ general = {"diameter": 10,  # turtle diameter
            "slow_factor": 30,  # controls movement speed of turtles
            "timer": int(1000 // 30),  # ontimer() turtle delay timer
            "fast_forward": 1,  # fast-forward modifier, base 1
-           "proximity": 40,  # proximity check in simulation steps
+           "proximity": 10,  # proximity check in simulation steps
            }
 
 # turtle screen
@@ -42,8 +42,8 @@ prey_attributes = {"population": 100,
                    "peripheral": math.pi / 4,
                    "speed": 10,
                    "damage": 0,
-                   "separation_weight": 0.5,
-                   "birth_rate": 0.003,
+                   "separation_weight": 1,
+                   "birth_rate": 0.005,
                    "mutation_rate": 0.25
                    }
 
@@ -55,8 +55,8 @@ pred_attributes = {"population": 20,
                    "peripheral": math.pi / 2,
                    "speed": 25,
                    "damage": 1,
-                   "separation_weight": 0.5,
-                   "birth_rate": 0.009,
+                   "separation_weight": 1,
+                   "birth_rate": 0.005,
                    "mutation_rate": 0.25
                    }
 

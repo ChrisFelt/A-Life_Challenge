@@ -2,12 +2,12 @@ import settings
 import simulation_window
 
 
-def set_target(index, organisms):
+def set_target(index, organisms, speed_factors):
     """Step 1 of turn order.
     """
     # check if within range of target
     if organisms[index].proximity_check(settings.general["proximity"]):
-        organisms[index].set_dest(organisms, settings.screen_size)
+        organisms[index].set_dest(organisms, settings.screen_size, speed_factors.get_fast_forward())
     pass
 
 
@@ -45,7 +45,7 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     else:
         if organisms[index].is_fertile(speed_factors.get_fast_forward(), session_stats.get_prey_pop()):
             identifier = organisms[index].get_identifier()
-            pos = simulation_window.rand_coords()
+            pos = organisms[index].get_offspring_pos()
             dest = simulation_window.rand_coords()
             simulation_window.create_organism(organisms,
                                               screen,

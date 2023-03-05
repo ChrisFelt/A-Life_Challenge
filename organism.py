@@ -5,12 +5,6 @@ import numpy as np
 import settings
 
 
-def rand_dest(screen_size) -> list:
-    """Returns a list containing random [x, y] coordinates"""
-    return [random.uniform(-screen_size / 2, screen_size / 2),
-            random.uniform(-screen_size / 2, screen_size / 2)]
-
-
 class Organism:
     """Represents a single organism and its genome."""
 
@@ -25,14 +19,14 @@ class Organism:
 
         # set attributes
         self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
-        self._peripheral = attributes["peripheral"]
+        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
-        self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._lifespan = attributes["lifespan"]
         self._age = 0
         self._health = attributes["health"]
         self._energy = 0
@@ -57,6 +51,10 @@ class Organism:
         """Return current position"""
         return self._position
 
+    def get_offspring_pos(self):
+        """Return position near current position"""
+        return [self._position[0] + random.uniform(-10.0, 10.0), self._position[0] + random.uniform(-10.0, 10.0)]
+
     def get_dest(self):
         """Return current destination"""
         return self._destination
@@ -73,12 +71,20 @@ class Organism:
         """Return lifespan"""
         return self._lifespan
 
-    def set_dest(self, organisms, screen_size):
+    def rand_dest(self, fast_forward) -> list:
+        """Returns a random [x, y] coordinate destination within visual field"""
+        vision_min = self._direction - self._peripheral
+        vision_max = self._direction + self._peripheral
+        self._direction = random.uniform(vision_min, vision_max)
+        return [math.cos(self._direction) * self._vision * fast_forward, math.sin(self._direction) * self._vision *
+                fast_forward]
+
+    def set_dest(self, organisms, screen_size, fast_forward):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
             # set random destination
-            self._destination = rand_dest(screen_size)
+            self._destination = self.rand_dest(fast_forward)
         else:
             vector = self.__apply_behaviors(neighbors)
             # set new destination
@@ -89,7 +95,7 @@ class Organism:
 
     def battle(self, organisms, fast_forward):
         """For neighbors of the opposing type, attack, reducing health by the damage value"""
-        neighbors = self.__nearest_neighbors(organisms, 8)
+        neighbors = self.__nearest_neighbors(organisms, 5)
         for neighbor in neighbors:
             if self._identifier != neighbor.get_identifier():
                 neighbor.decrement_health(self._damage)
@@ -107,14 +113,15 @@ class Organism:
     def is_fertile(self, fast_forward, prey_population):
         """If the organism happens to be fertile (probability based on birth rate) returns True, otherwise False"""
         if self._identifier == 1:
-            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > 0:
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) and self._energy > \
+                    self._damage * (math.log(fast_forward, 10) + 1):
                 # energy cost scaled down with faster speeds as consumption/attack rate doesn't increase
                 self._energy -= (self._damage * (math.log(fast_forward, 10) + 1))
                 return True
             else:
                 return False
         else:
-            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) / (prey_population / 100):
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 2) + 1)) / (prey_population/100):
                 return True
             else:
                 return False
@@ -126,7 +133,7 @@ class Organism:
                       "lifespan": self._lifespan,
                       "health": self._health,
                       "vision": self._vision,
-                      "peripheral": math.pi / 4,
+                      "peripheral": self._peripheral,
                       "speed": self._speed,
                       "damage": self._damage,
                       "separation_weight": self._separation_weight,
