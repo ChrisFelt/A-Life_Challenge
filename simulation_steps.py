@@ -2,12 +2,12 @@ import settings
 import simulation_window
 
 
-def set_target(index, organisms, speed_factors):
+def set_target(index, organisms):
     """Step 1 of turn order.
     """
     # check if within range of target
     if organisms[index].proximity_check(settings.general["proximity"]):
-        organisms[index].set_dest(organisms, settings.screen_size, speed_factors.get_fast_forward())
+        organisms[index].set_dest(organisms, settings.screen_size)
     pass
 
 
