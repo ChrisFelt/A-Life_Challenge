@@ -12,6 +12,7 @@ import tkinter
 import tkinter.filedialog as filemanager
 import os
 import pickle
+import tktooltip
 
 interrupt = False
 pause_simulation = False
@@ -56,7 +57,6 @@ def steps(organisms, session_stats, screen, speed_factors):
     # auto-update slow_factor
     speed_factors.auto_adjust(session_stats.get_pred_stats()["population"] +
                               session_stats.get_prey_stats()["population"])
-    #print(speed_factors.get_slow_factor())
 
     # run all steps for each organism in the list
     i = 0
@@ -94,8 +94,6 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     for child in root.winfo_children():
         child.destroy()
 
-    root.config(pady=0, width=settings.screen_size*2)
-
     # track new session statistics
     if save_data is None:
         session_stats = statistics.Statistics(pred_attributes, prey_attributes)
@@ -106,6 +104,26 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
 
     # track speed factors
     speed_factors = speed_control.SpeedControl(settings.general)
+
+    # -----------------------------------------------------------------------------
+    # HELP menu
+    # -----------------------------------------------------------------------------
+    menu = tkinter.Menu(root)
+    help_menu = tkinter.Menu(menu, tearoff=0)
+    root.config(pady=0, width=settings.screen_size*2, menu=menu)
+
+    def show_help():
+        """Displays a popup when help menu is clicked"""
+        parameters_window.popup(root, "Welcome to A-Life Challenge Help!\n\n"
+                                      "SIMULATION WINDOW\n"
+                                      "Hover over any part of the window/button\n"
+                                      "to view tooltip help.")
+
+    # ------------------------------
+    # help label
+    # ------------------------------
+    help_menu.add_command(label="Show Help", command=show_help)
+    menu.add_cascade(menu=help_menu, label="Help")
 
     # -----------------------------------------------------------------------------
     # control buttons frame
@@ -135,6 +153,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  length=200,  # horizontal length of slider in pixels
                                  width=15)  # slider height in pixels
     speed_slider.pack(side="left", padx=(10, 100))
+    tktooltip.ToolTip(speed_slider,
+                      msg=settings.tooltip["fast_forward"],
+                      delay=settings.delay_long)
 
     # -------------------------------
     # pause button
@@ -165,6 +186,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                   width=settings.button_width)
     pause_button.pack(side="left")
     pause_text.set("Pause")
+    tktooltip.ToolTip(pause_button,
+                      msg=settings.tooltip["pause_button"],
+                      delay=settings.delay_long)
 
     # -------------------------------
     # save button
@@ -207,6 +231,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  height=settings.button_height,
                                  width=settings.button_width)
     save_button.pack(side="left")
+    tktooltip.ToolTip(save_button,
+                      msg=settings.tooltip["save_button"],
+                      delay=settings.delay_long)
 
     # -------------------------------
     # load button
@@ -259,6 +286,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  height=settings.button_height,
                                  width=settings.button_width)
     load_button.pack(side="left")
+    tktooltip.ToolTip(load_button,
+                      msg=settings.tooltip["load_button"],
+                      delay=settings.delay_long)
 
     # -------------------------------
     # stop button
@@ -288,6 +318,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                  height=settings.button_height,
                                  width=settings.button_width)
     stop_button.pack(side="left", anchor="e", padx=(50, 0))
+    tktooltip.ToolTip(stop_button,
+                      msg=settings.tooltip["stop_button"],
+                      delay=settings.delay_long)
 
     # -------------------------------
     # show session results check box
@@ -313,8 +346,13 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                          onvalue=True,
                                          offvalue=False)
     graph_checkbox.pack(side="left", anchor="e", padx=settings.x_pad_left)
+    # auto check button when show_results is True
     if show_results:
         graph_checkbox.select()
+
+    tktooltip.ToolTip(graph_checkbox,
+                      msg=settings.tooltip["graph_checkbox"],
+                      delay=settings.delay_short)
 
     # -----------------------------------------------------------------------------
     # sim screen frame
@@ -330,6 +368,9 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # setup turtle screen
     sim_screen = turtle.TurtleScreen(sim_canvas)
     sim_screen.tracer(0, 0)  # requires update method to be called on screen
+    tktooltip.ToolTip(sim_canvas,
+                      msg=settings.tooltip["sim_screen"],
+                      delay=settings.delay_short)
 
     # initialize list of organisms - must happen before stats frame is populated
     if save_data is None:
@@ -346,9 +387,12 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                highlightbackground="black",
                                highlightthickness=1)
     side_frame.pack(side="left", anchor="nw", padx=settings.x_pad//4, pady=settings.y_pad//3)
+    tktooltip.ToolTip(side_frame,
+                      msg=settings.tooltip["stats_frame"],
+                      delay=settings.delay_long)
 
     # -------------------------------
-    # get starting statistics todo: save/load feature proof
+    # get starting statistics
     # -------------------------------
     pred_stats = session_stats.get_pred_stats()
     prey_stats = session_stats.get_prey_stats()

@@ -48,14 +48,15 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     # -----------------------------------------------------------------------------
     # HELP menu
     # -----------------------------------------------------------------------------
-    help_menu = tkinter.Menu(root)
-    root.config(pady=settings.y_pad, menu=help_menu)
+    menu = tkinter.Menu(root)
+    help_menu = tkinter.Menu(menu, tearoff=0)
+    root.config(pady=settings.y_pad, menu=menu)
 
     def show_help():
         """Displays a popup when help menu is clicked"""
         popup(root, "Welcome to A-Life Challenge Help!\n\n"
                     "PARAMETER INFORMATION\n"
-                    "Hover over any label or field to see details,\n"
+                    "Hover over any label or field to see tooltips,\n"
                     "including minimum/maximum values.\n\n"
                     "START SIMULATION\n"
                     "When desired parameters are entered, \n"
@@ -67,7 +68,8 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     # ------------------------------
     # help label
     # ------------------------------
-    help_menu.add_command(label="Help", command=show_help)
+    help_menu.add_command(label="Show Help", command=show_help)
+    menu.add_cascade(menu=help_menu, label="Help")
 
     # -----------------------------------------------------------------------------
     # PREY frame
@@ -84,7 +86,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
                                     font='Calibri 12 underline',
                                     height=2)
     prey_main_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
-    tktooltip.ToolTip(prey_main_label, msg=settings.tooltip["prey_main"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_main_label, msg=settings.tooltip["prey_main"], delay=settings.delay_short)
 
     # -------------------------------
     # labels for text entry boxes
@@ -92,33 +94,33 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     # population
     prey_nostart_label = tkinter.Label(prey_frame, text="Population")
     prey_nostart_label.grid(row=1, column=0, sticky="w", padx=settings.x_pad_left)
-    tktooltip.ToolTip(prey_nostart_label, msg=settings.tooltip["prey_population"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_nostart_label, msg=settings.tooltip["prey_population"], delay=settings.delay_short)
 
     # health
     prey_health_label = tkinter.Label(prey_frame, text="Health")
     prey_health_label.grid(row=1, column=1, sticky="w")
-    tktooltip.ToolTip(prey_health_label, msg=settings.tooltip["prey_health"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_health_label, msg=settings.tooltip["prey_health"], delay=settings.delay_short)
 
     # speed
     prey_speed_label = tkinter.Label(prey_frame, text="Speed")
     prey_speed_label.grid(row=1, column=2, sticky="w")
-    tktooltip.ToolTip(prey_speed_label, msg=settings.tooltip["prey_speed"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_speed_label, msg=settings.tooltip["prey_speed"], delay=settings.delay_short)
 
     # damage
     prey_damage_label = tkinter.Label(prey_frame, text="Damage")
     prey_damage_label.grid(row=3, column=0, sticky="w", padx=settings.x_pad_left, pady=settings.y_pad_top)
-    tktooltip.ToolTip(prey_damage_label, msg=settings.tooltip["prey_damage"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_damage_label, msg=settings.tooltip["prey_damage"], delay=settings.delay_short)
 
     # birth rate
     prey_birth_rate_label = tkinter.Label(prey_frame, text="Birth Rate")
     prey_birth_rate_label.grid(row=3, column=1, sticky="w", pady=settings.y_pad_top)
-    tktooltip.ToolTip(prey_birth_rate_label, msg=settings.tooltip["prey_birth_rate"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_birth_rate_label, msg=settings.tooltip["prey_birth_rate"], delay=settings.delay_short)
 
     # mutation rate
     prey_mutation_rate_label = tkinter.Label(prey_frame, text="Mutation Rate")
     prey_mutation_rate_label.grid(row=3, column=2, sticky="w", pady=settings.y_pad_top)
     tktooltip.ToolTip(prey_mutation_rate_label,
-                      msg=settings.tooltip["prey_mutation_rate"], delay=settings.tooltip_delay)
+                      msg=settings.tooltip["prey_mutation_rate"], delay=settings.delay_short)
 
     # -------------------------------
     # text entry boxes
@@ -127,38 +129,38 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     prey_population_entry = tkinter.Entry(prey_frame)
     prey_population_entry.insert(0, prey_attributes["population"])
     prey_population_entry.grid(row=2, column=0, padx=settings.x_pad_both)
-    tktooltip.ToolTip(prey_population_entry, msg=settings.tooltip["prey_population"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_population_entry, msg=settings.tooltip["prey_population"], delay=settings.delay_short)
 
     # health
     prey_health_entry = tkinter.Entry(prey_frame)
     prey_health_entry.insert(0, prey_attributes["health"])
     prey_health_entry.grid(row=2, column=1, padx=settings.x_pad_right)
-    tktooltip.ToolTip(prey_health_entry, msg=settings.tooltip["prey_health"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_health_entry, msg=settings.tooltip["prey_health"], delay=settings.delay_short)
 
     # speed
     prey_speed_entry = tkinter.Entry(prey_frame)
     prey_speed_entry.insert(0, prey_attributes["speed"])
     prey_speed_entry.grid(row=2, column=2, padx=settings.x_pad_right)
-    tktooltip.ToolTip(prey_speed_entry, msg=settings.tooltip["prey_speed"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_speed_entry, msg=settings.tooltip["prey_speed"], delay=settings.delay_short)
 
     # damage
     prey_damage_entry = tkinter.Entry(prey_frame)
     prey_damage_entry.insert(0, prey_attributes["damage"])
     prey_damage_entry.grid(row=4, column=0, padx=settings.x_pad_both, pady=settings.y_pad_bot)
-    tktooltip.ToolTip(prey_damage_entry, msg=settings.tooltip["prey_damage"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_damage_entry, msg=settings.tooltip["prey_damage"], delay=settings.delay_short)
 
     # birth rate
     prey_birth_rate_entry = tkinter.Entry(prey_frame)
     prey_birth_rate_entry.insert(0, prey_attributes["birth_rate"])
     prey_birth_rate_entry.grid(row=4, column=1, padx=settings.x_pad_right, pady=settings.y_pad_bot)
-    tktooltip.ToolTip(prey_birth_rate_entry, msg=settings.tooltip["prey_birth_rate"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(prey_birth_rate_entry, msg=settings.tooltip["prey_birth_rate"], delay=settings.delay_short)
 
     # mutation rate
     prey_mutation_rate_entry = tkinter.Entry(prey_frame)
     prey_mutation_rate_entry.insert(0, prey_attributes["mutation_rate"])
     prey_mutation_rate_entry.grid(row=4, column=2, padx=settings.x_pad_right, pady=settings.y_pad_bot)
     tktooltip.ToolTip(prey_mutation_rate_entry,
-                      msg=settings.tooltip["prey_mutation_rate"], delay=settings.tooltip_delay)
+                      msg=settings.tooltip["prey_mutation_rate"], delay=settings.delay_short)
 
     # -----------------------------------------------------------------------------
     # pad frame
@@ -181,7 +183,7 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
                                     font='Calibri 12 underline',
                                     height=2)
     pred_main_label.grid(row=0, column=0, sticky="w", padx=settings.x_pad_left)
-    tktooltip.ToolTip(pred_main_label, msg=settings.tooltip["pred_main"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_main_label, msg=settings.tooltip["pred_main"], delay=settings.delay_short)
 
     # -------------------------------
     # labels for text entry boxes
@@ -189,33 +191,33 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     # population
     pred_nostart_label = tkinter.Label(pred_frame, text="Population")
     pred_nostart_label.grid(row=1, column=0, sticky="w", padx=settings.x_pad_left)
-    tktooltip.ToolTip(pred_nostart_label, msg=settings.tooltip["pred_population"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_nostart_label, msg=settings.tooltip["pred_population"], delay=settings.delay_short)
 
     # health
     pred_health_label = tkinter.Label(pred_frame, text="Health")
     pred_health_label.grid(row=1, column=1, sticky="w")
-    tktooltip.ToolTip(pred_health_label, msg=settings.tooltip["pred_health"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_health_label, msg=settings.tooltip["pred_health"], delay=settings.delay_short)
 
     # speed
     pred_speed_label = tkinter.Label(pred_frame, text="Speed")
     pred_speed_label.grid(row=1, column=2, sticky="w")
-    tktooltip.ToolTip(pred_speed_label, msg=settings.tooltip["pred_speed"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_speed_label, msg=settings.tooltip["pred_speed"], delay=settings.delay_short)
 
     # damage
     pred_damage_label = tkinter.Label(pred_frame, text="Damage")
     pred_damage_label.grid(row=3, column=0, sticky="w", padx=settings.x_pad_left, pady=settings.y_pad_top)
-    tktooltip.ToolTip(pred_damage_label, msg=settings.tooltip["pred_damage"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_damage_label, msg=settings.tooltip["pred_damage"], delay=settings.delay_short)
 
     # birth rate
     pred_birth_rate_label = tkinter.Label(pred_frame, text="Birth Rate")
     pred_birth_rate_label.grid(row=3, column=1, sticky="w", pady=settings.y_pad_top)
-    tktooltip.ToolTip(pred_birth_rate_label, msg=settings.tooltip["pred_birth_rate"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_birth_rate_label, msg=settings.tooltip["pred_birth_rate"], delay=settings.delay_short)
 
     # mutation rate
     pred_mutation_rate_label = tkinter.Label(pred_frame, text="Mutation Rate")
     pred_mutation_rate_label.grid(row=3, column=2, sticky="w", pady=settings.y_pad_top)
     tktooltip.ToolTip(pred_mutation_rate_label,
-                      msg=settings.tooltip["pred_mutation_rate"], delay=settings.tooltip_delay)
+                      msg=settings.tooltip["pred_mutation_rate"], delay=settings.delay_short)
 
     # -------------------------------
     # text entry boxes
@@ -224,38 +226,38 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     pred_population_entry = tkinter.Entry(pred_frame)
     pred_population_entry.insert(0, pred_attributes["population"])
     pred_population_entry.grid(row=2, column=0, padx=settings.x_pad_both)
-    tktooltip.ToolTip(pred_population_entry, msg=settings.tooltip["pred_population"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_population_entry, msg=settings.tooltip["pred_population"], delay=settings.delay_short)
 
     # health
     pred_health_entry = tkinter.Entry(pred_frame)
     pred_health_entry.insert(0, pred_attributes["health"])
     pred_health_entry.grid(row=2, column=1, padx=settings.x_pad_right)
-    tktooltip.ToolTip(pred_health_entry, msg=settings.tooltip["pred_health"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_health_entry, msg=settings.tooltip["pred_health"], delay=settings.delay_short)
 
     # speed
     pred_speed_entry = tkinter.Entry(pred_frame)
     pred_speed_entry.insert(0, pred_attributes["speed"])
     pred_speed_entry.grid(row=2, column=2, padx=settings.x_pad_right)
-    tktooltip.ToolTip(pred_speed_entry, msg=settings.tooltip["pred_speed"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_speed_entry, msg=settings.tooltip["pred_speed"], delay=settings.delay_short)
 
     # damage
     pred_damage_entry = tkinter.Entry(pred_frame)
     pred_damage_entry.insert(0, pred_attributes["damage"])
     pred_damage_entry.grid(row=4, column=0, padx=settings.x_pad_both, pady=settings.y_pad_bot)
-    tktooltip.ToolTip(pred_damage_entry, msg=settings.tooltip["pred_damage"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_damage_entry, msg=settings.tooltip["pred_damage"], delay=settings.delay_short)
 
     # birth rate
     pred_birth_rate_entry = tkinter.Entry(pred_frame)
     pred_birth_rate_entry.insert(0, pred_attributes["birth_rate"])
     pred_birth_rate_entry.grid(row=4, column=1, padx=settings.x_pad_right, pady=settings.y_pad_bot)
-    tktooltip.ToolTip(pred_birth_rate_entry, msg=settings.tooltip["pred_birth_rate"], delay=settings.tooltip_delay)
+    tktooltip.ToolTip(pred_birth_rate_entry, msg=settings.tooltip["pred_birth_rate"], delay=settings.delay_short)
 
     # mutation rate
     pred_mutation_rate_entry = tkinter.Entry(pred_frame)
     pred_mutation_rate_entry.insert(0, pred_attributes["mutation_rate"])
     pred_mutation_rate_entry.grid(row=4, column=2, padx=settings.x_pad_right, pady=settings.y_pad_bot)
     tktooltip.ToolTip(pred_mutation_rate_entry,
-                      msg=settings.tooltip["pred_mutation_rate"], delay=settings.tooltip_delay)
+                      msg=settings.tooltip["pred_mutation_rate"], delay=settings.delay_short)
 
     # -----------------------------------------------------------------------------
     # pad frame
@@ -488,8 +490,8 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
                                   width=settings.button_width)
     start_button.pack(side="left")
     tktooltip.ToolTip(start_button,
-                      msg="Start the simulation with the current parameters.",
-                      delay=settings.tooltip_delay)
+                      msg=settings.tooltip["start_button"],
+                      delay=settings.delay_long)
 
     # ------------------------------
     # load button
@@ -532,8 +534,8 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
                                  width=settings.button_width)
     load_button.pack(side="left")
     tktooltip.ToolTip(load_button,
-                      msg="Load a saved simulation from a save (.pkl) file.",
-                      delay=settings.tooltip_delay)
+                      msg=settings.tooltip["load_button"],
+                      delay=settings.delay_long)
 
     # -----------------------------------------------------------------------------
     # center tkinter window

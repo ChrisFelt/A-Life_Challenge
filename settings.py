@@ -94,7 +94,16 @@ tooltip = {"prey_main": "Enter starting values for PREY.",
            "pred_mutation_rate": "Starting mutation rate for PREDATORS.\n"
                                  "Improves the chance of genome mutations.\n"
                                  "May be any value > 0.",
-
+           "start_button": "Start the simulation with the current parameters.",
+           "load_button": "Load a saved simulation from a save (.pkl) file.",
+           "sim_screen": "Predators are RED dots.\nPrey are GREEN dots.",
+           "stats_frame": "Live statistics of the simulation.",
+           "fast_forward": "Fast-forward the simulation by up to 10x.",
+           "pause_button": "Pause or unpause the simulation.",
+           "save_button": "Save the current state of the simulation.\nSimulation paused during save.",
+           "stop_button": "Stop the simulation and return to parameters window.",
+           "graph_checkbox": "Shows population and mutation graphs when stop button is pressed.",
            }
 
-tooltip_delay = 0.50
+delay_short = 0.30
+delay_long = 1.0
