@@ -116,8 +116,29 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
         """Displays a popup when help menu is clicked"""
         parameters_window.popup(root, "Welcome to A-Life Challenge Help!\n\n"
                                       "SIMULATION WINDOW\n"
-                                      "Hover over any part of the window/button\n"
-                                      "to view tooltip help.")
+                                      "Hover over any part of the window/button to\n"
+                                      "view tooltip help.\n\n"
+                                      "ANIMATION SCREEN\n"
+                                      "Organism activity is shown in the animation screen.\n"
+                                      "Green dots represent PREY. Red dots represent\n"
+                                      "PREDATORS.\n\n"
+                                      "SIMULATION SPEED\n"
+                                      "To increase simulation speed, move slider to\n"
+                                      "the right. Note: this feature emulates increased\n"
+                                      "speeds, but may not result in the same outcome.\n\n"
+                                      "PAUSE\n"
+                                      "Press the pause button to pause/unpause the\n"
+                                      "simulation.\n\n"
+                                      "SAVE\n"
+                                      "To save the current state of the simulation, press\n"
+                                      "the save button. The simulation will pause while\n"
+                                      "the save file is being created.\n\n"
+                                      "LOAD\n"
+                                      "Loads a new simulation from save file. The current\n"
+                                      "simulation will not be saved.\n\n"
+                                      "GRAPH RESULTS\n"
+                                      "To view plots of the organism population and mutations\n"
+                                      "over time, check the \"Show graph results\" box.")
 
     # ------------------------------
     # help label
@@ -340,7 +361,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # add checkbox to button_frame
     graph_checkbox_var = tkinter.BooleanVar()
     graph_checkbox = tkinter.Checkbutton(button_frame,
-                                         text="Show session results on completion",
+                                         text="Show graph results",
                                          command=show_graph,
                                          variable=graph_checkbox_var,
                                          onvalue=True,

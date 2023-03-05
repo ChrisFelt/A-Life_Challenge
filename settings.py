@@ -97,7 +97,18 @@ tooltip = {"prey_main": "Enter starting values for PREY.",
            "start_button": "Start the simulation with the current parameters.",
            "load_button": "Load a saved simulation from a save (.pkl) file.",
            "sim_screen": "Predators are RED dots.\nPrey are GREEN dots.",
-           "stats_frame": "Live statistics of the simulation.",
+           "stats_frame": "Live statistics of the simulation.\n\n"
+                          "Population: current population of the organisms. Also broken\n"
+                          "down by organism type.\n\n"
+                          "Turn Number: current turn of the simulation. A turn consists of\n"
+                          "setting destination, moving, fighting, and reproducing.\n\n"
+                          "Time Elapsed: time since the simulation began.\n\n"
+                          "Generation: current youngest generation. Initial 0. Each time a\n"
+                          "child is born, their generation is 1 higher than the parent.\n\n"
+                          "Births: number of births, broken down by organism type, since\n"
+                          "the simulation began.\n\n"
+                          "Deaths: number of deaths, broken down by organism type, since\n"
+                          "the simulation began.",
            "fast_forward": "Fast-forward the simulation by up to 10x.",
            "pause_button": "Pause or unpause the simulation.",
            "save_button": "Save the current state of the simulation.\nSimulation paused during save.",

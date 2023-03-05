@@ -55,13 +55,13 @@ def change_to_parameters(root, organisms, prey_attributes, pred_attributes, init
     def show_help():
         """Displays a popup when help menu is clicked"""
         popup(root, "Welcome to A-Life Challenge Help!\n\n"
-                    "PARAMETER INFORMATION\n"
+                    "PARAMETER WINDOW\n"
                     "Hover over any label or field to see tooltips,\n"
                     "including minimum/maximum values.\n\n"
-                    "START SIMULATION\n"
+                    "START\n"
                     "When desired parameters are entered, \n"
                     "press start button to begin simulation.\n\n"
-                    "LOAD SIMULATION\n"
+                    "LOAD\n"
                     "To start a simulation from a saved state, \n"
                     "press Load and select the save file.")
 
