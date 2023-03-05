@@ -85,6 +85,7 @@ class Organism:
         if not neighbors:
             # set random destination
             self._destination = self.rand_dest(fast_forward)
+            self.__enforce_boundaries(screen_size)
         else:
             vector = self.__apply_behaviors(neighbors)
             # set new destination
