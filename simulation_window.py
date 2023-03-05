@@ -112,8 +112,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     help_menu = tkinter.Menu(menu, tearoff=0)
     root.config(pady=0, width=settings.screen_size*2, menu=menu)
 
-    def show_help():
-        """Displays a popup when help menu is clicked"""
+    def show_general_help():
+        """Displays general help popup"""
         parameters_window.popup(root, "Welcome to A-Life Challenge Help!\n\n"
                                       "SIMULATION WINDOW\n"
                                       "Hover over any part of the window/button to\n"
@@ -122,6 +122,14 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                       "Organism activity is shown in the animation screen.\n"
                                       "Green dots represent PREY. Red dots represent\n"
                                       "PREDATORS.\n\n"
+                                      "SESSION STATISTICS\n"
+                                      "Current statistics of the simulation are shown in the\n"
+                                      "Session Statistics frame. Hover over this frame to\n"
+                                      "see a detailed breakdown of each statistic.")
+
+    def show_button_help():
+        """Displays button help popup"""
+        parameters_window.popup(root, "Welcome to A-Life Challenge Help!\n\n"
                                       "SIMULATION SPEED\n"
                                       "To increase simulation speed, move slider to\n"
                                       "the right. Note: this feature emulates increased\n"
@@ -143,7 +151,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # ------------------------------
     # help label
     # ------------------------------
-    help_menu.add_command(label="Show Help", command=show_help)
+    help_menu.add_command(label="General Help", command=show_general_help)
+    help_menu.add_command(label="Button Help", command=show_button_help)
     menu.add_cascade(menu=help_menu, label="Help")
 
     # -----------------------------------------------------------------------------
