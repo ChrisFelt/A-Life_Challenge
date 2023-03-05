@@ -7,6 +7,7 @@ import settings
 
 class Organism:
     """Represents a single organism and its genome."""
+
     def __init__(self, screen, identifier, position, destination, attributes):
 
         # setup turtle data members
@@ -145,7 +146,7 @@ class Organism:
         """Increments the age of the organism"""
         self._age += 0.01 * (math.log(fast_forward, 10) + 1)
         if self._identifier == 1 and self._energy == 0:
-            self._health -= random.uniform(0, 0.1) * (math.log(fast_forward, 10) + 1)    # simulated starvation
+            self._health -= random.uniform(0, 0.1) * (math.log(fast_forward, 10) + 1)  # simulated starvation
 
     def proximity_check(self, distance_to_check):
         """Returns True if Organism is within the given distance of the target destination"""
@@ -286,11 +287,19 @@ class Organism:
         Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
-    def update_pos(self, slow_factor):
+    def update_pos(self, slow_factor, screen_size):
         """Increment current position towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
         self._position[1] += self._speed / slow_factor * math.sin(self._direction)
+
+        # prevent organisms from going off-screen (only applicable at very high speeds)
+        if self._position[0] > screen_size / 2 or self._position[0] < -screen_size / 2 \
+                or self._position[1] > screen_size / 2 or self._position[1] < -screen_size / 2:
+            # NOTE: __enforce_boundaries approach results in organisms sticking to edges at very high speeds
+            # assume organism arrived at destination to avoid sticking
+            self._position[0] = self._destination[0]
+            self._position[1] = self._destination[1]
 
     def move(self):
         """Move sprite to current position"""

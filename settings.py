@@ -59,3 +59,42 @@ pred_attributes = {"population": 20,
                    "birth_rate": 0.005,
                    "mutation_rate": 0.25
                    }
+
+tooltip = {"prey_main": "Enter starting values for PREY.",
+           "prey_population": "Starting population for PREY.\nMust be an integer >= 0.",
+           "prey_health": "Starting health pool for PREY.\n"
+                          "Increases the amount of damage the organism may receive before dying.\n"
+                          "Must be an integer > 0.",
+           "prey_speed": "Starting speed for PREY.\n"
+                         "Increases distance moved per turn.\n"
+                         "Must be an integer >= 0.",
+           "prey_damage": "Starting damage value for PREY.\n"
+                          "PREY deal damage only to PREDATORS.\n"
+                          "Must be an integer >= 0.",
+           "prey_birth_rate": "Starting birth rate for PREY.\n"
+                              "Denotes probability that the organism will give birth each turn.\n"
+                              "Must be a float value between (0, 0.01].",
+           "prey_mutation_rate": "Starting mutation rate for PREY.\n"
+                                 "Improves the chance of genome mutations.\n"
+                                 "May be any value > 0.",
+           "pred_main": "Enter starting values for PREDATORS.",
+           "pred_population": "Starting population for PREDATORS.\nMust be an integer >= 0.",
+           "pred_health": "Starting health pool for PREDATORS.\n"
+                          "Increases the amount of damage the organism may receive before dying.\n"
+                          "Must be an integer > 0.",
+           "pred_speed": "Starting speed for PREDATORS.\n"
+                         "Increases distance moved per turn.\n"
+                         "Must be an integer >= 0.",
+           "pred_damage": "Starting damage value for PREDATORS.\n"
+                          "PREDATORS deal damage only to PREY.\n"
+                          "Must be an integer >= 0.",
+           "pred_birth_rate": "Starting birth rate for PREDATORS.\n"
+                              "Denotes probability that the organism will give birth each turn.\n"
+                              "Must be a float value between (0, 0.01].",
+           "pred_mutation_rate": "Starting mutation rate for PREDATORS.\n"
+                                 "Improves the chance of genome mutations.\n"
+                                 "May be any value > 0.",
+
+           }
+
+tooltip_delay = 0.50
