@@ -70,19 +70,20 @@ class Organism:
         """Return lifespan"""
         return self._lifespan
 
-    def rand_dest(self) -> list:
+    def rand_dest(self, fast_forward) -> list:
         """Returns a random [x, y] coordinate destination within visual field"""
         vision_min = self._direction - self._peripheral
         vision_max = self._direction + self._peripheral
         self._direction = random.uniform(vision_min, vision_max)
-        return [math.cos(self._direction) * self._vision * 3, math.sin(self._direction) * self._vision * 3]
+        return [math.cos(self._direction) * self._vision * fast_forward, math.sin(self._direction) * self._vision *
+                fast_forward]
 
-    def set_dest(self, organisms, screen_size):
+    def set_dest(self, organisms, screen_size, fast_forward):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
             # set random destination
-            self._destination = self.rand_dest()
+            self._destination = self.rand_dest(fast_forward)
         else:
             vector = self.__apply_behaviors(neighbors)
             # set new destination
