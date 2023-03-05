@@ -76,15 +76,18 @@ class Organism:
         vision_min = self._direction - self._peripheral
         vision_max = self._direction + self._peripheral
         self._direction = random.uniform(vision_min, vision_max)
-        return [math.cos(self._direction) * self._vision * fast_forward, math.sin(self._direction) * self._vision *
-                fast_forward]
+        x = math.cos(self._direction) * self._vision * (math.log(fast_forward, 10) + 1)
+        y = math.sin(self._direction) * self._vision * (math.log(fast_forward, 10) + 1)
+        return [x, y]
 
     def set_dest(self, organisms, screen_size, fast_forward):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
             # set random destination
-            self._destination = self.rand_dest(fast_forward)
+            vector = self.rand_dest(fast_forward)
+            self._destination[0] = self._position[0] + vector[0]
+            self._destination[1] = self._position[1] + vector[1]
             self.__enforce_boundaries(screen_size)
         else:
             vector = self.__apply_behaviors(neighbors)
