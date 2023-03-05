@@ -125,7 +125,7 @@ class Organism:
             else:
                 return False
         else:
-            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 2) + 1)) / (prey_population/100):
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) / (prey_population/100):
                 return True
             else:
                 return False
