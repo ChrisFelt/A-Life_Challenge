@@ -143,7 +143,8 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
                                       "the save file is being created.\n\n"
                                       "LOAD\n"
                                       "Loads a new simulation from save file. The current\n"
-                                      "simulation will not be saved.\n\n"
+                                      "simulation will not be saved. Simulation paused until\n"
+                                      "a file is loaded.\n\n"
                                       "GRAPH RESULTS\n"
                                       "To view plots of the organism population and mutations\n"
                                       "over time, check the \"Show graph results\" box.")
