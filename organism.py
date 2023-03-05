@@ -18,14 +18,14 @@ class Organism:
 
         # set attributes
         self._vision = attributes["vision"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
-        self._peripheral = attributes["peripheral"]
+        self._peripheral = attributes["peripheral"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._speed = attributes["speed"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._damage = attributes["damage"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
         self._separation_weight = attributes["separation_weight"]
         self._birth_rate = attributes["birth_rate"]
         self._mutation_rate = attributes["mutation_rate"]
         self._generation = attributes["generation"]
-        self._lifespan = attributes["lifespan"] + (random.uniform(-1.0, 1.0) * attributes["mutation_rate"])
+        self._lifespan = attributes["lifespan"]
         self._age = 0
         self._health = attributes["health"]
         self._energy = 0
@@ -120,7 +120,7 @@ class Organism:
             else:
                 return False
         else:
-            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 10) + 1)) / (prey_population/100):
+            if random.uniform(0, 1) < (self._birth_rate * (math.log(fast_forward, 2) + 1)) / (prey_population/100):
                 return True
             else:
                 return False
@@ -132,7 +132,7 @@ class Organism:
                       "lifespan": self._lifespan,
                       "health": self._health,
                       "vision": self._vision,
-                      "peripheral": math.pi / 4,
+                      "peripheral": self._peripheral,
                       "speed": self._speed,
                       "damage": self._damage,
                       "separation_weight": self._separation_weight,

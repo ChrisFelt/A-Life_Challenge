@@ -42,7 +42,7 @@ prey_attributes = {"population": 100,
                    "peripheral": math.pi / 4,
                    "speed": 10,
                    "damage": 0,
-                   "separation_weight": 0.5,
+                   "separation_weight": 1,
                    "birth_rate": 0.005,
                    "mutation_rate": 0.25
                    }
@@ -55,7 +55,7 @@ pred_attributes = {"population": 20,
                    "peripheral": math.pi / 2,
                    "speed": 25,
                    "damage": 1,
-                   "separation_weight": 0.5,
+                   "separation_weight": 1,
                    "birth_rate": 0.005,
                    "mutation_rate": 0.25
                    }
