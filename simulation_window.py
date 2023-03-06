@@ -1,5 +1,3 @@
-import _pickle
-
 import parameters_window
 import settings
 import organism
@@ -480,7 +478,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # prey label
     # -------------------------------
     # prey label
-    prey_label = tkinter.Label(side_frame, text="Prey", font='Calibri 11 underline')
+    prey_label = tkinter.Label(side_frame, text="Prey", font='Calibri 11 underline', fg='green')
     prey_label.grid(row=plus_one(current_row), column=0, sticky="w", pady=settings.y_pad_top)
 
     # -------------------------------
@@ -535,7 +533,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # predator label
     # -------------------------------
     # predator label
-    pred_label = tkinter.Label(side_frame, text="Predators", font='Calibri 11 underline')
+    pred_label = tkinter.Label(side_frame, text="Predators", font='Calibri 11 underline', fg='red')
     pred_label.grid(row=plus_one(current_row), column=0, sticky="w", pady=settings.y_pad_top)
 
     # -------------------------------
