@@ -533,7 +533,7 @@ def change_to_simulation(root, organisms, prey_attributes, pred_attributes, save
     # predator label
     # -------------------------------
     # predator label
-    pred_label = tkinter.Label(side_frame, text="Predators", font='Calibri 11 underline', fg='red')
+    pred_label = tkinter.Label(side_frame, text="Predators", font='Calibri 11 underline', fg='firebrick')
     pred_label.grid(row=plus_one(current_row), column=0, sticky="w", pady=settings.y_pad_top)
 
     # -------------------------------
