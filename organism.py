@@ -291,7 +291,7 @@ class Organism:
         Accepts color names ("red", "blue", etc.) or RGB hex values ("#FFFFFF")"""
         self._sprite.color(color)
 
-    def update_pos(self, slow_factor, screen_size):
+    def update_pos(self, screen_size, slow_factor):
         """Increment current position towards destination"""
         # slow_factor reduces distance moved and makes the animation smoother
         self._position[0] += self._speed / slow_factor * math.cos(self._direction)
