@@ -7,7 +7,7 @@ def set_target(index, organisms, speed_factors):
     Check proximity and set new destination when old destination reached."""
     # check if within range of target
     if organisms[index].proximity_check(settings.general["proximity"]):
-        organisms[index].set_dest(organisms, settings.screen_size, speed_factors.get_fast_forward())
+        organisms[index].set_dest(organisms, speed_factors.get_fast_forward())
 
 
 def move(index, organisms, speed_factors):

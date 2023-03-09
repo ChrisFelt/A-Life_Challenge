@@ -80,7 +80,7 @@ class Organism:
         y = math.sin(self._direction) * self._vision * (math.log(fast_forward, 10) + 1)
         return [x, y]
 
-    def set_dest(self, organisms, screen_size, fast_forward):
+    def set_dest(self, organisms, fast_forward):
         """Set new destination and update direction"""
         neighbors = self.__nearest_neighbors(organisms, self._vision)
         if not neighbors:
@@ -88,13 +88,11 @@ class Organism:
             vector = self.rand_dest(fast_forward)
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
-            self.__enforce_boundaries(screen_size)
         else:
             vector = self.__apply_behaviors(neighbors)
             # set new destination
             self._destination[0] = self._position[0] + vector[0]
             self._destination[1] = self._position[1] + vector[1]
-            self.__enforce_boundaries(screen_size)
         self._direction = self.__update_direction()
 
     def battle(self, organisms, fast_forward):
@@ -214,16 +212,20 @@ class Organism:
         return math.atan2(self._destination[1] - self._position[1],
                           self._destination[0] - self._position[0])
 
-    def __enforce_boundaries(self, screen_size):
-        """Private method that updates the destination coordinates to enforce walls"""
-        if self._destination[0] > screen_size / 2:
-            self._destination[0] = screen_size / 2
-        elif self._destination[0] < -screen_size / 2:
-            self._destination[0] = -screen_size / 2
-        if self._destination[1] > screen_size / 2:
-            self._destination[1] = screen_size / 2
-        elif self._destination[1] < -screen_size / 2:
-            self._destination[1] = -screen_size / 2
+    def __wrap_around(self, screen_size):
+        if self._position[0] > screen_size / 2:
+            self._position[0] = self._position[0] % (-screen_size / 2)
+            self._destination[0] = self._destination[0] % (-screen_size / 2)
+        elif self._position[0] < -screen_size / 2:
+            self._position[0] = self._position[0] % screen_size / 2
+            self._destination[0] = self._destination[0] % screen_size / 2
+        if self._position[1] > screen_size / 2:
+            self._position[1] = self._position[1] % (-screen_size / 2)
+            self._destination[1] = self._destination[1] % (-screen_size / 2)
+        elif self._position[1] < -screen_size / 2:
+            self._position[1] = self._position[1] % screen_size / 2
+            self._destination[1] = self._destination[1] % screen_size / 2
+        self.__update_direction()
 
     def __nearest_neighbors(self, organisms, distance):
         """Private method that returns a list of neighbors that are within vision"""
@@ -300,10 +302,7 @@ class Organism:
         # prevent organisms from going off-screen (only applicable at very high speeds)
         if self._position[0] > screen_size / 2 or self._position[0] < -screen_size / 2 \
                 or self._position[1] > screen_size / 2 or self._position[1] < -screen_size / 2:
-            # NOTE: __enforce_boundaries approach results in organisms sticking to edges at very high speeds
-            # assume organism arrived at destination to avoid sticking
-            self._position[0] = self._destination[0]
-            self._position[1] = self._destination[1]
+            self.__wrap_around(screen_size)
 
     def move(self):
         """Move sprite to current position"""
