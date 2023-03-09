@@ -4,19 +4,17 @@ import simulation_window
 
 def set_target(index, organisms, speed_factors):
     """Step 1 of turn order.
-    """
+    Check proximity and set new destination when old destination reached."""
     # check if within range of target
     if organisms[index].proximity_check(settings.general["proximity"]):
         organisms[index].set_dest(organisms, speed_factors.get_fast_forward())
-    pass
 
 
-def move(index, organisms, speed_factors) -> None:
+def move(index, organisms, speed_factors):
     """Step 2 of turn order.
-    Animate movement of the Organism at the given index"""
-    # clear shape, move turtle, and draw shape at new location
-    organisms[index].update_pos(speed_factors.get_slow_factor(), settings.screen_size)
-
+    Animate movement of the Organism at the given index."""
+    # update position, clear shape, move turtle, and redraw shape at new location
+    organisms[index].update_pos(settings.screen_size, speed_factors.get_slow_factor())
     organisms[index].clear()
     organisms[index].move()
     organisms[index].draw_dot(settings.general["diameter"])
@@ -24,16 +22,13 @@ def move(index, organisms, speed_factors) -> None:
 
 def battle(index, organisms, speed_factors):
     """Step 3 of turn order.
-    """
+    Organisms battle each other according to battle method."""
     organisms[index].battle(organisms, speed_factors.get_fast_forward())
 
 
 def conclude_turn(index, organisms, session_stats, screen, speed_factors):
     """Step 4 of turn order.
-    index: current index of organisms
-    index: list of Organism objects
-    screen: animation screen the Organism sprite will be drawn on
-    """
+    Clear dead organisms and reproduce."""
     organisms[index].increment_age(speed_factors.get_fast_forward())
     # remove an organism from the board if it reaches 0 health
     if organisms[index].is_dead():
@@ -42,6 +37,7 @@ def conclude_turn(index, organisms, session_stats, screen, speed_factors):
         session_stats.remove_organism(organisms[index].get_attributes())
         organisms.pop(index)
         return False
+    # otherwise reproduce offspring when fertile
     else:
         if organisms[index].is_fertile(speed_factors.get_fast_forward(), session_stats.get_prey_pop()):
             identifier = organisms[index].get_identifier()
