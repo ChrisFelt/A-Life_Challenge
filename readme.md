@@ -2,6 +2,8 @@
 
 #### Authors: Chelsey Beck and Christopher Felt
 
+Christopher Langton, a computer scientist who was an early identifier of the field of artificial life, characterized it as “locating life-as-we-know-it within the larger picture of life-as-it-could-be''. With that goal in mind, this project aims to simulate the movements and interactions of  populations of predators and prey organisms. Within this simulation these movements and behaviors should emulate the population dynamics the one would observe in the real world. As a work of “A-Life”, this program leverages knowledge of biological and physical principles to provide the user the opportunity to observe artificial life play out in ways that may or may not have occurred in real life. 
+
 ## <ins>Installation:</ins>
 
 1. Extract contents of zip to the same directory on a machine with Python 3.11 or later.
