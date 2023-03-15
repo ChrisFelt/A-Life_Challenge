@@ -5,7 +5,7 @@
 ## <ins>Installation:</ins>
 
 1. Extract contents of zip to the same directory on a machine with Python 3.11 or later.
-2. Install required packages: matplotlib, numpy, and tkinter-tooltip. The following standard libraries are also required: math, os, pickle, random, time, tkinter, and turtle.
+2. Install required packages: **matplotlib**, **numpy**, and **tkinter-tooltip**. The following standard libraries are also required: math, os, pickle, random, time, tkinter, and turtle.
 3. Run main.py
 
 ## <ins>How to use the program:<ins>
