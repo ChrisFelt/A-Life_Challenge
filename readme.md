@@ -2,7 +2,7 @@
 
 #### Authors: Chelsey Beck and Christopher Felt
 
-The A-Life Challenge is an artificial life simulation of a simple predator-prey paradigm. The organisms in this simulation boast a visual capability allowing them to chase, run away, or group together depending on behavioral tendencies. Each organism possesses a unique "genome" and, if it successfully reproduces, passes their unique capabilities down to their offspring. Survival of the fittest!
+The A-Life Challenge is an artificial life simulation of a simple predator-prey paradigm. The organisms in this simulation boast a visual capability allowing them to chase, run away, or group together depending on behavioral tendencies. Each organism possesses a unique "genome" and, if they successfully reproduce, pass their unique capabilities down to their offspring. Survival of the fittest!
 
 ## <ins>Installation:</ins>
 
