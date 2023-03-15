@@ -16,7 +16,7 @@ The program starts up by immediately displaying the parameters screen window, pi
 
 ![figure 1](https://user-images.githubusercontent.com/54368648/225216415-f91b86ea-265f-48c4-9bc7-aa74480b3787.png)
 
-Figure 1 - Parameters screen. Arrows indicate input fields.
+    Figure 1 - Parameters screen. Arrows indicate input fields.
 
 The input parameters are generally self explanatory, but we have supplied a detailed description of each below. Note: negative values are not allowed for any parameter. If a negative value is entered, the program will give the user a warning popup describing the error and will not proceed to the simulation window. Birth rates are additionally capped at 0.01, and speed is capped at 100.  
 
