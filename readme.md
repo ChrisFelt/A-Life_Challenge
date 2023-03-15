@@ -44,9 +44,7 @@ The control panel consists of five buttons and one checkbox. Each is described i
 
 1. “Pause”/”Resume” - freezes the simulation after the current turn finishes. The simulation will remain frozen until the “Resume” button is pressed. The name of this button changes appropriately when pressed. 
 2. “Stop” - ends the simulation immediately. 
-
     a. If “Show graph results” is checked a plot charting the population of the prey and predators over time is shown upon closing. Note: no data will be shown until after turn #200.
-
 3. “Load” - opens a dialog box that allows the user to load a previously saved simulation from a save file. The default directory is the current working directory. Only .pkl files will be visible. While the dialog box is open, the simulation is paused, and will resume if the load fails or is aborted.
 4. “Save” - opens a dialog box that allows the user to save the current state of the simulation to a save file. The default directory opened is the current working directory and the default file name and extension for save files is a_life_save.pkl. The simulation is paused while the dialog box is open and will resume when the file is successfully saved, an error occurs, or the operation is aborted.
 5. “Simulation Speed” (slider) - increases the speed of the simulation by a factor of between 1-10 times. Slide the slider to the right to increase speed, with the rightmost position resulting in 10 times speed and the leftmost position resulting in normal speed. Note: this fast-forward feature emulates a faster simulation, but may not result in the same outcome as if the slider were not used. The setting adjusts organism speed, birth-rate, energy, etc. proportionately to the speed value to achieve the fast-forward effect. Turns and time-elapsed proceed at a normal rate regardless of the speed. 
