@@ -37,7 +37,7 @@ When the “Start” button is pressed or a saved file is loaded, the parameters
 2. a statistics frame with live updated statistics of the simulation.
 3. a control panel with buttons that allow the user to make changes to the simulation.
 
-
+![figure 1](https://user-images.githubusercontent.com/54368648/225216415-f91b86ea-265f-48c4-9bc7-aa74480b3787.png)
         Figure 2 - Simulation screen with “animation screen”, “control panel”, and “statistics frame”.
 
 The control panel consists of five buttons and one checkbox. Each is described in detail below. See figure 3 for the location of the corresponding button to each number.
