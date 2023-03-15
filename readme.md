@@ -14,7 +14,7 @@ Run main.py
 
 The program starts up by immediately displaying the parameters screen window, pictured in figure 1 below. In this window, you may adjust the starting input parameters for prey and predators, including population, health, speed, damage, birth rate, and mutation rate.
 
-![figure 1](https://user-images.githubusercontent.com/54368648/225216415-f91b86ea-265f-48c4-9bc7-aa74480b3787.png)
+          ![figure 1](https://user-images.githubusercontent.com/54368648/225216415-f91b86ea-265f-48c4-9bc7-aa74480b3787.png)
 
           Figure 1 - Parameters screen. Arrows indicate input fields.
 
